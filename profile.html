@@ -299,6 +299,32 @@
         transform: translateY(-3px);
         box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
       }
+      /* === 機材ページへのリンク用スタイル === */
+      .gear-link-text {
+        margin-top: 35px;
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+      }
+      .gear-link-text a {
+        color: var(--accent-orange);
+        text-decoration: none;
+        font-weight: bold;
+        border-bottom: 1px solid var(--accent-orange);
+        transition: opacity 0.3s ease;
+      }
+      .gear-link-text a:hover {
+        opacity: 0.7;
+      }
+      /* === フッター（コピーライト）のスタイル === */
+      .site-footer {
+        text-align: center;
+        padding: 20px 10px;
+        margin-top: 60px;
+        border-top: 1px solid var(--border-color);
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        letter-spacing: 0.05em;
+      }
     </style>
   </head>
   <body>
@@ -381,6 +407,13 @@
         <p>
           初めての方でもリラックスして撮影を楽しめるような、丁寧で和やかな雰囲気作りを大切にしています。お写真はもちろん、「動画を作ってほしい！」という方も、ぜひ気軽にお声がけください！
         </p>
+
+        <p class="gear-link-text">
+          ※私が使用しているソフト・機材・PCについては、すべて<a
+            href="equipment.html"
+            >Gearページ</a
+          >に掲載しております。
+        </p>
       </div>
 
       <div class="favorites js-scroll-trigger">
@@ -392,7 +425,7 @@
         <dl>
           <dt>Anime</dt>
           <dd>
-            『進撃の巨人』、『うえきの法則』、『その着せ替え人形は恋をする』
+            『進撃の巨人』、『葬送のフリーレン』、『その着せ替え人形は恋をする』
             etc...
           </dd>
 
@@ -403,11 +436,17 @@
           </dd>
 
           <dt>Music</dt>
-          <dd>『BABYMETAL』、『幸祜』、『Aimer』 etc...</dd>
+          <dd>
+            『BABYMETAL』、『幸祜』、『Aimer』、『B'z』、『Michael Jackson』
+            etc...
+          </dd>
         </dl>
       </div>
     </section>
-
+    <footer class="site-footer">
+      &copy; 2026 MokuSaku. All Rights Reserved.<br />
+      当サイトのすべてのコンテンツの無断転載を禁じます。
+    </footer>
     <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
 
     <script>
@@ -453,6 +492,14 @@
         }
 
         lastScrollY = currentScrollY;
+      });
+      // --- TOPへ戻るボタンのスムーズスクロール制御 ---
+      pageTopBtn.addEventListener("click", (e) => {
+        e.preventDefault(); // 一瞬で一番上に飛ぶ標準の動作をキャンセル
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth", // 滑らかなスクロールを指定
+        });
       });
     </script>
   </body>
