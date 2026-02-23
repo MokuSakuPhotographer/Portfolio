@@ -153,7 +153,7 @@
 
       /* === 機材リスト専用スタイル === */
       .gear-container {
-        max-width: 800px;
+        max-width: 1000px; /* カードを並べるため横幅を少し広くします */
         margin: 0 auto;
         padding: 80px 20px;
       }
@@ -175,76 +175,183 @@
         margin: 15px auto 50px;
       }
 
-      /* 追加：導入文のスタイル */
       .gear-intro {
         text-align: center;
-        margin-bottom: 50px;
+        margin-bottom: 60px;
         color: var(--text-secondary);
         font-size: 0.95rem;
       }
 
+      /* カテゴリの枠を消してスッキリさせる */
       .gear-category {
-        background-color: var(--bg-dark);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        margin-bottom: 50px;
       }
 
+      /* 見出しをスタイリッシュに */
       .gear-category h2 {
-        font-size: 1.2rem;
-        color: var(--accent-orange);
+        font-size: 1.4rem;
+        color: #fff;
         margin-top: 0;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         border-bottom: 1px solid var(--border-color);
         padding-bottom: 10px;
         letter-spacing: 0.05em;
+        display: flex;
+        align-items: center;
       }
 
+      /* 見出しの左にオレンジのアクセントライン */
+      .gear-category h2::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 20px;
+        background-color: var(--accent-orange);
+        margin-right: 12px;
+        border-radius: 2px;
+      }
+
+      /* ▼▼▼ 追加・変更：カード型グリッドレイアウト ▼▼▼ */
       .gear-list {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fill,
+          minmax(280px, 1fr)
+        ); /* 自動で綺麗に並べる魔法のコード */
+        gap: 15px;
         list-style-type: none;
         padding: 0;
         margin: 0;
       }
 
+      /* カード内の文字レイアウトを整理 */
       .gear-list li {
         position: relative;
-        padding-left: 20px;
-        margin-bottom: 12px;
+        background-color: var(--bg-dark);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        transition: all 0.3s ease;
+        /* ↓ リンクがない場合でも文字がはみ出さないように調整 */
+        min-height: 80px;
+      }
+
+      /* ソフトウェア名（太字部分）の調整 */
+      .gear-list li span {
         color: var(--text-primary);
-        font-size: 0.95rem;
+        font-weight: bold;
+        font-size: 1.05rem;
+        margin-bottom: 5px; /* 説明文との間隔 */
       }
 
+      /* 前のドットを消す */
       .gear-list li::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 10px;
-        width: 6px;
-        height: 6px;
-        background-color: var(--text-secondary);
-        border-radius: 50%;
+        display: none;
       }
 
-      /* 追加：機材リスト内のリンクのスタイル調整 */
+      /* ホバー時のカードの浮き上がり */
+      .gear-list li:hover {
+        border-color: var(--accent-orange);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        background-color: #1a1a1a;
+      }
+
       .gear-list a {
         color: var(--text-primary);
         text-decoration: none;
         transition: color 0.3s ease;
-      }
-      .gear-list a:hover {
-        color: var(--accent-orange);
-        text-decoration: underline;
+        padding-right: 25px; /* 右上の矢印アイコン用の余白 */
       }
 
-      /* 追加：注釈（廃盤など）のスタイル */
-      .gear-list small {
+      /* カード全体をリンク化する設定 */
+      .gear-list a::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+
+      /* 右上にリンクマーク（↗）を表示 */
+      .gear-list a::after {
+        content: "↗";
+        position: absolute;
+        top: 20px;
+        right: 20px;
         color: var(--text-secondary);
-        font-size: 0.85em;
-        margin-left: 8px;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
       }
 
+      /* マウスを乗せた時の色変化 */
+      .gear-list li:hover a {
+        color: var(--accent-orange);
+      }
+      .gear-list li:hover a::after {
+        color: var(--accent-orange);
+        transform: translate(3px, -3px);
+      }
+
+      /* （廃盤）などの注釈をバッジ風にデザイン */
+      /* 機材の注釈（説明文）を自然なテキストにデザイン */
+      .gear-list small {
+        display: block; /* 改行して機材名の下に配置 */
+        margin-top: 8px; /* 機材名との間に少し余白を作る */
+        color: var(--text-secondary); /* 控えめなグレー */
+        font-size: 0.85rem;
+        font-weight: normal; /* 太字を解除して読みやすく */
+        line-height: 1.5;
+        letter-spacing: 0.05em;
+        position: relative;
+        z-index: 2; /* リンクの上に出す */
+      }
+      /* === PCスペック表専用スタイル === */
+      .pc-specs {
+        background-color: var(--bg-dark);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 30px;
+      }
+      .pc-specs dl {
+        margin: 0;
+        display: grid;
+        grid-template-columns: 150px 1fr; /* 左側の項目名を150pxに固定 */
+        gap: 15px 10px;
+        align-items: center;
+      }
+      .pc-specs dt {
+        color: var(--accent-orange);
+        font-weight: bold;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid rgba(255, 77, 0, 0.2);
+        padding-bottom: 5px;
+      }
+      .pc-specs dd {
+        margin: 0;
+        color: var(--text-primary);
+        font-size: 1.05rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 5px;
+      }
+
+      /* スマホ表示時の調整（縦並びにする） */
+      @media (max-width: 600px) {
+        .pc-specs dl {
+          grid-template-columns: 1fr;
+          gap: 4px;
+        }
+        .pc-specs dt {
+          margin-top: 15px;
+          border-bottom: none;
+          font-size: 0.9rem;
+        }
+      }
       /* === スクロールアニメーション用クラス === */
       .js-scroll-trigger {
         opacity: 0;
@@ -289,6 +396,65 @@
         color: #fff;
         transform: translateY(-3px);
         box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
+      }
+      /* === フッター（コピーライト）のスタイル === */
+      .site-footer {
+        text-align: center;
+        padding: 20px 10px;
+        margin-top: 60px;
+        border-top: 1px solid var(--border-color);
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        letter-spacing: 0.05em;
+      }
+      /* === ジャンル名の英語表記スタイル === */
+      .en-title {
+        font-size: 0.85rem; /* 日本語より小さく */
+        color: var(--text-secondary); /* 控えめなグレー */
+        margin-left: 12px; /* 日本語との間に少し余白を空ける */
+        font-weight: normal; /* 太字を解除してスッキリと */
+        letter-spacing: 0.05em;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+      }
+      /* === トグル（アコーディオン）専用スタイル === */
+      .gear-category h2 {
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.3s ease;
+        margin-bottom: 0; /* 開閉アニメーションのために元の余白をリセット */
+      }
+      .gear-category h2:hover {
+        color: var(--accent-orange);
+      }
+      /* 右端に「＋」アイコンを表示（Flexboxを利用） */
+      .gear-category h2::after {
+        content: "＋";
+        margin-left: auto;
+        font-size: 1.5rem;
+        color: var(--accent-orange);
+        transition: transform 0.3s ease;
+        font-weight: normal;
+        line-height: 1;
+      }
+      /* 開いた時は「＋」を45度回転させて「✕」っぽくする */
+      .gear-category h2.is-open::after {
+        transform: rotate(45deg);
+      }
+
+      /* スムーズに開閉するためのラッパー設定（CSS Gridの魔法） */
+      .toggle-wrapper {
+        display: grid;
+        grid-template-rows: 0fr; /* 初期状態は閉じる(0) */
+        transition: grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+      .toggle-wrapper.is-open {
+        grid-template-rows: 1fr; /* 開いた状態(1) */
+      }
+      .toggle-inner {
+        overflow: hidden;
+      }
+      .toggle-inner > * {
+        margin-top: 25px; /* アコーディオンが開いた時だけ見出しとの間に余白を出す */
       }
     </style>
   </head>
@@ -340,7 +506,7 @@
     </header>
 
     <section class="gear-container">
-      <h1 class="gear-page-title js-scroll-trigger">Equipment</h1>
+      <h1 class="gear-page-title js-scroll-trigger">My Gear</h1>
 
       <p class="gear-intro js-scroll-trigger">
         私が愛用する機材たちです。<br />
@@ -348,7 +514,7 @@
       </p>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>カメラ</h2>
+        <h2>カメラ <span class="en-title">Camera</span></h2>
         <ul class="gear-list">
           <li>
             <a
@@ -358,11 +524,19 @@
               >SONY α7Ⅳ</a
             >
           </li>
+          <li>
+            <a
+              href="https://amzn.to/4qXs8TX"
+              target="_blank"
+              rel="noopener noreferrer"
+              >SONY α7C</a
+            ><small>α7Ⅳの前に使用していたカメラ。現在は手放しています</small>
+          </li>
         </ul>
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>レンズ</h2>
+        <h2>レンズ <span class="en-title">Lens</span></h2>
         <ul class="gear-list">
           <li>
             <a
@@ -408,7 +582,7 @@
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>周辺機器</h2>
+        <h2>周辺機器 <span class="en-title">Accessories</span></h2>
         <ul class="gear-list">
           <li>
             <a
@@ -440,7 +614,7 @@
               target="_blank"
               rel="noopener noreferrer"
               >ProGrade Digital GOLD メモリーカード 64GB</a
-            ><small>(廃盤のためリンクは128GB)</small>
+            ><small>廃盤のためリンクは128GB</small>
           </li>
           <li>
             <a
@@ -470,7 +644,10 @@
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>三脚・スタビライザー</h2>
+        <h2>
+          三脚・スタビライザー
+          <span class="en-title">Tripods & Stabilizers</span>
+        </h2>
         <ul class="gear-list">
           <li>
             <a
@@ -508,7 +685,9 @@
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>ストラップ・ホルダー</h2>
+        <h2>
+          ストラップ・ホルダー <span class="en-title">Straps & Holders</span>
+        </h2>
         <ul class="gear-list">
           <li>
             <a
@@ -532,7 +711,7 @@
               target="_blank"
               rel="noopener noreferrer"
               >PeakDesign アンカーリンクス</a
-            ><small>(廃盤？リンクはCobby製)</small>
+            ><small>廃盤？リンクはCobby製</small>
           </li>
           <li>
             <a
@@ -554,7 +733,7 @@
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>バッグ</h2>
+        <h2>バッグ <span class="en-title">Bags</span></h2>
         <ul class="gear-list">
           <li>
             <a
@@ -584,9 +763,9 @@
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>ライト・補助光</h2>
+        <h2>ライト・補助光 <span class="en-title">Lighting</span></h2>
         <ul class="gear-list">
-          <li>Amconsure LEDリングライト<small>(廃盤)</small></li>
+          <li>Amconsure LEDリングライト<small>廃盤</small></li>
           <li>
             <a
               href="https://amzn.to/3OUNxj8"
@@ -639,7 +818,7 @@
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>レンズフィルター</h2>
+        <h2>レンズフィルター <span class="en-title">Filters</span></h2>
         <ul class="gear-list">
           <li>
             <a
@@ -681,7 +860,7 @@
               >K&F Concept NDフィルター 67mm 可変式</a
             >
           </li>
-          <li>Kenko 可変NDフィルター 77mm ND3-400<small>(廃盤)</small></li>
+          <li>Kenko 可変NDフィルター 77mm ND3-400<small>廃盤</small></li>
           <li>
             <a
               href="https://amzn.to/3MKuAPE"
@@ -694,7 +873,7 @@
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>あったら便利系</h2>
+        <h2>その他 <span class="en-title">Others</span></h2>
         <ul class="gear-list">
           <li>
             <a
@@ -704,7 +883,7 @@
               >Kingston SDメモリー カードリーダー</a
             >
           </li>
-          <li>ヘーネル ProCube2<small>(廃盤)</small></li>
+          <li>ヘーネル ProCube2<small>廃盤</small></li>
           <li>
             <a
               href="https://amzn.to/4ayC5SQ"
@@ -715,8 +894,68 @@
           </li>
         </ul>
       </div>
-    </section>
 
+      <div class="gear-category js-scroll-trigger">
+        <h2>使用ソフト</h2>
+        <ul class="gear-list">
+          <li>
+            <span>Adobe Lightroom</span>
+            <small>撮影した写真のレタッチに使用</small>
+          </li>
+          <li>
+            <span>Adobe Photoshop</span>
+            <small
+              >写真にエフェクトを付けたり凝ったレタッチをする時に使用</small
+            >
+          </li>
+          <li>
+            <span>Adobe After Effects</span>
+            <small>リリックビデオやアニメーション動画を制作する時に使用</small>
+          </li>
+          <li>
+            <span>Adobe Premiere Pro</span>
+            <small>ほぼ使用しませんが、簡単な動画制作にたまに使います</small>
+          </li>
+          <li>
+            <span>Adobe Illustrator</span>
+            <small>ロゴや動画で使う素材の制作に使用</small>
+          </li>
+          <li>
+            <span>Blender</span>
+            <small>3DCGを使用した動画を制作する時に使用</small>
+          </li>
+        </ul>
+      </div>
+
+      <div class="gear-category js-scroll-trigger">
+        <h2>PCスペック</h2>
+        <div class="pc-specs">
+          <dl>
+            <dt>OS</dt>
+            <dd>Windows 11</dd>
+
+            <dt>CPU</dt>
+            <dd>Core i9 14900KF</dd>
+
+            <dt>RAM</dt>
+            <dd>64GB (32GB × 2)</dd>
+
+            <dt>GPU</dt>
+            <dd>GeForce RTX 4090</dd>
+
+            <dt>Storage</dt>
+            <dd>SSD 1TB, SSD 2TB, HDD 8TB</dd>
+
+            <dt>Motherboard</dt>
+            <dd>Z790 Pro RS</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+    <footer class="site-footer">
+      &copy; 2026 MokuSaku. All Rights Reserved.<br />
+      当サイトのすべてのコンテンツの無断転載を禁じます。
+    </footer>
     <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
 
     <script>
@@ -744,6 +983,28 @@
           pageTopBtn.classList.remove("is-show");
         }
       });
+      // --- アコーディオン（トグル）の制御 ---
+      document.querySelectorAll(".gear-category").forEach((category) => {
+        const header = category.querySelector("h2");
+        const content = header.nextElementSibling; // h2の次にあるリストや表を取得
+
+        // 1. スムーズな開閉のためのラッパー（包み紙）をJSで自動生成
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("toggle-wrapper");
+        const inner = document.createElement("div");
+        inner.classList.add("toggle-inner");
+
+        // 要素を移動して入れ子にする（HTMLを手書きで修正する手間を省く）
+        content.parentNode.insertBefore(wrapper, content);
+        inner.appendChild(content);
+        wrapper.appendChild(inner);
+
+        // 2. クリックイベントの設定（最初はすべて閉じている状態）
+        header.addEventListener("click", () => {
+          header.classList.toggle("is-open");
+          wrapper.classList.toggle("is-open");
+        });
+      });
       // --- ヘッダーのスクロール（自動隠し）制御 ---
       const header = document.querySelector("header");
       let lastScrollY = window.scrollY;
@@ -762,6 +1023,14 @@
         }
 
         lastScrollY = currentScrollY;
+      });
+      // --- TOPへ戻るボタンのスムーズスクロール制御 ---
+      pageTopBtn.addEventListener("click", (e) => {
+        e.preventDefault(); // 一瞬で一番上に飛ぶ標準の動作をキャンセル
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth", // 滑らかなスクロールを指定
+        });
       });
     </script>
   </body>
