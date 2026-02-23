@@ -271,6 +271,16 @@
         transform: translateY(-3px);
         box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
       }
+      /* === フッター（コピーライト）のスタイル === */
+      .site-footer {
+        text-align: center;
+        padding: 20px 10px;
+        margin-top: 60px;
+        border-top: 1px solid var(--border-color);
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        letter-spacing: 0.05em;
+      }
     </style>
   </head>
   <body>
@@ -392,7 +402,10 @@
         </p>
       </div>
     </section>
-
+    <footer class="site-footer">
+      &copy; 2026 MokuSaku. All Rights Reserved.<br />
+      当サイトのすべてのコンテンツの無断転載を禁じます。
+    </footer>
     <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
 
     <script>
@@ -438,6 +451,14 @@
         }
 
         lastScrollY = currentScrollY;
+      });
+      // --- TOPへ戻るボタンのスムーズスクロール制御 ---
+      pageTopBtn.addEventListener("click", (e) => {
+        e.preventDefault(); // 一瞬で一番上に飛ぶ標準の動作をキャンセル
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth", // 滑らかなスクロールを指定
+        });
       });
     </script>
   </body>
