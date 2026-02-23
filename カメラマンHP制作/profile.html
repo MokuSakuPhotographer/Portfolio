@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile | MokuSaku</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        scrollbar-gutter: stable;
+      }
+      /* === SONY風ダークテーマ定義 === */
+      :root {
+        --bg-main: #1a1a1a;
+        --bg-dark: #111111;
+        --bg-header: rgba(30, 30, 30, 0.95);
+        --text-primary: #f0f0f0;
+        --text-secondary: #a0a0a0;
+        --accent-orange: #ff4d00;
+        --border-color: #333333;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family:
+          "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+        color: var(--text-primary);
+        background-color: var(--bg-main);
+        line-height: 1.6;
+        scroll-behavior: smooth;
+        position: relative;
+        min-height: 100vh; /* 画面の高さが足りなくても背景を維持します */
+      }
+
+      /* === 追加：背景画像を薄く敷く設定 === */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw; /* 画面幅に固定 */
+        height: 100vh; /* 画面の高さに固定 */
+        background-image: url("images/Camera_a.png");
+        background-size: cover;
+        background-position: center;
+        opacity: 0.15;
+        z-index: -2;
+        pointer-events: none;
+      }
+
+      /* === 追従型ナビゲーション === */
+      header {
+        position: sticky;
+        top: 0;
+        background-color: var(--bg-header);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        transition: top 0.3s ease;
+      }
+
+      /* ヘッダー内のレイアウト調整 */
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+      }
+
+      /* サイトタイトルのスタイル（筆記体） */
+      .site-title {
+        font-family: "Dancing Script", cursive;
+        font-size: 1.8rem;
+        color: var(--accent-orange); /* オレンジ色に統一 */
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.3s ease;
+      }
+      /* ホバーした時は白く光るように変更 */
+      .site-title:hover {
+        color: var(--text-primary);
+      }
+
+      nav {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        padding: 15px 0;
+      }
+      nav a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--text-primary);
+        margin: 5px 15px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+      nav a:hover {
+        color: var(--accent-orange);
+      }
+      nav a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--accent-orange);
+        transition: width 0.3s ease;
+      }
+      nav a:hover::after {
+        width: 100%;
+      }
+
+      /* アイコンの調整 */
+      .nav-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        transition: filter 0.3s ease;
+      }
+      nav a:hover .nav-icon {
+        filter: brightness(0) saturate(100%) invert(39%) sepia(93%)
+          saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
+      }
+
+      /* スマホ表示時のヘッダー調整 */
+      @media (max-width: 850px) {
+        .header-container {
+          flex-direction: column;
+          padding-top: 15px;
+        }
+        nav {
+          justify-content: center;
+          padding-top: 5px;
+          padding-bottom: 10px;
+        }
+        .site-title {
+          font-size: 2.2rem;
+        }
+      }
+
+      /* === プロフィールセクション専用スタイル === */
+      .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 80px 20px;
+        text-align: center;
+      }
+
+      .profile-avatar {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--accent-orange);
+        box-shadow: 0 0 20px rgba(255, 77, 0, 0.2);
+        margin-bottom: 20px;
+      }
+
+      .profile-sns {
+        margin-bottom: 25px;
+      }
+      .profile-sns a {
+        color: var(--text-primary);
+        text-decoration: none;
+        margin: 0 8px;
+        font-weight: bold;
+        font-size: 0.85rem;
+        border: 1px solid var(--border-color);
+        padding: 8px 20px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        display: inline-block;
+      }
+      .profile-sns a:hover {
+        border-color: var(--accent-orange);
+        color: var(--accent-orange);
+        transform: translateY(-2px);
+      }
+
+      .profile-name {
+        font-size: 2.5rem;
+        margin-bottom: 5px;
+        letter-spacing: 0.1em;
+        color: #fff;
+      }
+
+      .profile-role {
+        color: var(--accent-orange);
+        font-weight: bold;
+        margin-bottom: 40px;
+        font-size: 1.1rem;
+      }
+
+      .profile-text {
+        text-align: left;
+        margin-bottom: 60px;
+      }
+      .profile-text p {
+        margin-bottom: 1.5em;
+      }
+
+      .favorites {
+        background-color: var(--bg-dark);
+        padding: 40px;
+        border-radius: 8px;
+        text-align: left;
+        border: 1px solid var(--border-color);
+      }
+      .favorites h3 {
+        color: var(--accent-orange);
+        font-size: 1.5rem;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 10px;
+        margin-top: 0;
+        margin-bottom: 20px;
+        letter-spacing: 0.1em;
+      }
+      .favorites dl {
+        margin: 0;
+      }
+      .favorites dt {
+        font-weight: bold;
+        color: #fff;
+        margin-top: 25px;
+        font-size: 1.1rem;
+        letter-spacing: 0.05em;
+      }
+      .favorites dt::before {
+        content: "■ ";
+        color: var(--accent-orange);
+        font-size: 0.9em;
+      }
+      .favorites dd {
+        margin: 8px 0 0 15px;
+        color: var(--text-secondary);
+      }
+      .favorites small {
+        display: block;
+        margin-top: 5px;
+        font-size: 0.85em;
+        color: #888;
+      }
+
+      /* === スクロールアニメーション用クラス === */
+      .js-scroll-trigger {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.8s ease-out,
+          transform 0.8s ease-out;
+      }
+      .js-scroll-trigger.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* === TOPへ戻るボタンのスタイル === */
+      .page-top-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background-color: var(--bg-dark);
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        color: var(--text-primary);
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2rem;
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+      .page-top-btn.is-show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .page-top-btn:hover {
+        background-color: var(--accent-orange);
+        border-color: var(--accent-orange);
+        color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <a href="index.html" class="site-title">MokuSaku's Photo booth</a>
+        <nav>
+          <a href="profile.html"
+            ><img
+              src="images/Profile.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Profile</a
+          >
+          <a href="Policy.html"
+            ><img
+              src="images/Policy.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Policy</a
+          >
+          <a href="event.html"
+            ><img
+              src="images/Calendar.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Calendar</a
+          >
+          <a href="gallery.html"
+            ><img
+              src="images/Gallery.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Gallery</a
+          >
+          <a href="equipment.html"
+            ><img src="images/Gear.png?v=2" class="nav-icon" alt="" />Gear</a
+          >
+          <a href="contact.html"
+            ><img
+              src="images/Contact.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Contact</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <section class="profile-container">
+      <img
+        src="images/myportrait.png"
+        alt="MokuSaku"
+        class="profile-avatar js-scroll-trigger"
+      />
+
+      <div class="profile-sns js-scroll-trigger">
+        <a href="https://x.com/SakuMoku137673" target="_blank">X (Twitter)</a>
+        <a href="https://www.instagram.com/mokusakurock/" target="_blank"
+          >Instagram</a
+        >
+      </div>
+
+      <h1 class="profile-name js-scroll-trigger">MokuSaku</h1>
+      <p class="profile-role js-scroll-trigger">
+        関東を拠点に活動するフォト・ビデオグラファー
+      </p>
+
+      <div class="profile-text js-scroll-trigger">
+        <p>
+          関東を中心に、ジャンルを問わず「いいな」と思った瞬間をカメラに収めています。
+        </p>
+        <p>
+          もともとは風景スナップや、じっくり向き合う物撮りがメインでしたが、池袋の「acosta!」でレイヤーさんの熱量に触れてから、人物撮影の楽しさにすっかりハマってしまいました。
+        </p>
+        <p>
+          写真だけでなく動画にも力を入れていて、特にリリックビデオ制作が大好きです。After
+          Effectsを使い、音楽と映像、そしてキャラクターの世界観を掛け合わせた作品作りを追求しています。
+        </p>
+        <p>
+          初めての方でもリラックスして撮影を楽しめるような、丁寧で和やかな雰囲気作りを大切にしています。お写真はもちろん、「動画を作ってほしい！」という方も、ぜひ気軽にお声がけください！
+        </p>
+      </div>
+
+      <div class="favorites js-scroll-trigger">
+        <h3>Favorite</h3>
+        <p style="margin-bottom: 20px; color: var(--text-primary)">
+          どれも書ききれないのですが、共通の話題があれば撮影の合間にぜひ楽しくお話ししましょう！
+        </p>
+
+        <dl>
+          <dt>Anime</dt>
+          <dd>
+            『進撃の巨人』、『うえきの法則』、『その着せ替え人形は恋をする』
+            etc...
+          </dd>
+
+          <dt>Game</dt>
+          <dd>
+            『League of
+            Legends』、『崩壊：スターレイル』、『学園アイドルマスター』 etc...
+          </dd>
+
+          <dt>Music</dt>
+          <dd>『BABYMETAL』、『幸祜』、『Aimer』 etc...</dd>
+        </dl>
+      </div>
+    </section>
+
+    <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
+
+    <script>
+      // --- スクロールアニメーションの制御 ---
+      const scrollTriggers = document.querySelectorAll(".js-scroll-trigger");
+      const cb = function (entries, observer) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      };
+      const io = new IntersectionObserver(cb, { rootMargin: "-5% 0px" });
+      scrollTriggers.forEach((trigger) => {
+        io.observe(trigger);
+      });
+
+      // --- TOPへ戻るボタンの表示制御 ---
+      const pageTopBtn = document.getElementById("pageTopBtn");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          pageTopBtn.classList.add("is-show");
+        } else {
+          pageTopBtn.classList.remove("is-show");
+        }
+      });
+      // --- ヘッダーのスクロール（自動隠し）制御 ---
+      const header = document.querySelector("header");
+      let lastScrollY = window.scrollY;
+
+      window.addEventListener("scroll", () => {
+        const currentScrollY = window.scrollY;
+        if (Math.abs(currentScrollY - lastScrollY) < 60) {
+          return;
+        }
+        // 下にスクロール ＆ 上から50px以上スクロールしている場合のみ隠す
+        if (currentScrollY > lastScrollY && currentScrollY > 50) {
+          header.style.top = "-150px"; // ヘッダーの高さ分、画面外（上）に移動させる
+        } else {
+          // 上に少しでもスクロールした時、または一番上の時は表示する
+          header.style.top = "0px";
+        }
+
+        lastScrollY = currentScrollY;
+      });
+    </script>
+  </body>
+</html>
