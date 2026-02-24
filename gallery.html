@@ -167,6 +167,136 @@
         color: var(--accent-orange);
         font-style: italic;
       }
+      /* === ギャラリーの操作説明テキスト === */
+      .gallery-hint {
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-top: -45px; /* 上のタイトルの大きな余白を少し打ち消して近づける */
+        margin-bottom: 50px;
+        letter-spacing: 0.05em;
+        font-weight: normal;
+      }
+      /* === スプリット拡張レイアウト専用スタイル === */
+      .split-container {
+        display: flex;
+        width: 100vw;
+        height: calc(100vh - 70px); /* ヘッダーの高さを引いて画面ピッタリに */
+        margin-left: calc(50% - 50vw); /* 画面幅いっぱいまで広げるハック */
+        overflow: hidden;
+        background-color: transparent;
+      }
+
+      /* スマホ表示では縦並びにする */
+      @media (max-width: 850px) {
+        .split-container {
+          flex-direction: column;
+          height: calc(100vh - 120px);
+        }
+      }
+
+      .split-panel {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1); /* 滑らかに広がる魔法 */
+        border-right: 1px solid var(--border-color);
+      }
+      .split-panel:last-child {
+        border-right: none;
+      }
+      .split-panel:hover {
+        flex: 1.8; /* マウスを乗せると少し広がる */
+      }
+
+      /* 表紙の背景画像と文字 */
+      .panel-cover {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.4) grayscale(60%);
+        transition: all 0.5s ease;
+        cursor: pointer;
+      }
+      .split-panel:hover .panel-cover {
+        filter: brightness(0.8) grayscale(0%);
+        transform: scale(1.15);
+      }
+      .panel-title {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+        font-family: "Dancing Script", cursive;
+        font-size: 3.5rem;
+        pointer-events: none;
+        text-shadow: 0 5px 15px rgba(0, 0, 0, 0.9);
+        transition: all 0.4s ease;
+        z-index: 10;
+      }
+
+      /* ▼ 追加：マウスを乗せた時に文字をオレンジにする ▼ */
+      .split-panel:hover .panel-title {
+        color: var(--accent-orange);
+      }
+      /* パネルをクリックして展開した時の状態 */
+      .split-panel.is-active {
+        flex: 10;
+        overflow-y: auto; /* 中身のスクロールを許可 */
+        cursor: default;
+      }
+      .split-panel.is-hidden {
+        flex: 0;
+        border: none;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .split-panel.is-active .panel-cover,
+      .split-panel.is-active .panel-title {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* 展開後に表示される中身 */
+      .panel-content {
+        display: none;
+        padding: 100px 5vw 80px;
+        opacity: 0;
+        animation: fadeInContent 0.8s ease forwards 0.4s;
+      }
+      .split-panel.is-active .panel-content {
+        display: block;
+      }
+      @keyframes fadeInContent {
+        to { opacity: 1; }
+      }
+
+      /* 戻るボタン */
+      .back-btn {
+        position: fixed;
+        top: 90px;
+        left: 20px;
+        z-index: 1000;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.6);
+        border: 1px solid var(--accent-orange);
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        display: none;
+        backdrop-filter: blur(5px);
+        transition: background-color 0.3s;
+      }
+      .back-btn:hover {
+        background-color: var(--accent-orange);
+      }
+      .back-btn.is-show {
+        display: block;
+      }
 
       /* --- 1. 写真（美しいタイル状レイアウト・15枚用） --- */
       .photo-grid {
@@ -382,6 +512,20 @@
           transform: translate(-50%, -50%) rotate(360deg);
         }
       }
+      /* === 画像読み込み用プログレスバー（細いオレンジの線） === */
+      .lightbox-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background-color: var(--accent-orange);
+        box-shadow: 0 0 10px var(--accent-orange);
+        z-index: 2005;
+        opacity: 0;
+        transition: width 0.4s ease-out, opacity 0.4s ease;
+        pointer-events: none;
+      }
 
       /* === スクロールアニメーション用クラス === */
       .js-scroll-trigger {
@@ -394,6 +538,10 @@
       .js-scroll-trigger.is-visible {
         opacity: 1;
         transform: translateY(0);
+      }
+      /* === パネル展開時に外側のスクロールを隠す設定 === */
+      body.is-panel-open {
+        overflow: hidden;
       }
 
       /* === TOPへ戻るボタンのスタイル === */
@@ -520,343 +668,225 @@
       </div>
     </header>
 
+    <button id="backToMenu" class="back-btn">← BACK TO CATEGORIES</button>
+
     <section class="gallery-container">
-      <h1 class="section-title js-scroll-trigger"><span>P</span>hotography</h1>
+      
+      <div class="split-container">
+        
+        <div class="split-panel">
+          <div class="panel-cover" style="background-image: url('images/thumb_DSC02601.png');"></div>
+          <div class="panel-title">Snap</div>
+          <div class="panel-content">
+            <h1 class="section-title"><span>S</span>nap</h1>
+            <p class="gallery-hint">Tap or click an image to enlarge / 写真をタップ・クリックで拡大表示できます</p>
+            <div class="photo-grid">
+              
+              <div class="photo-item">
+                <img src="images/thumb_DSC04616.png" data-highres="images/DSC04616.png" alt="Gallery Image 1" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC04604.png" data-highres="images/DSC04604.png" alt="Gallery Image 2" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC00589.png" data-highres="images/DSC00589.png" alt="Gallery Image 3" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC00992.png" data-highres="images/DSC00992.png" alt="Gallery Image 4" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC03561.png" data-highres="images/DSC03561.png" alt="Gallery Image 5" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC02215-Enhanced-NR.png" data-highres="images/DSC02215-Enhanced-NR.png" alt="Gallery Image 6" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC02077.png" data-highres="images/DSC02077.png" alt="Gallery Image 7" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC00252_20230218.png" data-highres="images/DSC00252_20230218.png" alt="Gallery Image 8" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC01866.png" data-highres="images/DSC01866.png" alt="Gallery Image 9" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_A7C03670.png" data-highres="images/A7C03670.png" alt="Gallery Image 10" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06066.png" data-highres="images/DSC06066.png" alt="Gallery Image 11" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_Camera_a.png" data-highres="images/Camera_a.png" alt="Gallery Image 12" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC02047.png" data-highres="images/DSC02047.png" alt="Gallery Image 13" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC01850.png" data-highres="images/DSC01850.png" alt="Gallery Image 14" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC00587_20230401.png" data-highres="images/DSC00587_20230401.png" alt="Gallery Image 15" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_20201210-DSC00288.png" data-highres="images/20201210-DSC00288.png" alt="Gallery Image 16" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_20201210-DSC00223.png" data-highres="images/20201210-DSC00223.png" alt="Gallery Image 17" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC01033.png" data-highres="images/DSC01033.png" alt="Gallery Image 18" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC02601.png" data-highres="images/DSC02601.png" alt="Gallery Image 19" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC00484.png" data-highres="images/DSC00484.png" alt="Gallery Image 20" loading="lazy" />
+              </div>
 
-      <div class="photo-grid js-scroll-trigger">
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC04616.png"
-            data-highres="images/DSC04616.png"
-            alt="Gallery Image 1"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC04604.png"
-            data-highres="images/DSC04604.png"
-            alt="Gallery Image 2"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC00589.png"
-            data-highres="images/DSC00589.png"
-            alt="Gallery Image 3"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC00992.png"
-            data-highres="images/DSC00992.png"
-            alt="Gallery Image 4"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC03561.png"
-            data-highres="images/DSC03561.png"
-            alt="Gallery Image 5"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC02215-Enhanced-NR.png"
-            data-highres="images/DSC02215-Enhanced-NR.png"
-            alt="Gallery Image 6"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC02077.png"
-            data-highres="images/DSC02077.png"
-            alt="Gallery Image 7"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC00252_20230218.png"
-            data-highres="images/DSC00252_20230218.png"
-            alt="Gallery Image 8"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC01866.png"
-            data-highres="images/DSC01866.png"
-            alt="Gallery Image 9"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_A7C03670.png"
-            data-highres="images/A7C03670.png"
-            alt="Gallery Image 10"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC06066.png"
-            data-highres="images/DSC06066.png"
-            alt="Gallery Image 11"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_Camera_a.png"
-            data-highres="images/Camera_a.png"
-            alt="Gallery Image 12"
-            loading="lazy"
-          />
+            </div>
+          </div>
         </div>
 
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC02047.png"
-            data-highres="images/DSC02047.png"
-            alt="Gallery Image 13"
-            loading="lazy"
-          />
+        <div class="split-panel">
+          <div class="panel-cover" style="background-image: url('images/thumb_DSC06507.png');"></div>
+          <div class="panel-title">Portrait</div>
+          <div class="panel-content">
+            <h1 class="section-title"><span>P</span>ortrait</h1>
+            <p class="gallery-hint">Tap or click an image to enlarge / 写真をタップ・クリックで拡大表示できます</p>
+            <div class="photo-grid">
+              
+              <div class="photo-item">
+                <img src="images/thumb_DSC06507.png" data-highres="images/DSC06507.png" alt="Gallery Image 11" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06520.png" data-highres="images/DSC06520.png" alt="Gallery Image 12" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06523.png" data-highres="images/DSC06523.png" alt="Gallery Image 13" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06531.png" data-highres="images/DSC06531.png" alt="Gallery Image 14" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06543.png" data-highres="images/DSC06543.png" alt="Gallery Image 15" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06698.png" data-highres="images/DSC06698.png" alt="Gallery Image 16" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06758.png" data-highres="images/DSC06758.png" alt="Gallery Image 17" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06766.png" data-highres="images/DSC06766.png" alt="Gallery Image 18" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06775.png" data-highres="images/DSC06775.png" alt="Gallery Image 19" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06828.png" data-highres="images/DSC06828.png" alt="Gallery Image 20" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06838.png" data-highres="images/DSC06838.png" alt="Gallery Image 21" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06864.png" data-highres="images/DSC06864.png" alt="Gallery Image 22" loading="lazy" />
+              </div>
+              <div class="photo-item">
+                <img src="images/thumb_DSC06883.png" data-highres="images/DSC06883.png" alt="Gallery Image 23" loading="lazy" />
+              </div>
+              
+            </div>
+          </div>
         </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC01850.png"
-            data-highres="images/DSC01850.png"
-            alt="Gallery Image 14"
-            loading="lazy"
-          />
+
+        <div class="split-panel">
+          <div class="panel-cover" style="background-image: url('videos/Thumb_video1.jpg');"></div>
+          <div class="panel-title">Video</div>
+          <div class="panel-content">
+            <h1 class="section-title"><span>V</span>ideography</h1>
+            <div class="video-section">
+              
+              <div class="video-wrapper">
+                <div class="video-title">
+                  Sumerlin / Speak Up, Speak Out【Unofficial Lyrics MV】<span class="video-role">リリックアニメーション・文字デザイン</span>
+                </div>
+                <div class="video-container">
+                  <video controls playsinline preload="metadata" poster="videos/Thumb_video1.jpg">
+                    <source src="videos/Sumerlin   Speak Up, Speak Out【Unofficial Lyrics MV】.mp4" type="video/mp4" />
+                    お使いのブラウザは動画の再生に対応していません。
+                  </video>
+                </div>
+              </div>
+              
+              <div class="video-wrapper">
+                <div class="video-title">
+                  2020/12/07 Vlog<span class="video-role">映像全般</span>
+                </div>
+                <div class="video-container">
+                  <video controls playsinline preload="metadata" poster="videos/Thumb_video4.jpg">
+                    <source src="videos/My first Vlog.mp4" type="video/mp4" />
+                    お使いのブラウザは動画の再生に対応していません。
+                  </video>
+                </div>
+              </div>
+              
+              <div class="video-wrapper">
+                <div class="video-title">
+                  ROY - Mily (feat. Elad)【Unofficial Lyrics MV】<span class="video-role">リリックアニメーション・文字デザイン</span>
+                </div>
+                <div class="video-container">
+                  <video controls playsinline preload="metadata" poster="videos/Thumb_video2.jpg">
+                    <source src="videos/ROY - Mily (feat. Elad)【Unofficial Lyrics MV】.mp4" type="video/mp4" />
+                    お使いのブラウザは動画の再生に対応していません。
+                  </video>
+                </div>
+              </div>
+
+              <div class="video-wrapper">
+                <div class="video-title">
+                  Parasite Eve【VALORANT 3D MONTAGE】<span class="video-role">3DCG・3Dアニメーション</span>
+                </div>
+                <div class="video-container">
+                  <video controls playsinline preload="metadata" poster="videos/Thumb_video3.jpg">
+                    <source src="videos/Parasite Eve.mp4" type="video/mp4" />
+                    お使いのブラウザは動画の再生に対応していません。
+                  </video>
+                </div>
+              </div>
+              
+              <div class="video-wrapper">
+                <div class="video-title">
+                  Ridy Hudson Love song (Lyric video)<span class="video-role">映像全般</span>
+                </div>
+                <div class="video-container">
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/h-7ce-ToyDE?si=auTBBz4kF6q6o2vz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+              </div>
+              
+              <div class="video-wrapper">
+                <div class="video-title">
+                  さめざめ - 裏SHIBUYA<span class="video-role">リリックアニメーション・文字デザイン</span>
+                </div>
+                <div class="video-container">
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/zx8EhAOL_Ic?si=hX6iZ63dKWBT4t8g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+              </div>
+              
+              <div class="video-wrapper">
+                <div class="video-title">
+                  さめざめ - 洗脳B<span class="video-role">リリックアニメーション・文字デザイン</span>
+                </div>
+                <div class="video-container">
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/8em_5LSJXsk?si=SvJQNxGHgkusEiy6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC00587_20230401.png"
-            data-highres="images/DSC00587_20230401.png"
-            alt="Gallery Image 15"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_20201210-DSC00288.png"
-            data-highres="images/20201210-DSC00288.png"
-            alt="Gallery Image 16"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_20201210-DSC00223.png"
-            data-highres="images/20201210-DSC00223.png"
-            alt="Gallery Image 17"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC01033.png"
-            data-highres="images/DSC01033.png"
-            alt="Gallery Image 18"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC02601.png"
-            data-highres="images/DSC02601.png"
-            alt="Gallery Image 19"
-            loading="lazy"
-          />
-        </div>
-        <div class="photo-item">
-          <img
-            src="images/thumb_DSC00484.png"
-            data-highres="images/DSC00484.png"
-            alt="Gallery Image 20"
-            loading="lazy"
-          />
-        </div>
+
       </div>
-
-      <h1 class="section-title js-scroll-trigger" style="margin-top: 120px">
-        <span>V</span>ideography
-      </h1>
-
-      <div class="video-section">
-        <div class="video-wrapper js-scroll-trigger">
-          <div class="video-title">
-            Sumerlin / Speak Up, Speak Out【Unofficial Lyrics MV】<span
-              class="video-role"
-              >リリックアニメーション・文字デザイン</span
-            >
-          </div>
-          <div class="video-container">
-            <video
-              controls
-              playsinline
-              preload="metadata"
-              poster="videos/Thumb_video1.jpg"
-            >
-              <source
-                src="videos/Sumerlin   Speak Up, Speak Out【Unofficial Lyrics MV】.mp4"
-                type="video/mp4"
-              />
-              お使いのブラウザは動画の再生に対応していません。
-            </video>
-          </div>
-        </div>
-        <div class="video-wrapper js-scroll-trigger">
-          <div class="video-title">
-            2020/12/07 Vlog<span class="video-role">映像全般</span>
-          </div>
-          <div class="video-container">
-            <video
-              controls
-              playsinline
-              preload="metadata"
-              poster="videos/Thumb_video4.jpg"
-            >
-              <source src="videos/My first Vlog.mp4" type="video/mp4" />
-              お使いのブラウザは動画の再生に対応していません。
-            </video>
-          </div>
-        </div>
-        <div class="video-wrapper js-scroll-trigger">
-          <div class="video-title">
-            ROY - Mily (feat. Elad)【Unofficial Lyrics MV】<span
-              class="video-role"
-              >リリックアニメーション・文字デザイン</span
-            >
-          </div>
-          <div class="video-container">
-            <video
-              controls
-              playsinline
-              preload="metadata"
-              poster="videos/Thumb_video2.jpg"
-            >
-              <source
-                src="videos/ROY - Mily (feat. Elad)【Unofficial Lyrics MV】.mp4"
-                type="video/mp4"
-              />
-              お使いのブラウザは動画の再生に対応していません。
-            </video>
-          </div>
-        </div>
-
-        <div class="video-wrapper js-scroll-trigger">
-          <div class="video-title">
-            Parasite Eve【VALORANT 3D MONTAGE】<span class="video-role"
-              >3DCG・3Dアニメーション</span
-            >
-          </div>
-          <div class="video-container">
-            <video
-              controls
-              playsinline
-              preload="metadata"
-              poster="videos/Thumb_video3.jpg"
-            >
-              <source src="videos/Parasite Eve.mp4" type="video/mp4" />
-              お使いのブラウザは動画の再生に対応していません。
-            </video>
-          </div>
-        </div>
-        <div class="video-wrapper js-scroll-trigger">
-          <div class="video-title">
-            Ridy Hudson Love song (Lyric video)<span class="video-role"
-              >映像全般</span
-            >
-          </div>
-          <div class="video-container">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/h-7ce-ToyDE?si=auTBBz4kF6q6o2vz"
-              title="YouTube video player"
-              frameborder="0"
-              allow="
-                accelerometer;
-                autoplay;
-                clipboard-write;
-                encrypted-media;
-                gyroscope;
-                picture-in-picture;
-                web-share;
-              "
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
-            >
-            </iframe>
-          </div>
-        </div>
-        <div class="video-wrapper js-scroll-trigger">
-          <div class="video-title">
-            さめざめ - 裏SHIBUYA<span class="video-role"
-              >リリックアニメーション・文字デザイン</span
-            >
-          </div>
-          <div class="video-container">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/zx8EhAOL_Ic?si=hX6iZ63dKWBT4t8g"
-              title="YouTube video player"
-              frameborder="0"
-              allow="
-                accelerometer;
-                autoplay;
-                clipboard-write;
-                encrypted-media;
-                gyroscope;
-                picture-in-picture;
-                web-share;
-              "
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
-            >
-            </iframe>
-          </div>
-        </div>
-        <div class="video-wrapper js-scroll-trigger">
-          <div class="video-title">
-            さめざめ - 洗脳B<span class="video-role"
-              >リリックアニメーション・文字デザイン</span
-            >
-          </div>
-          <div class="video-container">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/8em_5LSJXsk?si=SvJQNxGHgkusEiy6"
-              title="YouTube video player"
-              frameborder="0"
-              allow="
-                accelerometer;
-                autoplay;
-                clipboard-write;
-                encrypted-media;
-                gyroscope;
-                picture-in-picture;
-                web-share;
-              "
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
-            >
-            </iframe>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
     <footer class="site-footer">
       &copy; 2026 MokuSaku. All Rights Reserved.<br />
       当サイトのすべてのコンテンツの無断転載を禁じます。
@@ -866,7 +896,9 @@
 
     <div id="lightbox" class="lightbox">
       <div class="lightbox-bg"></div>
-      <div class="lightbox-spinner"></div>
+      
+      <div id="lightbox-progress" class="lightbox-progress"></div>
+      
       <img id="lightbox-img" src="" alt="Expanded Image" />
       <div class="lightbox-close">×</div>
     </div>
@@ -900,7 +932,6 @@
       const lightboxImg = document.getElementById("lightbox-img");
       const lightboxBg = document.querySelector(".lightbox-bg");
       const lightboxClose = document.querySelector(".lightbox-close");
-      const spinner = document.querySelector(".lightbox-spinner");
       let activeImage = null;
 
       lightboxImg.style.visibility = "hidden";
@@ -938,15 +969,39 @@
           lightboxImg.style.borderRadius = "0px";
 
           if (highResSrc && highResSrc !== activeImage.src) {
-            spinner.style.display = "block";
+            // ▼ スピナーの代わりにプログレスバーを表示
+            const lightboxProgress = document.getElementById("lightbox-progress");
+            lightboxProgress.style.opacity = "1";
+            lightboxProgress.style.width = "15%"; // 最初は15%までスッと伸ばす
+
+            // 擬似的に進捗を進める（最大85%までランダムに少しずつ伸ばす）
+            window.progressInterval = setInterval(() => {
+              let currentWidth = parseFloat(lightboxProgress.style.width);
+              if (currentWidth < 85) {
+                lightboxProgress.style.width = (currentWidth + Math.random() * 10) + "%";
+              }
+            }, 400);
+
             const highResImage = new Image();
             highResImage.src = highResSrc;
 
+            // ▼ 読み込み完了時の処理
             highResImage.onload = () => {
-              lightboxImg.src = highResSrc;
-              spinner.style.display = "none";
+              // プログレスバーを100%にする
+              clearInterval(window.progressInterval);
+              lightboxProgress.style.width = "100%";
 
-              // ふわっとしたオレンジの光エフェクト
+              lightboxImg.src = highResSrc;
+
+              // 0.3秒後にプログレスバーをフェードアウトさせてリセット
+              setTimeout(() => {
+                lightboxProgress.style.opacity = "0";
+                setTimeout(() => {
+                  lightboxProgress.style.width = "0%";
+                }, 400);
+              }, 300);
+
+              // ふわっとしたオレンジの光エフェクト（そのまま残す）
               lightboxImg.style.transition = "all 0.5s ease-out";
               lightboxImg.style.transform = "scale(1.015)";
               lightboxImg.style.boxShadow = "0 0 100px rgba(255, 77, 0, 0.7)";
@@ -964,12 +1019,18 @@
       function closeLightbox() {
         if (!activeImage) return;
 
+        // ▼ 追加：途中で閉じた時のプログレスバーのリセット
+        clearInterval(window.progressInterval);
+        const lightboxProgress = document.getElementById("lightbox-progress");
+        if(lightboxProgress) {
+          lightboxProgress.style.opacity = "0";
+          setTimeout(() => { lightboxProgress.style.width = "0%"; }, 400);
+        }
+
         const rect = activeImage.getBoundingClientRect();
 
         lightboxBg.style.opacity = "0";
         lightboxClose.style.opacity = "0";
-        spinner.style.display = "none";
-
         lightboxImg.style.left = rect.left + "px";
         lightboxImg.style.top = rect.top + "px";
         lightboxImg.style.width = rect.width + "px";
@@ -1007,6 +1068,41 @@
         }
 
         lastScrollY = currentScrollY;
+      });
+      // === スプリットパネルの展開制御 ===
+      const panels = document.querySelectorAll('.split-panel');
+      const covers = document.querySelectorAll('.panel-cover');
+      const backBtn = document.getElementById('backToMenu');
+
+      covers.forEach(cover => {
+        cover.addEventListener('click', (e) => {
+          const parentPanel = e.target.closest('.split-panel');
+          
+          // すべてのパネルを一旦隠す状態にする
+          panels.forEach(p => p.classList.add('is-hidden'));
+          
+          // クリックされたパネルだけを表示・展開する
+          parentPanel.classList.remove('is-hidden');
+          parentPanel.classList.add('is-active');
+          
+          // 戻るボタンを表示
+          backBtn.classList.add('is-show');
+          
+          // パネルの中身を一番上にスクロールしておく
+          parentPanel.scrollTop = 0;
+          // ▼ 追加：外側のスクロールバーを消す
+          document.body.classList.add('is-panel-open');
+        });
+      });
+
+      // 戻るボタンを押した時の処理
+      backBtn.addEventListener('click', () => {
+        panels.forEach(p => {
+          p.classList.remove('is-hidden', 'is-active');
+        });
+        backBtn.classList.remove('is-show');
+        // ▼ 追加：外側のスクロールバーを復活させる
+        document.body.classList.remove('is-panel-open');
       });
       // --- TOPへ戻るボタンのスムーズスクロール制御 ---
       pageTopBtn.addEventListener("click", (e) => {
