@@ -619,6 +619,38 @@
           margin-left: auto;
         }
       }
+      /* === Portraitセクション専用 タイルレイアウト拡張 === */
+      /* Snapの設定と干渉させないためのリセット */
+      .split-panel .portrait-grid .photo-item {
+        grid-column: span 1;
+        grid-row: span 1;
+      }
+      
+      /* それぞれのサイズ指定 */
+      .split-panel .portrait-grid .photo-item.size-large {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+      .split-panel .portrait-grid .photo-item.size-wide {
+        grid-column: span 2;
+      }
+      .split-panel .portrait-grid .photo-item.size-tall {
+        grid-row: span 2;
+      }
+
+      /* スマホ表示時のPortrait用レスポンシブ調整 */
+      @media (max-width: 768px) {
+        .split-panel .portrait-grid .photo-item {
+          grid-column: span 1 !important;
+          grid-row: span 1 !important;
+        }
+        /* スマホ時は大きく・横長なものを2列に広げて見栄えを良くする */
+        .split-panel .portrait-grid .photo-item.size-large,
+        .split-panel .portrait-grid .photo-item.size-wide {
+          grid-column: span 2 !important;
+          grid-row: span 1 !important;
+        }
+      }
     </style>
   </head>
   <body>
@@ -753,46 +785,54 @@
           <div class="panel-content">
             <h1 class="section-title"><span>P</span>ortrait</h1>
             <p class="gallery-hint">Tap or click an image to enlarge / 写真をタップ・クリックで拡大表示できます</p>
-            <div class="photo-grid">
+            <div class="photo-grid portrait-grid">
               
               <div class="photo-item">
-                <img src="images/thumb_DSC06507.png" data-highres="images/DSC06507.png" alt="Gallery Image 11" loading="lazy" />
+                <img src="images/thumb_DSC06507.png" data-highres="images/DSC06507.png" alt="Gallery Image 21" loading="lazy" />
               </div>
               <div class="photo-item">
-                <img src="images/thumb_DSC06520.png" data-highres="images/DSC06520.png" alt="Gallery Image 12" loading="lazy" />
+                <img src="images/thumb_DSC06520.png" data-highres="images/DSC06520.png" alt="Gallery Image 22" loading="lazy" />
+              </div>
+              
+              <div class="photo-item size-large">
+                <img src="images/thumb_DSC06523.png" data-highres="images/DSC06523.png" alt="Gallery Image 23" loading="lazy" />
+              </div>
+              
+              <div class="photo-item size-wide">
+                <img src="images/thumb_DSC06531.png" data-highres="images/DSC06531.png" alt="Gallery Image 24" loading="lazy" />
+              </div>
+              
+              <div class="photo-item size-tall">
+                <img src="images/thumb_DSC06543.png" data-highres="images/DSC06543.png" alt="Gallery Image 25" loading="lazy" />
+              </div>
+              <div class="photo-item size-tall">
+                <img src="images/thumb_DSC06698.png" data-highres="images/DSC06698.png" alt="Gallery Image 26" loading="lazy" />
+              </div>
+              
+              <div class="photo-item">
+                <img src="images/thumb_DSC06758.png" data-highres="images/DSC06758.png" alt="Gallery Image 27" loading="lazy" />
               </div>
               <div class="photo-item">
-                <img src="images/thumb_DSC06523.png" data-highres="images/DSC06523.png" alt="Gallery Image 13" loading="lazy" />
+                <img src="images/thumb_DSC06766.png" data-highres="images/DSC06766.png" alt="Gallery Image 28" loading="lazy" />
               </div>
               <div class="photo-item">
-                <img src="images/thumb_DSC06531.png" data-highres="images/DSC06531.png" alt="Gallery Image 14" loading="lazy" />
+                <img src="images/thumb_DSC06775.png" data-highres="images/DSC06775.png" alt="Gallery Image 29" loading="lazy" />
               </div>
-              <div class="photo-item">
-                <img src="images/thumb_DSC06543.png" data-highres="images/DSC06543.png" alt="Gallery Image 15" loading="lazy" />
+              
+              <div class="photo-item size-wide">
+                <img src="images/thumb_DSC06828.png" data-highres="images/DSC06828.png" alt="Gallery Image 30" loading="lazy" />
               </div>
-              <div class="photo-item">
-                <img src="images/thumb_DSC06698.png" data-highres="images/DSC06698.png" alt="Gallery Image 16" loading="lazy" />
+              
+              <div class="photo-item size-large">
+                <img src="images/thumb_DSC06838.png" data-highres="images/DSC06838.png" alt="Gallery Image 31" loading="lazy" />
               </div>
-              <div class="photo-item">
-                <img src="images/thumb_DSC06758.png" data-highres="images/DSC06758.png" alt="Gallery Image 17" loading="lazy" />
+              
+              <div class="photo-item size-wide">
+                <img src="images/thumb_DSC06864.png" data-highres="images/DSC06864.png" alt="Gallery Image 32" loading="lazy" />
               </div>
-              <div class="photo-item">
-                <img src="images/thumb_DSC06766.png" data-highres="images/DSC06766.png" alt="Gallery Image 18" loading="lazy" />
-              </div>
-              <div class="photo-item">
-                <img src="images/thumb_DSC06775.png" data-highres="images/DSC06775.png" alt="Gallery Image 19" loading="lazy" />
-              </div>
-              <div class="photo-item">
-                <img src="images/thumb_DSC06828.png" data-highres="images/DSC06828.png" alt="Gallery Image 20" loading="lazy" />
-              </div>
-              <div class="photo-item">
-                <img src="images/thumb_DSC06838.png" data-highres="images/DSC06838.png" alt="Gallery Image 21" loading="lazy" />
-              </div>
-              <div class="photo-item">
-                <img src="images/thumb_DSC06864.png" data-highres="images/DSC06864.png" alt="Gallery Image 22" loading="lazy" />
-              </div>
-              <div class="photo-item">
-                <img src="images/thumb_DSC06883.png" data-highres="images/DSC06883.png" alt="Gallery Image 23" loading="lazy" />
+              
+              <div class="photo-item size-tall">
+                <img src="images/thumb_DSC06883.png" data-highres="images/DSC06883.png" alt="Gallery Image 33" loading="lazy" />
               </div>
               
             </div>
