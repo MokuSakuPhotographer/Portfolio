@@ -323,6 +323,10 @@
       .gear-link-text a:hover {
         opacity: 0.7;
       }
+      /* === 文字色の一部変更用スタイル === */
+      .accent-color {
+        color: var(--accent-orange);
+      }
       /* === フッター（コピーライト）のスタイル === */
       .site-footer {
         text-align: center;
@@ -413,9 +417,24 @@
             />
           </svg>
         </a>
+
+        <a
+          href="https://mokusaku.hatenablog.com"
+          target="_blank"
+          aria-label="Blog"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+            />
+          </svg>
+        </a>
       </div>
 
-      <h1 class="profile-name js-scroll-trigger">MokuSaku</h1>
+      <h1 class="profile-name js-scroll-trigger">
+        <span class="accent-color">M</span>oku<span class="accent-color">S</span
+        >aku
+      </h1>
       <p class="profile-role js-scroll-trigger">
         関東を拠点に活動するフォト・ビデオグラファー
       </p>
