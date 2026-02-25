@@ -227,9 +227,6 @@
       .split-panel:last-child {
         border-right: none;
       }
-      .split-panel:hover {
-        flex: 1.8; /* マウスを乗せると少し広がる */
-      }
 
       /* 表紙の背景画像と文字 */
       .panel-cover {
@@ -241,10 +238,7 @@
         transition: all 0.5s ease;
         cursor: pointer;
       }
-      .split-panel:hover .panel-cover {
-        filter: brightness(0.8) grayscale(0%);
-        transform: scale(1.15);
-      }
+
       .panel-title {
         position: absolute;
         top: 50%;
@@ -259,9 +253,18 @@
         z-index: 10;
       }
 
-      /* ▼ 追加：マウスを乗せた時に文字をオレンジにする ▼ */
-      .split-panel:hover .panel-title {
-        color: var(--accent-orange);
+      /* ▼ 修正：PC（マウスがある端末）の時だけホバーアニメーションを有効にする ▼ */
+      @media (hover: hover) and (pointer: fine) {
+        .split-panel:hover {
+          flex: 1.8; /* マウスを乗せると少し広がる */
+        }
+        .split-panel:hover .panel-cover {
+          filter: brightness(0.8) grayscale(0%);
+          transform: scale(1.15);
+        }
+        .split-panel:hover .panel-title {
+          color: var(--accent-orange);
+        }
       }
       /* パネルをクリックして展開した時の状態 */
       .split-panel.is-active {
@@ -777,7 +780,7 @@
             <h1 class="section-title"><span>S</span>nap</h1>
             <p class="gallery-hint">
               Tap or click an image to enlarge /
-              写真をタップ・クリックで拡大表示できます<br>被写体様のお名前は敬称略とさせていただいております
+              写真をタップ・クリックで拡大表示できます<br />被写体様のお名前は敬称略とさせていただいております
             </p>
             <div class="photo-grid">
               <div class="photo-item">
@@ -954,7 +957,7 @@
             <h1 class="section-title"><span>P</span>ortrait</h1>
             <p class="gallery-hint">
               Tap or click an image to enlarge /
-              写真をタップ・クリックで拡大表示できます<br>被写体様のお名前は敬称略とさせていただいております
+              写真をタップ・クリックで拡大表示できます<br />被写体様のお名前は敬称略とさせていただいております
             </p>
             <div class="photo-grid portrait-grid">
               <div class="photo-item">
@@ -1028,7 +1031,7 @@
                 <img
                   src="images/thumb_DSC06766.png"
                   data-highres="images/DSC06766.png"
-                  data-caption="Model: なな<br>Character: 菅谷 乃羽 (その着せ替え人形は恋をする)
+                  data-caption="Model: なな<br>Character: 菅谷 乃羽 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 28"
                   loading="lazy"
                 />
@@ -1067,7 +1070,7 @@
                 <img
                   src="images/thumb_DSC06864.png"
                   data-highres="images/DSC06864.png"
-                  data-caption="Model: なな<br>Character: 菅谷 乃羽 (その着せ替え人形は恋をする)
+                  data-caption="Model: なな<br>Character: 菅谷 乃羽 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 32"
                   loading="lazy"
                 />
