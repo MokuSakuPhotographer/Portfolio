@@ -563,6 +563,30 @@
         pointer-events: none;
       }
 
+      /* === ライトボックスのキャプション（被写体情報） === */
+      .lightbox-caption {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+        text-shadow:
+          0 2px 8px rgba(0, 0, 0, 0.9),
+          0 0 4px rgba(0, 0, 0, 0.6);
+        z-index: 2005;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        text-align: center;
+        pointer-events: none;
+        width: 90vw;
+      }
+      .lightbox.active .lightbox-caption.is-show {
+        opacity: 1;
+        transition-delay: 0.4s;
+      }
+
       /* === スクロールアニメーション用クラス === */
       .js-scroll-trigger {
         opacity: 0;
@@ -753,7 +777,7 @@
             <h1 class="section-title"><span>S</span>nap</h1>
             <p class="gallery-hint">
               Tap or click an image to enlarge /
-              写真をタップ・クリックで拡大表示できます
+              写真をタップ・クリックで拡大表示できます<br>被写体様のお名前は敬称略とさせていただいております
             </p>
             <div class="photo-grid">
               <div class="photo-item">
@@ -930,13 +954,14 @@
             <h1 class="section-title"><span>P</span>ortrait</h1>
             <p class="gallery-hint">
               Tap or click an image to enlarge /
-              写真をタップ・クリックで拡大表示できます
+              写真をタップ・クリックで拡大表示できます<br>被写体様のお名前は敬称略とさせていただいております
             </p>
             <div class="photo-grid portrait-grid">
               <div class="photo-item">
                 <img
                   src="images/thumb_DSC06507.png"
                   data-highres="images/DSC06507.png"
+                  data-caption="Model: 左:なな 右:おゆ💧<br>Character: 左:菅谷 乃羽 右:喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 21"
                   loading="lazy"
                 />
@@ -945,6 +970,7 @@
                 <img
                   src="images/thumb_DSC06520.png"
                   data-highres="images/DSC06520.png"
+                  data-caption="Model: なな<br>Character: 菅谷 乃羽 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 22"
                   loading="lazy"
                 />
@@ -954,6 +980,7 @@
                 <img
                   src="images/thumb_DSC06523.png"
                   data-highres="images/DSC06523.png"
+                  data-caption="Model: 左:なな 右:おゆ💧<br>Character: 左:菅谷 乃羽 右:喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 23"
                   loading="lazy"
                 />
@@ -963,6 +990,7 @@
                 <img
                   src="images/thumb_DSC06531.png"
                   data-highres="images/DSC06531.png"
+                  data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 24"
                   loading="lazy"
                 />
@@ -972,6 +1000,7 @@
                 <img
                   src="images/thumb_DSC06543.png"
                   data-highres="images/DSC06543.png"
+                  data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 25"
                   loading="lazy"
                 />
@@ -980,6 +1009,7 @@
                 <img
                   src="images/thumb_DSC06698.png"
                   data-highres="images/DSC06698.png"
+                  data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 26"
                   loading="lazy"
                 />
@@ -989,6 +1019,7 @@
                 <img
                   src="images/thumb_DSC06758.png"
                   data-highres="images/DSC06758.png"
+                  data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 27"
                   loading="lazy"
                 />
@@ -997,6 +1028,7 @@
                 <img
                   src="images/thumb_DSC06766.png"
                   data-highres="images/DSC06766.png"
+                  data-caption="Model: なな<br>Character: 菅谷 乃羽 (その着せ替え人形は恋をする)
                   alt="Gallery Image 28"
                   loading="lazy"
                 />
@@ -1005,6 +1037,7 @@
                 <img
                   src="images/thumb_DSC06775.png"
                   data-highres="images/DSC06775.png"
+                  data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 29"
                   loading="lazy"
                 />
@@ -1014,6 +1047,7 @@
                 <img
                   src="images/thumb_DSC06828.png"
                   data-highres="images/DSC06828.png"
+                  data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 30"
                   loading="lazy"
                 />
@@ -1023,6 +1057,7 @@
                 <img
                   src="images/thumb_DSC06838.png"
                   data-highres="images/DSC06838.png"
+                  data-caption="Model: 左:おゆ💧 右:なな<br>Character: 左:喜多川 海夢 右:菅谷 乃羽 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 31"
                   loading="lazy"
                 />
@@ -1032,6 +1067,7 @@
                 <img
                   src="images/thumb_DSC06864.png"
                   data-highres="images/DSC06864.png"
+                  data-caption="Model: なな<br>Character: 菅谷 乃羽 (その着せ替え人形は恋をする)
                   alt="Gallery Image 32"
                   loading="lazy"
                 />
@@ -1041,6 +1077,7 @@
                 <img
                   src="images/thumb_DSC06883.png"
                   data-highres="images/DSC06883.png"
+                  data-caption="Model: 左:なな 右:おゆ💧<br>Character: 左:菅谷 乃羽 右:喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 33"
                   loading="lazy"
                 />
@@ -1283,6 +1320,9 @@
       <div id="lightbox-progress" class="lightbox-progress"></div>
 
       <img id="lightbox-img" src="" alt="Expanded Image" />
+
+      <div id="lightbox-caption" class="lightbox-caption"></div>
+
       <div class="lightbox-close">×</div>
     </div>
 
@@ -1315,6 +1355,7 @@
       const lightboxImg = document.getElementById("lightbox-img");
       const lightboxBg = document.querySelector(".lightbox-bg");
       const lightboxClose = document.querySelector(".lightbox-close");
+      const lightboxCaption = document.getElementById("lightbox-caption");
       let activeImage = null;
 
       lightboxImg.style.visibility = "hidden";
@@ -1330,6 +1371,14 @@
 
           lightboxImg.src = activeImage.src;
           lightboxImg.style.visibility = "visible";
+          const captionText = activeImage.getAttribute("data-caption");
+          if (captionText) {
+            lightboxCaption.innerHTML = captionText;
+            lightboxCaption.classList.add("is-show");
+          } else {
+            lightboxCaption.innerHTML = "";
+            lightboxCaption.classList.remove("is-show");
+          }
 
           lightboxImg.style.transition = "none";
           lightboxImg.style.left = rect.left + "px";
@@ -1418,6 +1467,7 @@
 
         lightboxBg.style.opacity = "0";
         lightboxClose.style.opacity = "0";
+        lightboxCaption.classList.remove("is-show");
         lightboxImg.style.left = rect.left + "px";
         lightboxImg.style.top = rect.top + "px";
         lightboxImg.style.width = rect.width + "px";
