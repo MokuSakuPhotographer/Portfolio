@@ -1,0 +1,1533 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery | MokuSaku</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        scrollbar-gutter: stable;
+      }
+      /* === SONY風ダークテーマ定義 === */
+      :root {
+        --bg-main: #1a1a1a;
+        --bg-dark: #111111;
+        --bg-header: rgba(30, 30, 30, 0.95);
+        --text-primary: #f0f0f0;
+        --text-secondary: #a0a0a0;
+        --accent-orange: #ff4d00;
+        --border-color: #333333;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family:
+          "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+        color: var(--text-primary);
+        background-color: var(--bg-main);
+        line-height: 1.6;
+        scroll-behavior: smooth;
+        position: relative;
+        min-height: 100vh;
+      }
+
+      /* === 背景画像を薄く敷く設定 === */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-image: url("images/Camera_a.png");
+        background-size: cover;
+        background-position: center;
+        opacity: 0.15;
+        z-index: -2;
+        pointer-events: none;
+      }
+
+      /* === 1. ヘッダーを通常配置に戻し、フェードアウト機能を追加 === */
+      header {
+        position: sticky;
+        top: 0;
+        background-color: var(--bg-header);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        transition:
+          transform 0.4s ease,
+          opacity 0.4s ease;
+      }
+      /* パネル展開時にヘッダーを隠すための魔法のクラス */
+      header.is-hidden {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transform: translateY(
+          -100%
+        ) !important; /* ←追加：完全に画面外へ飛ばす */
+      }
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+      }
+
+      /* ▼ サイトタイトルの色統一 ▼ */
+      .site-title {
+        font-family: "Dancing Script", cursive;
+        font-size: 1.8rem;
+        color: var(--accent-orange);
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.3s ease;
+      }
+      .site-title:hover {
+        color: var(--text-primary);
+      }
+
+      nav {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        padding: 15px 0;
+      }
+      nav a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--text-primary);
+        margin: 5px 15px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+      nav a:hover {
+        color: var(--accent-orange);
+      }
+      nav a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--accent-orange);
+        transition: width 0.3s ease;
+      }
+      nav a:hover::after {
+        width: 100%;
+      }
+
+      .nav-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        transition: filter 0.3s ease;
+      }
+      nav a:hover .nav-icon {
+        filter: brightness(0) saturate(100%) invert(39%) sepia(93%)
+          saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
+      }
+
+      @media (max-width: 850px) {
+        .header-container {
+          flex-direction: column;
+          padding-top: 15px;
+        }
+        nav {
+          justify-content: center;
+          padding-top: 5px;
+          padding-bottom: 10px;
+        }
+        .site-title {
+          font-size: 2.2rem;
+        }
+      }
+
+      /* === ギャラリー専用スタイル === */
+      .gallery-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 20px 80px; /* 80px 20px から変更：上の余白を0にして天井にピッタリくっつける */
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        letter-spacing: 0.15em;
+        margin-bottom: 60px;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: 300;
+      }
+      .section-title span {
+        color: var(--accent-orange);
+        font-style: italic;
+      }
+      /* === ギャラリーの操作説明テキスト === */
+      .gallery-hint {
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-top: -45px; /* 上のタイトルの大きな余白を少し打ち消して近づける */
+        margin-bottom: 50px;
+        letter-spacing: 0.05em;
+        font-weight: normal;
+      }
+      /* === 2. スプリットコンテナ（3分割パネル）の最適化 === */
+      .split-container {
+        display: flex;
+        width: 100vw;
+        height: 75vh; /* PCでは少し高さを抑えて美しく */
+        margin-left: calc(50% - 50vw);
+        overflow: hidden;
+        background-color: transparent;
+        transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+      @media (max-width: 850px) {
+        .split-container {
+          flex-direction: column;
+          height: calc(
+            100vh - 130px
+          ); /* ←修正：スマホ画面の高さにピッタリ合わせる */
+        }
+      }
+
+      /* ▼ 修正：パネル展開時に画面全体をジャックする「全画面化」クラス ▼ */
+      .split-container.is-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        z-index: 2000 !important;
+        background-color: transparent !important; /* ← 透明に戻す */
+      }
+
+      .split-panel {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1); /* 滑らかに広がる魔法 */
+        border-right: 1px solid var(--border-color);
+      }
+      .split-panel:last-child {
+        border-right: none;
+      }
+      .split-panel:hover {
+        flex: 1.8; /* マウスを乗せると少し広がる */
+      }
+
+      /* 表紙の背景画像と文字 */
+      .panel-cover {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.4) grayscale(60%);
+        transition: all 0.5s ease;
+        cursor: pointer;
+      }
+      .split-panel:hover .panel-cover {
+        filter: brightness(0.8) grayscale(0%);
+        transform: scale(1.15);
+      }
+      .panel-title {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+        font-family: "Dancing Script", cursive;
+        font-size: 3.5rem;
+        pointer-events: none;
+        text-shadow: 0 5px 15px rgba(0, 0, 0, 0.9);
+        transition: all 0.4s ease;
+        z-index: 10;
+      }
+
+      /* ▼ 追加：マウスを乗せた時に文字をオレンジにする ▼ */
+      .split-panel:hover .panel-title {
+        color: var(--accent-orange);
+      }
+      /* パネルをクリックして展開した時の状態 */
+      .split-panel.is-active {
+        flex: 10;
+        overflow-y: auto; /* 中身のスクロールを許可 */
+        cursor: default;
+      }
+      .split-panel.is-hidden {
+        flex: 0;
+        border: none;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .split-panel.is-active .panel-cover,
+      .split-panel.is-active .panel-title {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* 展開後に表示される中身 */
+      .panel-content {
+        display: none;
+        padding: 80px 5vw 80px; /* ←修正：120pxから80pxに減らし、無駄な黒い空間を消す */
+        opacity: 0;
+        animation: fadeInContent 0.8s ease forwards 0.4s;
+      }
+      .split-panel.is-active .panel-content {
+        display: block;
+      }
+      @keyframes fadeInContent {
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* 戻るボタン */
+      .back-btn {
+        position: fixed;
+        top: 90px;
+        left: 20px;
+        z-index: 2500;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.6);
+        border: 1px solid var(--accent-orange);
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        display: none;
+        backdrop-filter: blur(5px);
+        transition: background-color 0.3s;
+      }
+      .back-btn:hover {
+        background-color: var(--accent-orange);
+      }
+      .back-btn.is-show {
+        display: block;
+      }
+      /* ▼ 修正：スマホ表示時の戻るボタンを「絶対に左下」に固定 ▼ */
+      @media (max-width: 850px) {
+        .back-btn {
+          top: auto !important;
+          bottom: 30px !important;
+          left: 20px !important;
+          font-size: 0.8rem;
+          padding: 12px 18px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+        }
+      }
+      /* --- 1. 写真（美しいタイル状レイアウト・15枚用） --- */
+      .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 250px;
+        gap: 15px;
+        margin-bottom: 100px;
+        grid-auto-flow: dense; /* 空白を自動で隙間なく埋める魔法の設定 */
+      }
+
+      .photo-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 2px;
+        background-color: #000;
+      }
+
+      .photo-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(80%) contrast(1.1);
+        transition:
+          transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+          filter 0.6s ease;
+        cursor: zoom-in;
+      }
+
+      .photo-item:hover img {
+        filter: grayscale(0%) contrast(1.05);
+        transform: scale(1.05);
+      }
+
+      /* 20枚の画像を縦長・横長・正方形でバランスよく散りばめる設定 */
+      .photo-item:nth-child(1) {
+        grid-column: span 2;
+        grid-row: span 2;
+      } /* 左上の大きなアイキャッチ */
+      .photo-item:nth-child(4) {
+        grid-column: span 2;
+      } /* 横長 */
+      .photo-item:nth-child(6) {
+        grid-column: span 2;
+      } /* 横長 */
+      .photo-item:nth-child(15) {
+        grid-column: span 2;
+        grid-row: span 2;
+      } /* 中央の大きなアイキャッチ */
+      .photo-item:nth-child(12) {
+        grid-column: span 2;
+      } /* 横長 */
+      .photo-item:nth-child(14) {
+        grid-row: span 2;
+      } /* 縦長 */
+      .photo-item:nth-child(17) {
+        grid-row: span 2;
+      } /* 縦長 */
+      .photo-item:nth-child(18) {
+        grid-column: span 2;
+      } /* 横長 */
+
+      @media (max-width: 768px) {
+        .photo-grid {
+          grid-template-columns: repeat(2, 1fr);
+          grid-auto-rows: 200px;
+        }
+        .photo-item {
+          grid-column: span 1 !important;
+          grid-row: span 1 !important;
+        }
+        /* スマホ時は横長をアクセントとしてリズミカルに配置 */
+        .photo-item:nth-child(1),
+        .photo-item:nth-child(4),
+        .photo-item:nth-child(9),
+        .photo-item:nth-child(12),
+        .photo-item:nth-child(17),
+        .photo-item:nth-child(20) {
+          grid-column: span 2 !important;
+        }
+      }
+
+      /* --- 2. 動画（YouTube埋め込み） --- */
+      .video-section {
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+      }
+
+      .video-wrapper {
+        position: relative;
+        width: 80%;
+        border-left: 4px solid var(--accent-orange);
+        padding-left: 20px;
+        box-sizing: border-box;
+      }
+
+      .video-wrapper:nth-child(even) {
+        margin-left: auto;
+        border-left: none;
+        border-right: 4px solid var(--accent-orange);
+        padding-left: 0;
+        padding-right: 20px;
+        text-align: right;
+      }
+
+      .video-title {
+        font-size: 1.2rem;
+        color: #fff;
+        margin-bottom: 15px;
+        letter-spacing: 0.1em;
+      }
+
+      .video-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: 4px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        background-color: #000;
+      }
+      .video-container iframe,
+      .video-container video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        object-fit: contain; /* 枠内に動画をピッタリ収める設定 */
+        background-color: #000;
+      }
+
+      @media (max-width: 768px) {
+        .video-wrapper {
+          width: 100%;
+        }
+      }
+
+      /* === ライトボックス（画像拡大アニメーション）用スタイル === */
+      .lightbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 3000;
+        pointer-events: none;
+      }
+      .lightbox.active {
+        pointer-events: auto;
+      }
+      .lightbox-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(8px);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .lightbox.active .lightbox-bg {
+        opacity: 1;
+      }
+      #lightbox-img {
+        position: absolute;
+        z-index: 2001;
+        object-fit: cover;
+        cursor: zoom-out;
+        border-radius: 2px;
+      }
+      .lightbox-close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: #fff;
+        font-size: 40px;
+        cursor: pointer;
+        z-index: 2002;
+        opacity: 0;
+        transition:
+          opacity 0.4s ease,
+          color 0.3s ease;
+        line-height: 1;
+      }
+      .lightbox.active .lightbox-close {
+        opacity: 1;
+        transition-delay: 0.3s;
+      }
+      .lightbox-close:hover {
+        color: var(--accent-orange);
+      }
+      .lightbox-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-top-color: var(--accent-orange);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        z-index: 2000;
+        display: none;
+      }
+      @keyframes spin {
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+      /* === 画像読み込み用プログレスバー（細いオレンジの線） === */
+      .lightbox-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background-color: var(--accent-orange);
+        box-shadow: 0 0 10px var(--accent-orange);
+        z-index: 2005;
+        opacity: 0;
+        transition:
+          width 0.4s ease-out,
+          opacity 0.4s ease;
+        pointer-events: none;
+      }
+
+      /* === スクロールアニメーション用クラス === */
+      .js-scroll-trigger {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.8s ease-out,
+          transform 0.8s ease-out;
+      }
+      .js-scroll-trigger.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      /* === パネル展開時に外側のスクロールを隠す設定 === */
+      body.is-panel-open {
+        overflow: hidden;
+      }
+
+      /* === TOPへ戻るボタンのスタイル === */
+      .page-top-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background-color: var(--bg-dark);
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        color: var(--text-primary);
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2rem;
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+      .page-top-btn.is-show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .page-top-btn:hover {
+        background-color: var(--accent-orange);
+        border-color: var(--accent-orange);
+        color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
+      }
+      /* === フッター（コピーライト）のスタイル === */
+      .site-footer {
+        text-align: center;
+        padding: 20px 10px;
+        margin-top: 60px;
+        border-top: 1px solid var(--border-color);
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        letter-spacing: 0.05em;
+      }
+      body.is-panel-open > .site-footer {
+        display: none;
+      }
+      /* === 動画の担当役割（Role）表示スタイル === */
+      .video-role {
+        display: inline-block;
+        font-size: 0.75rem; /* タイトルより小さく */
+        color: var(--text-secondary); /* 控えめなグレー */
+        margin-left: 12px;
+        padding: 3px 8px;
+        border: 1px solid var(--border-color); /* 薄い枠線でバッジ風に */
+        border-radius: 4px;
+        font-weight: normal;
+        letter-spacing: 0.05em;
+        vertical-align: middle;
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.03
+        ); /* ほんの少しだけ背景を明るく */
+      }
+
+      /* スマホ表示ではタイトルの横幅が狭くなるため、少し余白を調整します */
+      @media (max-width: 768px) {
+        .video-role {
+          display: block; /* スマホではタイトルの下に改行して表示 */
+          width: fit-content;
+          margin-top: 8px;
+          margin-left: 0;
+        }
+        /* 偶数番目（右寄せ）の動画はバッジも右に寄せる */
+        .video-wrapper:nth-child(even) .video-role {
+          margin-left: auto;
+        }
+      }
+      /* === Portraitセクション専用 タイルレイアウト拡張 === */
+      /* Snapの設定と干渉させないためのリセット */
+      .split-panel .portrait-grid .photo-item {
+        grid-column: span 1;
+        grid-row: span 1;
+      }
+
+      /* それぞれのサイズ指定 */
+      .split-panel .portrait-grid .photo-item.size-large {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+      .split-panel .portrait-grid .photo-item.size-wide {
+        grid-column: span 2;
+      }
+      .split-panel .portrait-grid .photo-item.size-tall {
+        grid-row: span 2;
+      }
+
+      /* スマホ表示時のPortrait用レスポンシブ調整 */
+      @media (max-width: 768px) {
+        .split-panel .portrait-grid .photo-item {
+          grid-column: span 1 !important;
+          grid-row: span 1 !important;
+        }
+        /* スマホ時は大きく・横長なものを2列に広げて見栄えを良くする */
+        .split-panel .portrait-grid .photo-item.size-large,
+        .split-panel .portrait-grid .photo-item.size-wide {
+          grid-column: span 2 !important;
+          grid-row: span 1 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <a href="index.html" class="site-title">MokuSaku's Photo booth</a>
+        <nav>
+          <a href="profile.html"
+            ><img
+              src="images/Profile.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Profile</a
+          >
+          <a href="Policy.html"
+            ><img
+              src="images/Policy.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Policy</a
+          >
+          <a href="event.html"
+            ><img
+              src="images/Calendar.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Schedule</a
+          >
+          <a href="gallery.html"
+            ><img
+              src="images/Gallery.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Gallery</a
+          >
+          <a href="equipment.html"
+            ><img src="images/Gear.png?v=2" class="nav-icon" alt="" />Gear</a
+          >
+          <a href="contact.html"
+            ><img
+              src="images/Contact.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Contact</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <button id="backToMenu" class="back-btn">← BACK TO CATEGORIES</button>
+
+    <section class="gallery-container">
+      <div class="split-container">
+        <div class="split-panel">
+          <div
+            class="panel-cover"
+            style="background-image: url(&quot;images/thumb_DSC02601.png&quot;)"
+          ></div>
+          <div class="panel-title">Snap</div>
+          <div class="panel-content">
+            <h1 class="section-title"><span>S</span>nap</h1>
+            <p class="gallery-hint">
+              Tap or click an image to enlarge /
+              写真をタップ・クリックで拡大表示できます
+            </p>
+            <div class="photo-grid">
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC04616.png"
+                  data-highres="images/DSC04616.png"
+                  alt="Gallery Image 1"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC04604.png"
+                  data-highres="images/DSC04604.png"
+                  alt="Gallery Image 2"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC00589.png"
+                  data-highres="images/DSC00589.png"
+                  alt="Gallery Image 3"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC00992.png"
+                  data-highres="images/DSC00992.png"
+                  alt="Gallery Image 4"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC03561.png"
+                  data-highres="images/DSC03561.png"
+                  alt="Gallery Image 5"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC02215-Enhanced-NR.png"
+                  data-highres="images/DSC02215-Enhanced-NR.png"
+                  alt="Gallery Image 6"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC02077.png"
+                  data-highres="images/DSC02077.png"
+                  alt="Gallery Image 7"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC00252_20230218.png"
+                  data-highres="images/DSC00252_20230218.png"
+                  alt="Gallery Image 8"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC01866.png"
+                  data-highres="images/DSC01866.png"
+                  alt="Gallery Image 9"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_A7C03670.png"
+                  data-highres="images/A7C03670.png"
+                  alt="Gallery Image 10"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC06066.png"
+                  data-highres="images/DSC06066.png"
+                  alt="Gallery Image 11"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_Camera_a.png"
+                  data-highres="images/Camera_a.png"
+                  alt="Gallery Image 12"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC02047.png"
+                  data-highres="images/DSC02047.png"
+                  alt="Gallery Image 13"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC01850.png"
+                  data-highres="images/DSC01850.png"
+                  alt="Gallery Image 14"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC00587_20230401.png"
+                  data-highres="images/DSC00587_20230401.png"
+                  alt="Gallery Image 15"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_20201210-DSC00288.png"
+                  data-highres="images/20201210-DSC00288.png"
+                  alt="Gallery Image 16"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_20201210-DSC00223.png"
+                  data-highres="images/20201210-DSC00223.png"
+                  alt="Gallery Image 17"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC01033.png"
+                  data-highres="images/DSC01033.png"
+                  alt="Gallery Image 18"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC02601.png"
+                  data-highres="images/DSC02601.png"
+                  alt="Gallery Image 19"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC00484.png"
+                  data-highres="images/DSC00484.png"
+                  alt="Gallery Image 20"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="split-panel">
+          <div
+            class="panel-cover"
+            style="background-image: url(&quot;images/thumb_DSC06507.png&quot;)"
+          ></div>
+          <div class="panel-title">Portrait</div>
+          <div class="panel-content">
+            <h1 class="section-title"><span>P</span>ortrait</h1>
+            <p class="gallery-hint">
+              Tap or click an image to enlarge /
+              写真をタップ・クリックで拡大表示できます
+            </p>
+            <div class="photo-grid portrait-grid">
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC06507.png"
+                  data-highres="images/DSC06507.png"
+                  alt="Gallery Image 21"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC06520.png"
+                  data-highres="images/DSC06520.png"
+                  alt="Gallery Image 22"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="photo-item size-large">
+                <img
+                  src="images/thumb_DSC06523.png"
+                  data-highres="images/DSC06523.png"
+                  alt="Gallery Image 23"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="photo-item size-wide">
+                <img
+                  src="images/thumb_DSC06531.png"
+                  data-highres="images/DSC06531.png"
+                  alt="Gallery Image 24"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="photo-item size-tall">
+                <img
+                  src="images/thumb_DSC06543.png"
+                  data-highres="images/DSC06543.png"
+                  alt="Gallery Image 25"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item size-tall">
+                <img
+                  src="images/thumb_DSC06698.png"
+                  data-highres="images/DSC06698.png"
+                  alt="Gallery Image 26"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="photo-item size-tall">
+                <img
+                  src="images/thumb_DSC06758.png"
+                  data-highres="images/DSC06758.png"
+                  alt="Gallery Image 27"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item size-tall">
+                <img
+                  src="images/thumb_DSC06766.png"
+                  data-highres="images/DSC06766.png"
+                  alt="Gallery Image 28"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC06775.png"
+                  data-highres="images/DSC06775.png"
+                  alt="Gallery Image 29"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="photo-item">
+                <img
+                  src="images/thumb_DSC06828.png"
+                  data-highres="images/DSC06828.png"
+                  alt="Gallery Image 30"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="photo-item size-large">
+                <img
+                  src="images/thumb_DSC06838.png"
+                  data-highres="images/DSC06838.png"
+                  alt="Gallery Image 31"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="photo-item size-tall">
+                <img
+                  src="images/thumb_DSC06864.png"
+                  data-highres="images/DSC06864.png"
+                  alt="Gallery Image 32"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="photo-item size-tall">
+                <img
+                  src="images/thumb_DSC06883.png"
+                  data-highres="images/DSC06883.png"
+                  alt="Gallery Image 33"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="split-panel">
+          <div
+            class="panel-cover"
+            style="
+              background-image: url(&quot;images/thumb_videography.png&quot;);
+            "
+          ></div>
+          <div class="panel-title">Video</div>
+          <div class="panel-content">
+            <h1 class="section-title"><span>V</span>ideography</h1>
+            <div class="video-section">
+              <div class="video-wrapper">
+                <div class="video-title">
+                  春猿火 / 声帯学【Unofficial Lyrics MV】<span
+                    class="video-role"
+                    >リリックアニメーション・文字デザイン</span
+                  >
+                </div>
+                <div class="video-container">
+                  <video
+                    controls
+                    playsinline
+                    preload="metadata"
+                    poster="videos/Thumb_video5.jpg"
+                  >
+                    <source src="videos/春猿火 - 声帯学.mp4" type="video/mp4" />
+                    お使いのブラウザは動画の再生に対応していません。
+                  </video>
+                </div>
+              </div>
+              <div class="video-wrapper">
+                <div class="video-title">
+                  Sumerlin / Speak Up, Speak Out【Unofficial Lyrics MV】<span
+                    class="video-role"
+                    >リリックアニメーション・文字デザイン</span
+                  >
+                </div>
+                <div class="video-container">
+                  <video
+                    controls
+                    playsinline
+                    preload="metadata"
+                    poster="videos/Thumb_video1.jpg"
+                  >
+                    <source
+                      src="videos/Sumerlin   Speak Up, Speak Out【Unofficial Lyrics MV】.mp4"
+                      type="video/mp4"
+                    />
+                    お使いのブラウザは動画の再生に対応していません。
+                  </video>
+                </div>
+              </div>
+              <div class="video-wrapper">
+                <div class="video-title">
+                  Orangestar - Encounter【Unofficial Lyrics MV】<span
+                    class="video-role"
+                    >リリックアニメーション・文字デザイン</span
+                  >
+                </div>
+                <div class="video-container">
+                  <video
+                    controls
+                    playsinline
+                    preload="metadata"
+                    poster="videos/Thumb_video6.png"
+                  >
+                    <source
+                      src="videos/Orangestar - Encounter.mp4"
+                      type="video/mp4"
+                    />
+                    お使いのブラウザは動画の再生に対応していません。
+                  </video>
+                </div>
+              </div>
+              <div class="video-wrapper">
+                <div class="video-title">
+                  2020/12/07 Vlog<span class="video-role">映像全般</span>
+                </div>
+                <div class="video-container">
+                  <video
+                    controls
+                    playsinline
+                    preload="metadata"
+                    poster="videos/Thumb_video4.jpg"
+                  >
+                    <source src="videos/My first Vlog.mp4" type="video/mp4" />
+                    お使いのブラウザは動画の再生に対応していません。
+                  </video>
+                </div>
+              </div>
+
+              <div class="video-wrapper">
+                <div class="video-title">
+                  ROY - Mily (feat. Elad)【Unofficial Lyrics MV】<span
+                    class="video-role"
+                    >リリックアニメーション・文字デザイン</span
+                  >
+                </div>
+                <div class="video-container">
+                  <video
+                    controls
+                    playsinline
+                    preload="metadata"
+                    poster="videos/Thumb_video2.jpg"
+                  >
+                    <source
+                      src="videos/ROY - Mily (feat. Elad)【Unofficial Lyrics MV】.mp4"
+                      type="video/mp4"
+                    />
+                    お使いのブラウザは動画の再生に対応していません。
+                  </video>
+                </div>
+              </div>
+
+              <div class="video-wrapper">
+                <div class="video-title">
+                  Parasite Eve【VALORANT 3D MONTAGE】<span class="video-role"
+                    >3DCG・3Dアニメーション</span
+                  >
+                </div>
+                <div class="video-container">
+                  <video
+                    controls
+                    playsinline
+                    preload="metadata"
+                    poster="videos/Thumb_video3.jpg"
+                  >
+                    <source src="videos/Parasite Eve.mp4" type="video/mp4" />
+                    お使いのブラウザは動画の再生に対応していません。
+                  </video>
+                </div>
+              </div>
+
+              <div class="video-wrapper">
+                <div class="video-title">
+                  Ridy Hudson Love song (Lyric video)<span class="video-role"
+                    >映像全般</span
+                  >
+                </div>
+                <div class="video-container">
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/h-7ce-ToyDE?si=auTBBz4kF6q6o2vz"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="
+                      accelerometer;
+                      autoplay;
+                      clipboard-write;
+                      encrypted-media;
+                      gyroscope;
+                      picture-in-picture;
+                      web-share;
+                    "
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+
+              <div class="video-wrapper">
+                <div class="video-title">
+                  さめざめ - 裏SHIBUYA<span class="video-role"
+                    >リリックアニメーション・文字デザイン</span
+                  >
+                </div>
+                <div class="video-container">
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/zx8EhAOL_Ic?si=hX6iZ63dKWBT4t8g"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="
+                      accelerometer;
+                      autoplay;
+                      clipboard-write;
+                      encrypted-media;
+                      gyroscope;
+                      picture-in-picture;
+                      web-share;
+                    "
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+
+              <div class="video-wrapper">
+                <div class="video-title">
+                  さめざめ - 洗脳B<span class="video-role"
+                    >リリックアニメーション・文字デザイン</span
+                  >
+                </div>
+                <div class="video-container">
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/8em_5LSJXsk?si=SvJQNxGHgkusEiy6"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="
+                      accelerometer;
+                      autoplay;
+                      clipboard-write;
+                      encrypted-media;
+                      gyroscope;
+                      picture-in-picture;
+                      web-share;
+                    "
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="site-footer">
+      &copy; 2026 MokuSaku. All Rights Reserved.<br />
+      当サイトのすべてのコンテンツの無断転載を禁じます。
+    </footer>
+
+    <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
+
+    <div id="lightbox" class="lightbox">
+      <div class="lightbox-bg"></div>
+
+      <div id="lightbox-progress" class="lightbox-progress"></div>
+
+      <img id="lightbox-img" src="" alt="Expanded Image" />
+      <div class="lightbox-close">×</div>
+    </div>
+
+    <script>
+      const scrollTriggers = document.querySelectorAll(".js-scroll-trigger");
+      const cb = function (entries, observer) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      };
+      const io = new IntersectionObserver(cb, { rootMargin: "-10% 0px" });
+      scrollTriggers.forEach((trigger) => {
+        io.observe(trigger);
+      });
+
+      const pageTopBtn = document.getElementById("pageTopBtn");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          pageTopBtn.classList.add("is-show");
+        } else {
+          pageTopBtn.classList.remove("is-show");
+        }
+      });
+
+      // === 画像拡大（ライトボックス）と高画質読み込みの制御 ===
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      const lightboxBg = document.querySelector(".lightbox-bg");
+      const lightboxClose = document.querySelector(".lightbox-close");
+      let activeImage = null;
+
+      lightboxImg.style.visibility = "hidden";
+
+      document.querySelectorAll(".photo-item img").forEach((img) => {
+        img.addEventListener("click", (e) => {
+          activeImage = e.target;
+          const rect = activeImage.getBoundingClientRect();
+          const highResSrc = activeImage.getAttribute("data-highres");
+
+          lightbox.classList.add("active");
+          document.body.style.overflow = "hidden";
+
+          lightboxImg.src = activeImage.src;
+          lightboxImg.style.visibility = "visible";
+
+          lightboxImg.style.transition = "none";
+          lightboxImg.style.left = rect.left + "px";
+          lightboxImg.style.top = rect.top + "px";
+          lightboxImg.style.width = rect.width + "px";
+          lightboxImg.style.height = rect.height + "px";
+          lightboxImg.style.objectFit = "cover";
+          lightboxImg.style.borderRadius = "2px";
+
+          lightboxImg.offsetHeight;
+
+          // アニメーション時間の調整（例として0.3秒）
+          lightboxImg.style.transition =
+            "all 0.3s cubic-bezier(0.25, 1, 0.5, 1)";
+          lightboxImg.style.left = "5vw";
+          lightboxImg.style.top = "5vh";
+          lightboxImg.style.width = "90vw";
+          lightboxImg.style.height = "90vh";
+          lightboxImg.style.objectFit = "contain";
+          lightboxImg.style.borderRadius = "0px";
+
+          if (highResSrc && highResSrc !== activeImage.src) {
+            // ▼ スピナーの代わりにプログレスバーを表示
+            const lightboxProgress =
+              document.getElementById("lightbox-progress");
+            lightboxProgress.style.opacity = "1";
+            lightboxProgress.style.width = "15%"; // 最初は15%までスッと伸ばす
+
+            // 擬似的に進捗を進める（最大85%までランダムに少しずつ伸ばす）
+            window.progressInterval = setInterval(() => {
+              let currentWidth = parseFloat(lightboxProgress.style.width);
+              if (currentWidth < 85) {
+                lightboxProgress.style.width =
+                  currentWidth + Math.random() * 10 + "%";
+              }
+            }, 400);
+
+            const highResImage = new Image();
+            highResImage.src = highResSrc;
+
+            // ▼ 読み込み完了時の処理
+            highResImage.onload = () => {
+              // プログレスバーを100%にする
+              clearInterval(window.progressInterval);
+              lightboxProgress.style.width = "100%";
+
+              lightboxImg.src = highResSrc;
+
+              // 0.3秒後にプログレスバーをフェードアウトさせてリセット
+              setTimeout(() => {
+                lightboxProgress.style.opacity = "0";
+                setTimeout(() => {
+                  lightboxProgress.style.width = "0%";
+                }, 400);
+              }, 300);
+
+              // ふわっとしたオレンジの光エフェクト（そのまま残す）
+              lightboxImg.style.transition = "all 0.5s ease-out";
+              lightboxImg.style.transform = "scale(1.015)";
+              lightboxImg.style.boxShadow = "0 0 100px rgba(255, 77, 0, 0.7)";
+
+              setTimeout(() => {
+                lightboxImg.style.transition = "all 0.5s ease-in-out";
+                lightboxImg.style.transform = "scale(1)";
+                lightboxImg.style.boxShadow = "0 0 0px rgba(255, 77, 0, 0)";
+              }, 500);
+            };
+          }
+        });
+      });
+
+      function closeLightbox() {
+        if (!activeImage) return;
+
+        // ▼ 追加：途中で閉じた時のプログレスバーのリセット
+        clearInterval(window.progressInterval);
+        const lightboxProgress = document.getElementById("lightbox-progress");
+        if (lightboxProgress) {
+          lightboxProgress.style.opacity = "0";
+          setTimeout(() => {
+            lightboxProgress.style.width = "0%";
+          }, 400);
+        }
+
+        const rect = activeImage.getBoundingClientRect();
+
+        lightboxBg.style.opacity = "0";
+        lightboxClose.style.opacity = "0";
+        lightboxImg.style.left = rect.left + "px";
+        lightboxImg.style.top = rect.top + "px";
+        lightboxImg.style.width = rect.width + "px";
+        lightboxImg.style.height = rect.height + "px";
+        lightboxImg.style.objectFit = "cover";
+
+        setTimeout(() => {
+          lightbox.classList.remove("active");
+          lightboxBg.style.opacity = "";
+          lightboxClose.style.opacity = "";
+          lightboxImg.style.visibility = "hidden";
+          document.body.style.overflow = "";
+          activeImage = null;
+        }, 300); // アニメーション時間（0.3秒）と合わせる
+      }
+
+      lightboxBg.addEventListener("click", closeLightbox);
+      lightboxClose.addEventListener("click", closeLightbox);
+      lightboxImg.addEventListener("click", closeLightbox);
+
+      // --- ヘッダーのスクロール（自動隠し）制御 ---
+      const header = document.querySelector("header");
+      let lastScrollY = 0;
+
+      // ▼ 共通のヘッダー隠し処理関数
+      function handleHeaderScroll(currentScrollY) {
+        if (Math.abs(currentScrollY - lastScrollY) < 60) {
+          return;
+        }
+        // 下にスクロール ＆ 上から50px以上スクロールしている場合のみ隠す
+        if (currentScrollY > lastScrollY && currentScrollY > 50) {
+          // ★ ピクセル指定ではなく、自分の高さ分（-100%）確実に上に移動させる
+          header.style.transform = "translateY(-100%)";
+        } else {
+          // 表示する時は元の位置（0）に戻す
+          header.style.transform = "translateY(0)";
+        }
+        lastScrollY = currentScrollY;
+      }
+
+      // 1. ページ全体（ウィンドウ）のスクロール検知
+      window.addEventListener("scroll", () => {
+        handleHeaderScroll(window.scrollY);
+      });
+
+      // 2. 展開された「パネルの中」のスクロールも検知する
+      document.querySelectorAll(".split-panel").forEach((panel) => {
+        panel.addEventListener("scroll", () => {
+          handleHeaderScroll(panel.scrollTop);
+        });
+      });
+
+      // === スプリットパネルの展開（全画面テイクオーバー）制御 ===
+      const splitContainer = document.querySelector(".split-container");
+      const panels = document.querySelectorAll(".split-panel");
+      const covers = document.querySelectorAll(".panel-cover");
+      const backBtn = document.getElementById("backToMenu");
+
+      covers.forEach((cover) => {
+        cover.addEventListener("click", (e) => {
+          const parentPanel = e.target.closest(".split-panel");
+
+          // ▼ 魔法発動：コンテナを全画面化し、ヘッダーを完全に消す！
+          if (splitContainer) splitContainer.classList.add("is-fullscreen");
+          header.classList.add("is-hidden"); // ← ★これが抜けていました！
+
+          // すべてのパネルを一旦隠す状態にする
+          panels.forEach((p) => p.classList.add("is-hidden"));
+
+          // クリックされたパネルだけを表示・展開する
+          parentPanel.classList.remove("is-hidden");
+          parentPanel.classList.add("is-active");
+
+          // 戻るボタンを表示
+          backBtn.classList.add("is-show");
+
+          // パネルの中身を一番上にスクロールしておく
+          parentPanel.scrollTop = 0;
+          document.body.classList.add("is-panel-open");
+        });
+      });
+
+      // 戻るボタンを押した時の処理
+      backBtn.addEventListener("click", () => {
+        // ▼ 魔法解除：全画面化を解除し、ヘッダーを元に戻す
+        if (splitContainer) splitContainer.classList.remove("is-fullscreen");
+        header.classList.remove("is-hidden"); // ← ★これも追加
+
+        panels.forEach((p) => {
+          p.classList.remove("is-hidden", "is-active");
+        });
+        backBtn.classList.remove("is-show");
+        document.body.classList.remove("is-panel-open");
+      });
+
+      // --- TOPへ戻るボタンのスムーズスクロール制御 ---
+      pageTopBtn.addEventListener("click", (e) => {
+        e.preventDefault(); // 一瞬で一番上に飛ぶ標準の動作をキャンセル
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth", // 滑らかなスクロールを指定
+        });
+      });
+      // --- 各ギャラリーパネルの一番下にフッターを自動コピー ---
+      const mainFooter = document.querySelector("body > .site-footer");
+      if (mainFooter) {
+        document.querySelectorAll(".panel-content").forEach((content) => {
+          content.appendChild(mainFooter.cloneNode(true));
+        });
+      }
+    </script>
+  </body>
+</html>

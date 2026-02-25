@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Policy | MokuSaku</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        scrollbar-gutter: stable;
+      }
+      /* === SONY風ダークテーマ定義 === */
+      :root {
+        --bg-main: #1a1a1a;
+        --bg-dark: #111111;
+        --bg-header: rgba(30, 30, 30, 0.95);
+        --text-primary: #f0f0f0;
+        --text-secondary: #a0a0a0;
+        --accent-orange: #ff4d00;
+        --border-color: #333333;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family:
+          "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+        color: var(--text-primary);
+        background-color: var(--bg-main);
+        line-height: 1.6;
+        scroll-behavior: smooth;
+        position: relative;
+        min-height: 100vh; /* 画面の高さが足りなくても背景を維持します */
+      }
+
+      /* === 追加：背景画像を薄く敷く設定 === */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw; /* 画面幅に固定 */
+        height: 100vh; /* 画面の高さに固定 */
+        background-image: url("images/Camera_a.png");
+        background-size: cover;
+        background-position: center;
+        opacity: 0.15;
+        z-index: -2;
+        pointer-events: none;
+      }
+
+      /* === 追従型ナビゲーション === */
+      header {
+        position: sticky;
+        top: 0;
+        background-color: var(--bg-header);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        transition: top 0.3s ease;
+      }
+
+      /* ヘッダー内のレイアウト調整 */
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+      }
+
+      /* サイトタイトルのスタイル（筆記体） */
+      .site-title {
+        font-family: "Dancing Script", cursive;
+        font-size: 1.8rem;
+        color: var(--accent-orange); /* オレンジ色に統一 */
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.3s ease;
+      }
+      /* ホバーした時は白く光るように変更 */
+      .site-title:hover {
+        color: var(--text-primary);
+      }
+
+      nav {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        padding: 15px 0;
+      }
+      nav a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--text-primary);
+        margin: 5px 15px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+      nav a:hover {
+        color: var(--accent-orange);
+      }
+      nav a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--accent-orange);
+        transition: width 0.3s ease;
+      }
+      nav a:hover::after {
+        width: 100%;
+      }
+
+      /* アイコンの調整 */
+      .nav-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        transition: filter 0.3s ease;
+      }
+      nav a:hover .nav-icon {
+        filter: brightness(0) saturate(100%) invert(39%) sepia(93%)
+          saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
+      }
+
+      /* スマホ表示時のヘッダー調整 */
+      @media (max-width: 850px) {
+        .header-container {
+          flex-direction: column;
+          padding-top: 15px;
+        }
+        nav {
+          justify-content: center;
+          padding-top: 5px;
+          padding-bottom: 10px;
+        }
+        .site-title {
+          font-size: 2.2rem;
+        }
+      }
+
+      /* === ポリシーセクション専用スタイル === */
+      .policy-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 80px 20px;
+      }
+
+      .policy-title {
+        text-align: center;
+        font-size: 2rem;
+        letter-spacing: 0.1em;
+        margin-bottom: 50px;
+        color: #fff;
+        text-transform: uppercase;
+      }
+      .policy-title::after {
+        content: "";
+        display: block;
+        width: 40px;
+        height: 3px;
+        background-color: var(--accent-orange);
+        margin: 15px auto 0;
+      }
+
+      .policy-item {
+        background-color: var(--bg-dark);
+        padding: 35px 30px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        margin-bottom: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .policy-item h3 {
+        color: #fff;
+        font-size: 1.3rem;
+        margin-top: 0;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 15px;
+        display: flex;
+        align-items: center;
+        letter-spacing: 0.05em;
+      }
+      .policy-num {
+        color: var(--accent-orange);
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-right: 12px;
+      }
+
+      .policy-item p {
+        margin-bottom: 1em;
+        color: var(--text-primary);
+      }
+      .policy-item p:last-child {
+        margin-bottom: 0;
+      }
+
+      .policy-list {
+        margin: 10px 0 0 0;
+        padding-left: 20px;
+        color: var(--text-primary);
+      }
+      .policy-list li {
+        margin-bottom: 12px;
+      }
+
+      .policy-note {
+        display: block;
+        margin-top: 15px;
+        font-size: 0.85rem;
+        color: var(--text-primary);
+      }
+
+      /* === スクロールアニメーション用クラス === */
+      .js-scroll-trigger {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.8s ease-out,
+          transform 0.8s ease-out;
+      }
+      .js-scroll-trigger.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* === TOPへ戻るボタンのスタイル === */
+      .page-top-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background-color: var(--bg-dark);
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        color: var(--text-primary);
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2rem;
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+      .page-top-btn.is-show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .page-top-btn:hover {
+        background-color: var(--accent-orange);
+        border-color: var(--accent-orange);
+        color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
+      }
+      /* === 言語切り替えボタンと表示制御のスタイル === */
+      .lang-switch {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+      }
+      .lang-switch button {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 5px;
+        transition: color 0.3s ease;
+      }
+      .lang-switch button:hover {
+        color: var(--text-primary);
+      }
+      .lang-switch button.active {
+        color: var(--accent-orange);
+        pointer-events: none;
+      }
+      .lang-switch span {
+        color: var(--border-color);
+        margin: 0 2px;
+      }
+
+      /* 魔法の設定：bodyの属性によって表示・非表示を切り替える */
+      body[data-lang="ja"] .lang-en {
+        display: none !important;
+      }
+      body[data-lang="en"] .lang-ja {
+        display: none !important;
+      }
+
+      /* === ポリシーの案内文（ご一読を）スタイル === */
+      .policy-hint {
+        text-align: center;
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        margin-top: -30px; /* タイトルとの距離を縮める */
+        margin-bottom: 50px;
+        letter-spacing: 0.05em;
+        line-height: 1.6;
+      }
+      /* === フッター（コピーライト）のスタイル === */
+      .site-footer {
+        text-align: center;
+        padding: 20px 10px;
+        margin-top: 60px;
+        border-top: 1px solid var(--border-color);
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        letter-spacing: 0.05em;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <a href="index.html" class="site-title">MokuSaku's Photo booth</a>
+        <nav>
+          <a href="profile.html"
+            ><img
+              src="images/Profile.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Profile</a
+          >
+          <a href="Policy.html"
+            ><img
+              src="images/Policy.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Policy</a
+          >
+          <a href="event.html"
+            ><img
+              src="images/Calendar.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Schedule</a
+          >
+          <a href="gallery.html"
+            ><img
+              src="images/Gallery.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Gallery</a
+          >
+          <a href="equipment.html"
+            ><img src="images/Gear.png?v=2" class="nav-icon" alt="" />Gear</a
+          >
+          <a href="contact.html"
+            ><img
+              src="images/Contact.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Contact</a
+          >
+          <div class="lang-switch">
+            <button id="btn-ja" class="active">JP</button>
+            <span>/</span>
+            <button id="btn-en">EN</button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <section class="policy-container">
+      <h1 class="policy-title js-scroll-trigger">Shooting Policy</h1>
+
+      <div class="lang-ja">
+        <p class="policy-hint js-scroll-trigger">
+          お互いに気持ちよく、楽しい撮影にするための大切なお願いです。<br>
+          撮影をご依頼いただく前に、必ずご一読をお願いいたします。
+        </p>
+
+        <div class="policy-item js-scroll-trigger">
+          <h3>
+            <span class="policy-num">1</span> 写真のレタッチ（補正・加工）について
+          </h3>
+          <p>
+            お渡しする写真は、私の方で全体の色調補正および肌の質感調整（美肌補正）を施しております。
+          </p>
+          <p>
+            被写体様ご自身による追加のレタッチや加工についても制限はございません。ご自身のイメージに合わせて、自由にご活用ください。
+          </p>
+          <p>
+            また、Photoshop等を使用した特別な加工も承ります。お気軽に相談ください。
+          </p>
+        </div>
+
+        <div class="policy-item js-scroll-trigger">
+          <h3>
+            <span class="policy-num">2</span>
+            SNS等への掲載・クレジット表記について
+          </h3>
+          <p>
+            撮影したお写真をSNSやWebサイト等へ掲載される際は、私のSNS
+            ID（アカウント名など）の併記をお願いしております。
+          </p>
+          <p>
+            素敵なお写真とともに、私の名前も一緒にご紹介いただけますと、今後の活動の大きな励みになります。ご理解とご協力をお願いいたします。
+          </p>
+        </div>
+
+        <div class="policy-item js-scroll-trigger">
+          <h3>
+            <span class="policy-num">3</span> データのファイル形式と受け渡し方法
+          </h3>
+          <p>データは以下の形式および方法でお送りいたします。</p>
+          <ul class="policy-list">
+            <li>
+              ファイル形式： 写真は PNG形式、動画は mp4形式 を基本とします。
+            </li>
+            <li>
+              受け渡し方法：
+              X（旧Twitter）のDM、InstagramのDM、またはギガファイル便。
+            </li>
+          </ul>
+          <span class="policy-note"
+            >※特別なファイル形式や受け渡し方法にご希望がある場合は、可能な限り柔軟に対応いたしますので、事前にお申し付けください。</span
+          >
+        </div>
+
+        <div class="policy-item js-scroll-trigger">
+          <h3><span class="policy-num">4</span> 納期と保存期間について</h3>
+          <ul class="policy-list">
+            <li>
+              納期： 通常、撮影日から1週間以内を目安にお送りいたします。<br />
+              （動画撮影や枚数が多い場合は、1週間以上お時間をいただくことがございます。その際は別途ご連絡いたします）
+            </li>
+            <li>
+              保存期間：
+              データの保存期間はお渡しから1ヶ月間とさせていただきます。期間を過ぎた後の再送依頼には、ストレージ管理の都合上お応えできかねますので、受け取り後は速やかにご自身でのバックアップをお願いいたします。
+            </li>
+          </ul>
+        </div>
+
+        <div class="policy-item js-scroll-trigger">
+          <h3><span class="policy-num">5</span> 依頼後のキャンセルについて</h3>
+          <p>
+            撮影依頼確定後のキャンセルや予定変更については、判明した時点でお早めにご連絡をお願いいたします。
+          </p>
+          <p>
+            無断キャンセルや、悪質な直前キャンセルが続く場合は、以降の撮影依頼をお断りさせていただくことがございますので、あらかじめご了承ください。
+          </p>
+        </div>
+      </div>
+      <div class="lang-en">
+        <p class="policy-hint js-scroll-trigger">
+          These guidelines are here to ensure a smooth and enjoyable photoshoot for both of us.<br>
+          Please be sure to read them before requesting a shoot.
+        </p>
+
+        <div class="policy-item js-scroll-trigger">
+          <h3>
+            <span class="policy-num">1</span> Photo Retouching and Editing
+          </h3>
+          <p>
+            All delivered photos will be color-graded and skin-retouched by me.
+          </p>
+          <p>
+            There are no restrictions on additional retouching or editing by the subject. Please feel free to use and edit them to match your vision.
+          </p>
+          <p>
+            I also accept requests for special editing using Photoshop or other tools. Please feel free to consult with me!
+          </p>
+        </div>
+
+        <div class="policy-item js-scroll-trigger">
+          <h3>
+            <span class="policy-num">2</span>
+            Posting on Social Media and Credits
+          </h3>
+          <p>
+            When posting the taken photos on social media or websites, I kindly ask that you include my SNS ID or account name.
+          </p>
+          <p>
+            Introducing my name alongside your wonderful photos greatly encourages my future activities. Thank you for your understanding and cooperation.
+          </p>
+        </div>
+
+        <div class="policy-item js-scroll-trigger">
+          <h3>
+            <span class="policy-num">3</span> File Formats and Delivery Methods
+          </h3>
+          <p>Data will be delivered in the following formats and methods:</p>
+          <ul class="policy-list">
+            <li>
+              File Formats: PNG for photos and mp4 for videos as a standard.
+            </li>
+            <li>
+              Delivery Methods: X (Twitter) DM, Instagram DM, or GigaFile (file transfer service).
+            </li>
+          </ul>
+          <span class="policy-note"
+            >* If you have specific preferences for file formats or delivery methods, I will try my best to be flexible, so please let me know in advance.</span
+          >
+        </div>
+
+        <div class="policy-item js-scroll-trigger">
+          <h3><span class="policy-num">4</span> Delivery Time and Data Retention Period</h3>
+          <ul class="policy-list">
+            <li>
+              Delivery Time: Generally, I aim to deliver the files within a week after the shoot.<br />
+              (If there are video shoots or a large number of photos, it may take more than a week. I will notify you separately in such cases.)
+            </li>
+            <li>
+              Data Retention: The data retention period is 1 month after delivery. Due to storage management, I cannot respond to resend requests after this period, so please back up the files promptly upon receipt.
+            </li>
+          </ul>
+        </div>
+
+        <div class="policy-item js-scroll-trigger">
+          <h3><span class="policy-num">5</span> Cancellation Policy</h3>
+          <p>
+            If you need to cancel or change the schedule after the shoot request is confirmed, please contact me as soon as you know.
+          </p>
+          <p>
+            Please note that in cases of no-shows or repeated malicious last-minute cancellations, I may have to decline future shoot requests.
+          </p>
+        </div>
+      </div>
+      </section>
+    <footer class="site-footer">
+      &copy; 2026 MokuSaku. All Rights Reserved.<br />
+      当サイトのすべてのコンテンツの無断転載を禁じます。
+    </footer>
+    <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
+
+    <script>
+      // --- スクロールアニメーションの制御 ---
+      const scrollTriggers = document.querySelectorAll(".js-scroll-trigger");
+      const cb = function (entries, observer) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      };
+      const io = new IntersectionObserver(cb, { rootMargin: "-5% 0px" });
+      scrollTriggers.forEach((trigger) => {
+        io.observe(trigger);
+      });
+
+      // --- TOPへ戻るボタンの表示制御 ---
+      const pageTopBtn = document.getElementById("pageTopBtn");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          pageTopBtn.classList.add("is-show");
+        } else {
+          pageTopBtn.classList.remove("is-show");
+        }
+      });
+      // === 言語切り替え制御 ===
+      const btnJa = document.getElementById("btn-ja");
+      const btnEn = document.getElementById("btn-en");
+      const body = document.body;
+
+      // 最初は日本語を表示する設定
+      body.setAttribute("data-lang", "ja");
+
+      btnJa.addEventListener("click", () => {
+        body.setAttribute("data-lang", "ja");
+        btnJa.classList.add("active");
+        btnEn.classList.remove("active");
+      });
+
+      btnEn.addEventListener("click", () => {
+        body.setAttribute("data-lang", "en");
+        btnEn.classList.add("active");
+        btnJa.classList.remove("active");
+      });
+      // --- ヘッダーのスクロール（自動隠し）制御 ---
+      const header = document.querySelector("header");
+      let lastScrollY = window.scrollY;
+
+      window.addEventListener("scroll", () => {
+        const currentScrollY = window.scrollY;
+        if (Math.abs(currentScrollY - lastScrollY) < 60) {
+          return;
+        }
+        // 下にスクロール ＆ 上から50px以上スクロールしている場合のみ隠す
+        if (currentScrollY > lastScrollY && currentScrollY > 0) {
+          header.style.top = "-150px"; // ヘッダーの高さ分、画面外（上）に移動させる
+        } else {
+          // 上に少しでもスクロールした時、または一番上の時は表示する
+          header.style.top = "0px";
+        }
+
+        lastScrollY = currentScrollY;
+      });
+      // --- TOPへ戻るボタンのスムーズスクロール制御 ---
+      pageTopBtn.addEventListener("click", (e) => {
+        e.preventDefault(); // 一瞬で一番上に飛ぶ標準の動作をキャンセル
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth", // 滑らかなスクロールを指定
+        });
+      });
+    </script>
+  </body>
+</html>
