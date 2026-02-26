@@ -246,6 +246,13 @@
         font-size: 1.05rem;
         margin-bottom: 5px; /* 説明文との間隔 */
       }
+      /* ▼ 追加：説明文（small）の中の言語設定が太字にならないようにリセット ▼ */
+      .gear-list small span {
+        font-size: inherit;
+        font-weight: inherit;
+        color: inherit;
+        margin: 0;
+      }
 
       /* 前のドットを消す */
       .gear-list li::before {
@@ -397,6 +404,39 @@
         transform: translateY(-3px);
         box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
       }
+      /* ▼▼ 追加：言語切り替えボタンと表示制御のスタイル ▼▼ */
+      .lang-switch {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+      }
+      .lang-switch button {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 5px;
+        transition: color 0.3s ease;
+      }
+      .lang-switch button:hover {
+        color: var(--text-primary);
+      }
+      .lang-switch button.active {
+        color: var(--accent-orange);
+        pointer-events: none;
+      }
+      .lang-switch span {
+        color: var(--border-color);
+        margin: 0 2px;
+      }
+      body[data-lang="ja"] .lang-en {
+        display: none !important;
+      }
+      body[data-lang="en"] .lang-ja {
+        display: none !important;
+      }
       /* === フッター（コピーライト）のスタイル === */
       .site-footer {
         text-align: center;
@@ -501,6 +541,11 @@
               alt=""
             />Contact</a
           >
+          <div class="lang-switch">
+            <button id="btn-ja" class="active">JP</button>
+            <span>/</span>
+            <button id="btn-en">EN</button>
+          </div>
         </nav>
       </div>
     </header>
@@ -509,12 +554,22 @@
       <h1 class="gear-page-title js-scroll-trigger">My Gear</h1>
 
       <p class="gear-intro js-scroll-trigger">
-        私が愛用する機材たちです。<br />
-        各機材の名前をクリックすると、Amazonの製品ページへ飛べます。
+        <span class="lang-ja"
+          >私が愛用する機材たちです。<br />各機材の名前をクリックすると、Amazonの製品ページへ飛べます。</span
+        >
+        <span class="lang-en"
+          >These are the gear I use.<br />Click on the name of each gear to
+          visit its Amazon product page.</span
+        >
       </p>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>カメラ <span class="en-title">Camera</span></h2>
+        <h2>
+          <span class="lang-ja"
+            >カメラ <span class="en-title">Camera</span></span
+          >
+          <span class="lang-en">Camera</span>
+        </h2>
         <ul class="gear-list">
           <li>
             <a
@@ -522,7 +577,11 @@
               target="_blank"
               rel="noopener noreferrer"
               >SONY α7Ⅳ</a
-            ><small>現在のメインカメラです</small>
+            >
+            <small>
+              <span class="lang-ja">現在のメインカメラです</span>
+              <span class="lang-en">My current main camera.</span>
+            </small>
           </li>
           <li>
             <a
@@ -530,13 +589,24 @@
               target="_blank"
               rel="noopener noreferrer"
               >SONY α7C</a
-            ><small>α7Ⅳの前に使用していたカメラ。現在は手放しています</small>
+            >
+            <small>
+              <span class="lang-ja"
+                >α7Ⅳの前に使用していたカメラ。現在は手放しています</span
+              >
+              <span class="lang-en"
+                >The camera I used before the a7IV. I no longer own it.</span
+              >
+            </small>
           </li>
         </ul>
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>レンズ <span class="en-title">Lens</span></h2>
+        <h2>
+          <span class="lang-ja">レンズ <span class="en-title">Lens</span></span>
+          <span class="lang-en">Lens</span>
+        </h2>
         <ul class="gear-list">
           <li>
             <a
@@ -544,9 +614,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >SONY SEL35F18F</a
-            ><small
-              >本当に無印かってくらい綺麗に写るレンズ。35mmという画角も使いやすくて好きです。</small
             >
+            <small>
+              <span class="lang-ja"
+                >本当に無印かってくらい綺麗に写るレンズ。35mmという画角も使いやすくて好きです。</span
+              >
+              <span class="lang-en"
+                >Takes such beautiful photos you'd doubt it's a standard lens. I
+                also love the versatile 35mm focal length.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -554,9 +631,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >SONY SEL90M28G</a
-            ><small
-              >マクロレンズ。物撮りや花を撮ったり、撮ろうと思えばポートレートもいけちゃう意外と何でも屋さん。</small
             >
+            <small>
+              <span class="lang-ja"
+                >マクロレンズ。物撮りや花を撮ったり、撮ろうと思えばポートレートもいけちゃう意外と何でも屋さん。</span
+              >
+              <span class="lang-en"
+                >Macro lens. Great for product photography, flowers, and
+                surprisingly versatile enough for portraits.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -564,7 +648,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >SONY SEL55F18Z</a
-            ><small>寄れないけどZeissの色味が好みです。軽いのも良い。</small>
+            >
+            <small>
+              <span class="lang-ja"
+                >寄れないけどZeissの色味が好みです。軽いのも良い。</span
+              >
+              <span class="lang-en"
+                >It can't focus very close, but I love the Zeiss colors. Its
+                light weight is also a plus.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -572,9 +665,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >SIGMA Art 85mm F1.4 DG DN</a
-            ><small
-              >背景トロットロ、解像度バキバキ。最高のポートレートレンズ。</small
             >
+            <small>
+              <span class="lang-ja"
+                >背景トロットロ、解像度バキバキ。最高のポートレートレンズ。</span
+              >
+              <span class="lang-en"
+                >Creamy bokeh and razor-sharp resolution. The ultimate portrait
+                lens.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -582,15 +682,27 @@
               target="_blank"
               rel="noopener noreferrer"
               >TAMRON 28-200mm F/2.8-5.6 Di III RXD (Model A071)</a
-            ><small
-              >安くて高倍率。だけど解像度に難アリ。そろそろ買い替えたい…</small
             >
+            <small>
+              <span class="lang-ja"
+                >安くて高倍率。だけど解像度に難アリ。そろそろ買い替えたい…</span
+              >
+              <span class="lang-en"
+                >Affordable and high zoom ratio, but lacks resolution. I'm
+                thinking of replacing it soon...</span
+              >
+            </small>
           </li>
         </ul>
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>周辺機器 <span class="en-title">Accessories</span></h2>
+        <h2>
+          <span class="lang-ja"
+            >周辺機器 <span class="en-title">Accessories</span></span
+          >
+          <span class="lang-en">Accessories</span>
+        </h2>
         <ul class="gear-list">
           <li>
             <a
@@ -598,7 +710,11 @@
               target="_blank"
               rel="noopener noreferrer"
               >SONY リチャージャブルバッテリーパック NP-FZ100</a
-            ><small>予備バッテリー。</small>
+            >
+            <small>
+              <span class="lang-ja">予備バッテリー。</span>
+              <span class="lang-en">Spare battery.</span>
+            </small>
           </li>
           <li>
             <a
@@ -606,7 +722,11 @@
               target="_blank"
               rel="noopener noreferrer"
               >Kenko クリーニングキット</a
-            ><small>お掃除は大事。</small>
+            >
+            <small>
+              <span class="lang-ja">お掃除は大事。</span>
+              <span class="lang-en">Cleaning is important.</span>
+            </small>
           </li>
           <li>
             <a
@@ -622,7 +742,13 @@
               target="_blank"
               rel="noopener noreferrer"
               >ProGrade Digital GOLD メモリーカード 64GB</a
-            ><small>廃盤のためリンクは128GB</small>
+            >
+            <small>
+              <span class="lang-ja">廃盤のためリンクは128GB</span>
+              <span class="lang-en"
+                >Discontinued. The link is for the 128GB version.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -646,15 +772,26 @@
               target="_blank"
               rel="noopener noreferrer"
               >HAKUBA E-ドライボックス KED-P20</a
-            ><small>自分が所持しているカメラ・レンズ入れてギリギリです。</small>
+            >
+            <small>
+              <span class="lang-ja"
+                >自分が所持しているカメラ・レンズ入れてギリギリです。</span
+              >
+              <span class="lang-en"
+                >Just big enough to fit all my cameras and lenses.</span
+              >
+            </small>
           </li>
         </ul>
       </div>
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          三脚・スタビライザー
-          <span class="en-title">Tripods & Stabilizers</span>
+          <span class="lang-ja"
+            >三脚・スタビライザー
+            <span class="en-title">Tripods & Stabilizers</span></span
+          >
+          <span class="lang-en">Tripods & Stabilizers</span>
         </h2>
         <ul class="gear-list">
           <li>
@@ -663,9 +800,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >Fotopro C-4i</a
-            ><small
-              >少し重め。現在はC-4i Plusしか販売していないっぽいです。</small
             >
+            <small>
+              <span class="lang-ja"
+                >少し重め。現在はC-4i Plusしか販売していないっぽいです。</span
+              >
+              <span class="lang-en"
+                >A bit heavy. It seems only the C-4i Plus is available
+                now.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -673,9 +817,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >FOSOTO ライトスタンド アルミ製</a
-            ><small
-              >お名前の通り。軽いが風にも影響されやすいのでバッグを重石にすることで解決しています。</small
             >
+            <small>
+              <span class="lang-ja"
+                >お名前の通り。軽いが風にも影響されやすいのでバッグを重石にすることで解決しています。</span
+              >
+              <span class="lang-en"
+                >True to its name. Light but easily affected by wind, which I
+                solve by using my bag as a weight.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -683,9 +834,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >DJI RSC2</a
-            ><small
-              >動画撮影に使用しているジンバル。あるのとないのとじゃ全然違う。</small
             >
+            <small>
+              <span class="lang-ja"
+                >動画撮影に使用しているジンバル。あるのとないのとじゃ全然違う。</span
+              >
+              <span class="lang-en"
+                >The gimbal I use for videography. It makes a huge
+                difference.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -693,16 +851,27 @@
               target="_blank"
               rel="noopener noreferrer"
               >SmallRig DJI RSC2用ハンドグリップ</a
-            ><small
-              >これがあると腕の負担がかなり軽減されます。DJIの他のジンバル用のも出ているはずなので是非。</small
             >
+            <small>
+              <span class="lang-ja"
+                >これがあると腕の負担がかなり軽減されます。DJIの他のジンバル用のも出ているはずなので是非。</span
+              >
+              <span class="lang-en"
+                >This significantly reduces arm strain. There should be versions
+                for other DJI gimbals too.</span
+              >
+            </small>
           </li>
         </ul>
       </div>
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          ストラップ・ホルダー <span class="en-title">Straps & Holders</span>
+          <span class="lang-ja"
+            >ストラップ・ホルダー
+            <span class="en-title">Straps & Holders</span></span
+          >
+          <span class="lang-en">Straps & Holders</span>
         </h2>
         <ul class="gear-list">
           <li>
@@ -711,7 +880,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >SPIDER CAMERA HOLSTER</a
-            ><small>腰にカメラぶら下げるやつ。めっちゃ便利。</small>
+            >
+            <small>
+              <span class="lang-ja"
+                >腰にカメラぶら下げるやつ。めっちゃ便利。</span
+              >
+              <span class="lang-en"
+                >A holster to hang the camera on your waist. Extremely
+                convenient.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -719,10 +897,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >Carry Speed F3プレート</a
-            ><small
-              >SPIDER CAMERA
-              HOLSTERを使用するためにカメラに装着しています。</small
             >
+            <small>
+              <span class="lang-ja"
+                >SPIDER CAMERA
+                HOLSTERを使用するためにカメラに装着しています。</span
+              >
+              <span class="lang-en"
+                >Attached to the camera to use the SPIDER CAMERA HOLSTER.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -730,7 +914,13 @@
               target="_blank"
               rel="noopener noreferrer"
               >PeakDesign アンカーリンクス</a
-            ><small>廃盤？リンクはCobby製</small>
+            >
+            <small>
+              <span class="lang-ja">廃盤？リンクはCobby製</span>
+              <span class="lang-en"
+                >Discontinued? The link is for a Cobby product.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -738,7 +928,15 @@
               target="_blank"
               rel="noopener noreferrer"
               >Cobby カメラストラップ</a
-            ><small>アンカーリンクスに対応した幅広ストラップ。</small>
+            >
+            <small>
+              <span class="lang-ja"
+                >アンカーリンクスに対応した幅広ストラップ。</span
+              >
+              <span class="lang-en"
+                >A wide strap compatible with Anchor Links.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -746,15 +944,25 @@
               target="_blank"
               rel="noopener noreferrer"
               >Peak Design カフ リストストラップ</a
-            ><small
-              >アンカーリンクスに対応した片手用ストラップ。スナップではこちらのほうが便利。</small
             >
+            <small>
+              <span class="lang-ja"
+                >アンカーリンクスに対応した片手用ストラップ。スナップではこちらのほうが便利。</span
+              >
+              <span class="lang-en"
+                >A one-handed strap compatible with Anchor Links. More
+                convenient for snapshots.</span
+              >
+            </small>
           </li>
         </ul>
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>バッグ <span class="en-title">Bags</span></h2>
+        <h2>
+          <span class="lang-ja">バッグ <span class="en-title">Bags</span></span>
+          <span class="lang-en">Bags</span>
+        </h2>
         <ul class="gear-list">
           <li>
             <a
@@ -762,9 +970,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >HAKUBA プラスシェル ショルダーバッグ M</a
-            ><small
-              >レンズを着けたカメラ+単焦点レンズ1本が入ります。長物は厳しい。散歩用。</small
             >
+            <small>
+              <span class="lang-ja"
+                >レンズを着けたカメラ+単焦点レンズ1本が入ります。長物は厳しい。散歩用。</span
+              >
+              <span class="lang-en"
+                >Fits a camera with a lens attached + one prime lens. Long
+                lenses won't fit. Good for walks.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -772,9 +987,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >HAKUBA プラスシェル メッセンジャー L</a
-            ><small
-              >レンズを着けたカメラ+単焦点なら2本、長物レンズなら1本が入ります。ちょっと遠出する時に。</small
             >
+            <small>
+              <span class="lang-ja"
+                >レンズを着けたカメラ+単焦点なら2本、長物レンズなら1本が入ります。ちょっと遠出する時に。</span
+              >
+              <span class="lang-en"
+                >Fits a camera with a lens attached + two prime lenses or one
+                long lens. For short trips.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -782,26 +1004,51 @@
               target="_blank"
               rel="noopener noreferrer"
               >HAKUBA プラスシェル シティロールトップバックパック26</a
-            ><small
-              >フル装備用。イベントなどでガッツリ撮影機材を持ち運ぶ時はこれに入れて持ち出します。</small
             >
+            <small>
+              <span class="lang-ja"
+                >フル装備用。イベントなどでガッツリ撮影機材を持ち運ぶ時はこれに入れて持ち出します。</span
+              >
+              <span class="lang-en"
+                >For full gear. Used when carrying a lot of equipment for events
+                and such.</span
+              >
+            </small>
           </li>
         </ul>
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>ライト・補助光 <span class="en-title">Lighting</span></h2>
+        <h2>
+          <span class="lang-ja"
+            >ライト・補助光 <span class="en-title">Lighting</span></span
+          >
+          <span class="lang-en">Lighting</span>
+        </h2>
         <ul class="gear-list">
-          <li>Amconsure LEDリングライト<small>廃盤</small></li>
+          <li>
+            <span>Amconsure LEDリングライト</span>
+            <small>
+              <span class="lang-ja">廃盤</span>
+              <span class="lang-en">Discontinued</span>
+            </small>
+          </li>
           <li>
             <a
               href="https://amzn.to/3OUNxj8"
               target="_blank"
               rel="noopener noreferrer"
               >GODOX TT685SⅡ-S</a
-            ><small
-              >日中でも光量充分です。クリップオンなのでカメラの上に着けられるのも良い。</small
             >
+            <small>
+              <span class="lang-ja"
+                >日中でも光量充分です。クリップオンなのでカメラの上に着けられるのも良い。</span
+              >
+              <span class="lang-en"
+                >Sufficient light output even during the day. As a clip-on, it
+                can be attached to the top of the camera.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -809,7 +1056,11 @@
               target="_blank"
               rel="noopener noreferrer"
               >PULUZ 撮影ボックス 60x60x60cm</a
-            ><small>物撮り用です。</small>
+            >
+            <small>
+              <span class="lang-ja">物撮り用です。</span>
+              <span class="lang-en">For product photography.</span>
+            </small>
           </li>
           <li>
             <a
@@ -825,9 +1076,16 @@
               target="_blank"
               rel="noopener noreferrer"
               >NEEWER 65cm 八角形ソフトボックス オクタゴン Bowensマウント</a
-            ><small
-              >ちょうどいいサイズでワンタッチで畳めるソフトボックス。</small
             >
+            <small>
+              <span class="lang-ja"
+                >ちょうどいいサイズでワンタッチで畳めるソフトボックス。</span
+              >
+              <span class="lang-en"
+                >A perfectly sized softbox that can be folded with one
+                touch.</span
+              >
+            </small>
           </li>
           <li>
             <a
@@ -843,13 +1101,26 @@
               target="_blank"
               rel="noopener noreferrer"
               >Godox X3S</a
-            ><small>ストロボを遠距離から発光させるためのレシーバーです。</small>
+            >
+            <small>
+              <span class="lang-ja"
+                >ストロボを遠距離から発光させるためのレシーバーです。</span
+              >
+              <span class="lang-en"
+                >A receiver for triggering strobes from a distance.</span
+              >
+            </small>
           </li>
         </ul>
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>レンズフィルター <span class="en-title">Filters</span></h2>
+        <h2>
+          <span class="lang-ja"
+            >レンズフィルター <span class="en-title">Filters</span></span
+          >
+          <span class="lang-en">Filters</span>
+        </h2>
         <ul class="gear-list">
           <li>
             <a
@@ -891,22 +1162,40 @@
               >K&F Concept NDフィルター 67mm 可変式</a
             >
           </li>
-          <li>Kenko 可変NDフィルター 77mm ND3-400<small>廃盤</small></li>
+          <li>
+            <span>Kenko 可変NDフィルター 77mm ND3-400</span>
+            <small>
+              <span class="lang-ja">廃盤</span>
+              <span class="lang-en">Discontinued</span>
+            </small>
+          </li>
           <li>
             <a
               href="https://amzn.to/3MKuAPE"
               target="_blank"
               rel="noopener noreferrer"
               >JJC 折りたたみ式 フィルターケース 3枚用</a
-            ><small
-              >分厚い割に3枚しか入らないので、他に良さげなのがあれば買い替えたい気持ち。</small
             >
+            <small>
+              <span class="lang-ja"
+                >分厚い割に3枚しか入らないので、他に良さげなのがあれば買い替えたい気持ち。</span
+              >
+              <span class="lang-en"
+                >Only holds 3 filters despite being thick. Looking to replace it
+                if I find a better one.</span
+              >
+            </small>
           </li>
         </ul>
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>その他 <span class="en-title">Others</span></h2>
+        <h2>
+          <span class="lang-ja"
+            >その他 <span class="en-title">Others</span></span
+          >
+          <span class="lang-en">Others</span>
+        </h2>
         <ul class="gear-list">
           <li>
             <a
@@ -916,7 +1205,13 @@
               >Kingston SDメモリー カードリーダー</a
             >
           </li>
-          <li>ヘーネル ProCube2<small>廃盤</small></li>
+          <li>
+            <span>ヘーネル ProCube2</span>
+            <small>
+              <span class="lang-ja">廃盤</span>
+              <span class="lang-en">Discontinued</span>
+            </small>
+          </li>
           <li>
             <a
               href="https://amzn.to/4ayC5SQ"
@@ -929,58 +1224,94 @@
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>使用ソフト<span class="en-title">Software</span></h2>
+        <h2>
+          <span class="lang-ja"
+            >使用ソフト<span class="en-title">Software</span></span
+          >
+          <span class="lang-en">Software</span>
+        </h2>
         <ul class="gear-list">
           <li>
             <span>Adobe Lightroom</span>
-            <small>撮影した写真のレタッチに使用</small>
+            <small>
+              <span class="lang-ja">撮影した写真のレタッチに使用。</span>
+              <span class="lang-en">Used for retouching photos.</span>
+            </small>
           </li>
           <li>
             <span>Adobe Photoshop</span>
-            <small
-              >写真にエフェクトを付けたり凝ったレタッチ・ガッツリ編集をする時に使用。</small
-            >
+            <small>
+              <span class="lang-ja"
+                >写真にエフェクトを付けたり凝ったレタッチ・ガッツリ編集をする時に使用。</span
+              >
+              <span class="lang-en"
+                >Used for adding effects to photos and for heavy
+                retouching/editing.</span
+              >
+            </small>
           </li>
           <li>
             <span>Adobe After Effects</span>
-            <small
-              >リリックビデオやアニメーション動画を制作する時に使用。</small
-            >
+            <small>
+              <span class="lang-ja"
+                >リリックビデオやアニメーション動画を制作する時に使用。</span
+              >
+              <span class="lang-en"
+                >Used for creating lyric videos and animations.</span
+              >
+            </small>
           </li>
           <li>
             <span>Adobe Premiere Pro</span>
-            <small>ほぼ使用しませんが、簡単な動画制作にたまに使います。</small>
+            <small>
+              <span class="lang-ja"
+                >ほぼ使用しませんが、簡単な動画制作にたまに使います。</span
+              >
+              <span class="lang-en"
+                >Rarely used, but occasionally for simple video editing.</span
+              >
+            </small>
           </li>
           <li>
             <span>Adobe Illustrator</span>
-            <small>ロゴや動画で使う素材の制作に使用。</small>
+            <small>
+              <span class="lang-ja">ロゴや動画で使う素材の制作に使用。</span>
+              <span class="lang-en"
+                >Used for creating logos and materials for videos.</span
+              >
+            </small>
           </li>
           <li>
             <span>Blender</span>
-            <small>3DCGを使用した動画を制作する時に使用。</small>
+            <small>
+              <span class="lang-ja"
+                >3DCGを使用した動画を制作する時に使用。</span
+              >
+              <span class="lang-en">Used for creating videos with 3DCG.</span>
+            </small>
           </li>
         </ul>
       </div>
 
       <div class="gear-category js-scroll-trigger">
-        <h2>PCスペック<span class="en-title">PC Specs</span></h2>
+        <h2>
+          <span class="lang-ja"
+            >PCスペック<span class="en-title">PC Specs</span></span
+          >
+          <span class="lang-en">PC Specs</span>
+        </h2>
         <div class="pc-specs">
           <dl>
             <dt>OS</dt>
             <dd>Windows 11</dd>
-
             <dt>CPU</dt>
             <dd>Core i9 14900KF</dd>
-
             <dt>RAM</dt>
             <dd>64GB (32GB × 2)</dd>
-
             <dt>GPU</dt>
             <dd>GeForce RTX 4090</dd>
-
             <dt>Storage</dt>
             <dd>SSD 1TB, SSD 2TB, HDD 8TB</dd>
-
             <dt>Motherboard</dt>
             <dd>Z790 Pro RS</dd>
           </dl>
@@ -989,7 +1320,13 @@
     </section>
     <footer class="site-footer">
       &copy; 2026 MokuSaku. All Rights Reserved.<br />
-      当サイトのすべてのコンテンツの無断転載を禁じます。
+      <span class="lang-ja"
+        >当サイトのすべてのコンテンツの無断転載を禁じます。</span
+      >
+      <span class="lang-en"
+        >Unauthorized reproduction of all contents on this site is
+        prohibited.</span
+      >
     </footer>
     <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
 
@@ -1067,6 +1404,30 @@
           behavior: "smooth", // 滑らかなスクロールを指定
         });
       });
+      // ▼ 追加：言語切り替え・状態保持の制御 ▼
+      const btnJa = document.getElementById("btn-ja");
+      const btnEn = document.getElementById("btn-en");
+      const body = document.body;
+
+      const savedLang = localStorage.getItem("mokusaku_lang") || "ja";
+
+      function setLanguage(lang) {
+        body.setAttribute("data-lang", lang);
+        localStorage.setItem("mokusaku_lang", lang);
+
+        if (lang === "en") {
+          btnEn.classList.add("active");
+          btnJa.classList.remove("active");
+        } else {
+          btnJa.classList.add("active");
+          btnEn.classList.remove("active");
+        }
+      }
+
+      setLanguage(savedLang);
+
+      btnJa.addEventListener("click", () => setLanguage("ja"));
+      btnEn.addEventListener("click", () => setLanguage("en"));
     </script>
   </body>
 </html>

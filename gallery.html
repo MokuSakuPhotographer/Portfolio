@@ -639,6 +639,40 @@
         transform: translateY(-3px);
         box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
       }
+      /* ▼▼ 追加：言語切り替えボタンと表示制御のスタイル ▼▼ */
+      .lang-switch {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+      }
+      .lang-switch button {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 5px;
+        transition: color 0.3s ease;
+      }
+      .lang-switch button:hover {
+        color: var(--text-primary);
+      }
+      .lang-switch button.active {
+        color: var(--accent-orange);
+        pointer-events: none;
+      }
+      .lang-switch span {
+        color: var(--border-color);
+        margin: 0 2px;
+      }
+      body[data-lang="ja"] .lang-en {
+        display: none !important;
+      }
+      body[data-lang="en"] .lang-ja {
+        display: none !important;
+      }
+      
       /* === フッター（コピーライト）のスタイル === */
       .site-footer {
         text-align: center;
@@ -776,6 +810,11 @@
               alt=""
             />Contact</a
           >
+          <div class="lang-switch">
+            <button id="btn-ja" class="active">JP</button>
+            <span>/</span>
+            <button id="btn-en">EN</button>
+          </div>
         </nav>
       </div>
     </header>
@@ -793,8 +832,10 @@
           <div class="panel-content">
             <h1 class="section-title"><span>S</span>nap</h1>
             <p class="gallery-hint">
-              Tap or click an image to enlarge /
-              写真をタップ・クリックで拡大表示できます<br />被写体様のお名前は敬称略とさせていただいております
+              <span class="lang-ja"
+                >写真をタップ・クリックで拡大表示できます。</span
+              >
+              <span class="lang-en">Tap or click an image to enlarge.</span>
             </p>
             <div class="photo-grid">
               <div class="photo-item">
@@ -970,8 +1011,13 @@
           <div class="panel-content">
             <h1 class="section-title"><span>P</span>ortrait</h1>
             <p class="gallery-hint">
-              Tap or click an image to enlarge /
-              写真をタップ・クリックで拡大表示できます<br />被写体様のお名前は敬称略とさせていただいております
+              <span class="lang-ja"
+                >写真をタップ・クリックで拡大表示できます。<br />被写体様のお名前は敬称略とさせていただいております。</span
+              >
+              <span class="lang-en"
+                >Tap or click an image to enlarge.<br />Model names are listed
+                without honorifics.</span
+              >
             </p>
             <div class="photo-grid portrait-grid">
               <div class="photo-item">
@@ -1116,276 +1162,111 @@
             <div class="video-section">
               <div class="video-wrapper">
                 <div class="video-title">
-                  春猿火 - 声帯学【Unofficial Lyrics MV】<span
-                    class="video-role"
-                    >リリックアニメーション・文字デザイン</span
-                  >
+                  <div class="lang-ja">春猿火 - 声帯学【Unofficial Lyrics MV】<span class="video-role">リリックアニメーション・文字デザイン</span></div>
+                  <div class="lang-en">Harusaruhi - Seitai Gaku【Unofficial Lyrics MV】<span class="video-role">Lyric Animation & Typography</span></div>
                 </div>
                 <div class="video-container">
-                  <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/QJC5y2m8DjU?si=zBHiCq1Ytqyyrj98"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="
-                      accelerometer;
-                      autoplay;
-                      clipboard-write;
-                      encrypted-media;
-                      gyroscope;
-                      picture-in-picture;
-                      web-share;
-                    "
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen
-                  ></iframe>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/QJC5y2m8DjU?si=zBHiCq1Ytqyyrj98" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               </div>
 
               <div class="video-wrapper">
                 <div class="video-title">
-                  Sumerlin / Speak Up, Speak Out【Unofficial Lyrics MV】<span
-                    class="video-role"
-                    >リリックアニメーション・文字デザイン</span
-                  >
-
-                  <div class="video-notice">
-                    著作権の都合上、サイト内での再生が制限されています。<br />プレイヤー内の「YouTubeで見る」からご視聴ください。
+                  <div class="lang-ja">
+                    Sumerlin / Speak Up, Speak Out【Unofficial Lyrics MV】<span class="video-role">リリックアニメーション・文字デザイン</span>
+                    <div class="video-notice">著作権の都合上、サイト内での再生が制限されています。<br />プレイヤー内の「YouTubeで見る」からご視聴ください。</div>
+                  </div>
+                  <div class="lang-en">
+                    Sumerlin - Speak Up, Speak Out【Unofficial Lyrics MV】<span class="video-role">Lyric Animation & Typography</span>
+                    <div class="video-notice">Due to copyright restrictions, playback on this site is limited.<br />Please watch via "Watch on YouTube" in the player.</div>
                   </div>
                 </div>
                 <div class="video-container">
-                  <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/PGYyZqQ7RL8?si=BQgE3LzMCedz9DT6"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="
-                      accelerometer;
-                      autoplay;
-                      clipboard-write;
-                      encrypted-media;
-                      gyroscope;
-                      picture-in-picture;
-                      web-share;
-                    "
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen
-                  ></iframe>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/PGYyZqQ7RL8?si=BQgE3LzMCedz9DT6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               </div>
 
               <div class="video-wrapper">
                 <div class="video-title">
-                  Orangestar - Encounter【Unofficial Lyrics MV】<span
-                    class="video-role"
-                    >リリックアニメーション・文字デザイン</span
-                  >
+                  <div class="lang-ja">Orangestar - Encounter【Unofficial Lyrics MV】<span class="video-role">リリックアニメーション・文字デザイン</span></div>
+                  <div class="lang-en">Orangestar - Encounter【Unofficial Lyrics MV】<span class="video-role">Lyric Animation & Typography</span></div>
                 </div>
                 <div class="video-container">
-                  <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/oIH7E0QpaIk?si=ORMQ0ME5s6R8R08G"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="
-                      accelerometer;
-                      autoplay;
-                      clipboard-write;
-                      encrypted-media;
-                      gyroscope;
-                      picture-in-picture;
-                      web-share;
-                    "
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen
-                  ></iframe>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/oIH7E0QpaIk?si=ORMQ0ME5s6R8R08G" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               </div>
 
               <div class="video-wrapper">
                 <div class="video-title">
-                  2020/12/07 Cinematic Vlog<span class="video-role"
-                    >映像全般</span
-                  >
+                  <div class="lang-ja">2020/12/07 Cinematic Vlog<span class="video-role">映像全般</span></div>
+                  <div class="lang-en">2020/12/07 Cinematic Vlog<span class="video-role">Videography</span></div>
                 </div>
                 <div class="video-container">
-                  <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/znFlVpuyjmY?si=I7iRmSxaFQq6IErW"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="
-                      accelerometer;
-                      autoplay;
-                      clipboard-write;
-                      encrypted-media;
-                      gyroscope;
-                      picture-in-picture;
-                      web-share;
-                    "
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen
-                  ></iframe>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/znFlVpuyjmY?si=I7iRmSxaFQq6IErW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               </div>
 
               <div class="video-wrapper">
                 <div class="video-title">
-                  ROY - Mily (feat. Elad)【Unofficial Lyrics MV】<span
-                    class="video-role"
-                    >リリックアニメーション・文字デザイン</span
-                  >
+                  <div class="lang-ja">ROY - Mily (feat. Elad)【Unofficial Lyrics MV】<span class="video-role">リリックアニメーション・文字デザイン</span></div>
+                  <div class="lang-en">ROY - Mily (feat. Elad)【Unofficial Lyrics MV】<span class="video-role">Lyric Animation & Typography</span></div>
                 </div>
                 <div class="video-container">
-                  <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/YnO6kyTwodQ?si=gA6Ouzsy0TCeQTb-"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="
-                      accelerometer;
-                      autoplay;
-                      clipboard-write;
-                      encrypted-media;
-                      gyroscope;
-                      picture-in-picture;
-                      web-share;
-                    "
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen
-                  ></iframe>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/YnO6kyTwodQ?si=gA6Ouzsy0TCeQTb-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               </div>
 
               <div class="video-wrapper">
                 <div class="video-title">
-                  Bring Me The Horizon - Parasite Eve【VALORANT 3D
-                  MONTAGE】<span class="video-role"
-                    >3DCG・3Dアニメーション</span
-                  >
-
-                  <div class="video-notice">
-                    著作権の都合上、サイト内での再生が制限されています。<br />プレイヤー内の「YouTubeで見る」からご視聴ください。
+                  <div class="lang-ja">
+                    Bring Me The Horizon - Parasite Eve【VALORANT 3D MONTAGE】<span class="video-role">3DCG・3Dアニメーション</span>
+                    <div class="video-notice">著作権の都合上、サイト内での再生が制限されています。<br />プレイヤー内の「YouTubeで見る」からご視聴ください。</div>
+                  </div>
+                  <div class="lang-en">
+                    Bring Me The Horizon - Parasite Eve【VALORANT 3D MONTAGE】<span class="video-role">3DCG & 3D Animation</span>
+                    <div class="video-notice">Due to copyright restrictions, playback on this site is limited.<br />Please watch via "Watch on YouTube" in the player.</div>
                   </div>
                 </div>
                 <div class="video-container">
-                  <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/Qkblf1rB31c?si=RG0U0b6YB8HYPXte"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="
-                      accelerometer;
-                      autoplay;
-                      clipboard-write;
-                      encrypted-media;
-                      gyroscope;
-                      picture-in-picture;
-                      web-share;
-                    "
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen
-                  ></iframe>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/Qkblf1rB31c?si=RG0U0b6YB8HYPXte" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               </div>
 
               <div class="video-wrapper">
                 <div class="video-title">
-                  Ridy Hudson Love song (Lyric video)<span class="video-role"
-                    >映像全般</span
-                  >
+                  <div class="lang-ja">Ridy Hudson Love song (Lyric video)<span class="video-role">映像全般</span></div>
+                  <div class="lang-en">Ridy Hudson - Love song (Lyric video)<span class="video-role">Videography</span></div>
                 </div>
                 <div class="video-container">
-                  <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/h-7ce-ToyDE?si=auTBBz4kF6q6o2vz"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="
-                      accelerometer;
-                      autoplay;
-                      clipboard-write;
-                      encrypted-media;
-                      gyroscope;
-                      picture-in-picture;
-                      web-share;
-                    "
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen
-                  ></iframe>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/h-7ce-ToyDE?si=auTBBz4kF6q6o2vz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               </div>
 
               <div class="video-wrapper">
                 <div class="video-title">
-                  さめざめ - 裏SHIBUYA<span class="video-role"
-                    >リリックアニメーション・文字デザイン</span
-                  >
+                  <div class="lang-ja">さめざめ - 裏SHIBUYA<span class="video-role">リリックアニメーション・文字デザイン</span></div>
+                  <div class="lang-en">Samezame - Ura SHIBUYA<span class="video-role">Lyric Animation & Typography</span></div>
                 </div>
                 <div class="video-container">
-                  <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/zx8EhAOL_Ic?si=hX6iZ63dKWBT4t8g"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="
-                      accelerometer;
-                      autoplay;
-                      clipboard-write;
-                      encrypted-media;
-                      gyroscope;
-                      picture-in-picture;
-                      web-share;
-                    "
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen
-                  ></iframe>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/zx8EhAOL_Ic?si=hX6iZ63dKWBT4t8g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               </div>
 
               <div class="video-wrapper">
                 <div class="video-title">
-                  さめざめ - 洗脳B<span class="video-role"
-                    >リリックアニメーション・文字デザイン</span
-                  >
+                  <div class="lang-ja">さめざめ - 洗脳B<span class="video-role">リリックアニメーション・文字デザイン</span></div>
+                  <div class="lang-en">Samezame - Senno B<span class="video-role">Lyric Animation & Typography</span></div>
                 </div>
                 <div class="video-container">
-                  <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/8em_5LSJXsk?si=SvJQNxGHgkusEiy6"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="
-                      accelerometer;
-                      autoplay;
-                      clipboard-write;
-                      encrypted-media;
-                      gyroscope;
-                      picture-in-picture;
-                      web-share;
-                    "
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen
-                  ></iframe>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/8em_5LSJXsk?si=SvJQNxGHgkusEiy6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
     </section>
     <footer class="site-footer">
       &copy; 2026 MokuSaku. All Rights Reserved.<br />
-      当サイトのすべてのコンテンツの無断転載を禁じます。
+      <span class="lang-ja">当サイトのすべてのコンテンツの無断転載を禁じます。</span>
+      <span class="lang-en">Unauthorized reproduction of all contents on this site is prohibited.</span>
     </footer>
 
     <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
@@ -1654,6 +1535,30 @@
           content.appendChild(mainFooter.cloneNode(true));
         });
       }
+      // ▼ 追加：言語切り替え・状態保持の制御 ▼
+      const btnJa = document.getElementById("btn-ja");
+      const btnEn = document.getElementById("btn-en");
+      const body = document.body;
+
+      const savedLang = localStorage.getItem("mokusaku_lang") || "ja";
+
+      function setLanguage(lang) {
+        body.setAttribute("data-lang", lang);
+        localStorage.setItem("mokusaku_lang", lang);
+
+        if (lang === "en") {
+          btnEn.classList.add("active");
+          btnJa.classList.remove("active");
+        } else {
+          btnJa.classList.add("active");
+          btnEn.classList.remove("active");
+        }
+      }
+
+      setLanguage(savedLang);
+
+      btnJa.addEventListener("click", () => setLanguage("ja"));
+      btnEn.addEventListener("click", () => setLanguage("en"));
     </script>
   </body>
 </html>

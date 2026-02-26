@@ -340,6 +340,39 @@
         transform: translateY(-3px);
         box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
       }
+      /* ▼▼ 追加：言語切り替えボタンと表示制御のスタイル ▼▼ */
+      .lang-switch {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+      }
+      .lang-switch button {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 5px;
+        transition: color 0.3s ease;
+      }
+      .lang-switch button:hover {
+        color: var(--text-primary);
+      }
+      .lang-switch button.active {
+        color: var(--accent-orange);
+        pointer-events: none;
+      }
+      .lang-switch span {
+        color: var(--border-color);
+        margin: 0 2px;
+      }
+      body[data-lang="ja"] .lang-en {
+        display: none !important;
+      }
+      body[data-lang="en"] .lang-ja {
+        display: none !important;
+      }
       /* === フッター（コピーライト）のスタイル === */
       .site-footer {
         text-align: center;
@@ -395,6 +428,12 @@
               alt=""
             />Contact</a
           >
+
+          <div class="lang-switch">
+            <button id="btn-ja" class="active">JP</button>
+            <span>/</span>
+            <button id="btn-en">EN</button>
+          </div>
         </nav>
       </div>
     </header>
@@ -402,24 +441,50 @@
     <section class="event-container">
       <h1 class="event-page-title js-scroll-trigger">Event Schedule</h1>
       <p class="event-intro js-scroll-trigger">
-        私がカメラマンとして参加予定のイベント一覧です。<br />
-        撮影のご依頼やご相談は、各SNSのDMよりお気軽にご連絡ください。
+        <span class="lang-ja"
+          >私がカメラマンとして参加予定のイベント一覧です。<br />撮影のご依頼やご相談は、各SNSのDMよりお気軽にご連絡ください。</span
+        >
+        <span class="lang-en"
+          >Here is the schedule of events I plan to attend as a photographer.<br />For
+          photography requests and inquiries, please feel free to contact me via
+          DM on any of my social media.</span
+        >
       </p>
 
       <h2 class="section-heading js-scroll-trigger">Upcoming Events</h2>
       <div class="event-list">
         <div class="event-card js-scroll-trigger">
           <div class="event-date">2026.03.01</div>
-          <h3 class="event-title">【仮】acosta! @池袋サンシャインシティ</h3>
-          <div class="event-location">池袋サンシャインシティ周辺</div>
-          <div class="event-status status-open">撮影依頼 受付中</div>
+          <h3 class="event-title">
+            <span class="lang-ja">【仮】acosta! @池袋サンシャインシティ</span>
+            <span class="lang-en"
+              >[Tentative] acosta! @ Ikebukuro Sunshine City</span
+            >
+          </h3>
+          <div class="event-location">
+            <span class="lang-ja">池袋サンシャインシティ周辺</span>
+            <span class="lang-en">Around Ikebukuro Sunshine City</span>
+          </div>
+          <div class="event-status status-open">
+            <span class="lang-ja">撮影依頼 受付中</span>
+            <span class="lang-en">Accepting Requests</span>
+          </div>
         </div>
 
         <div class="event-card js-scroll-trigger">
           <div class="event-date">2026.03.29</div>
-          <h3 class="event-title">acosta! @板橋大山ストリート</h3>
-          <div class="event-location">東京都板橋区</div>
-          <div class="event-status status-open">撮影依頼 受付中</div>
+          <h3 class="event-title">
+            <span class="lang-ja">acosta! @板橋大山ストリート</span>
+            <span class="lang-en">acosta! @ Itabashi Oyama Street</span>
+          </h3>
+          <div class="event-location">
+            <span class="lang-ja">東京都板橋区</span>
+            <span class="lang-en">Itabashi-ku, Tokyo</span>
+          </div>
+          <div class="event-status status-open">
+            <span class="lang-ja">撮影依頼 受付中</span>
+            <span class="lang-en">Accepting Requests</span>
+          </div>
         </div>
       </div>
 
@@ -427,15 +492,30 @@
       <div class="event-list">
         <div class="event-card past js-scroll-trigger">
           <div class="event-date">2026.02.15</div>
-          <h3 class="event-title">acosta! @池袋サンシャインシティ</h3>
-          <div class="event-location">池袋サンシャインシティ周辺</div>
-          <div class="event-status status-closed">終了しました</div>
+          <h3 class="event-title">
+            <span class="lang-ja">acosta! @池袋サンシャインシティ</span>
+            <span class="lang-en">acosta! @ Ikebukuro Sunshine City</span>
+          </h3>
+          <div class="event-location">
+            <span class="lang-ja">池袋サンシャインシティ周辺</span>
+            <span class="lang-en">Around Ikebukuro Sunshine City</span>
+          </div>
+          <div class="event-status status-closed">
+            <span class="lang-ja">終了しました</span>
+            <span class="lang-en">Closed</span>
+          </div>
         </div>
       </div>
     </section>
     <footer class="site-footer">
       &copy; 2026 MokuSaku. All Rights Reserved.<br />
-      当サイトのすべてのコンテンツの無断転載を禁じます。
+      <span class="lang-ja"
+        >当サイトのすべてのコンテンツの無断転載を禁じます。</span
+      >
+      <span class="lang-en"
+        >Unauthorized reproduction of all contents on this site is
+        prohibited.</span
+      >
     </footer>
     <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
 
@@ -491,6 +571,34 @@
           behavior: "smooth", // 滑らかなスクロールを指定
         });
       });
+      // === 言語切り替え・状態保持の制御 ===
+      const btnJa = document.getElementById("btn-ja");
+      const btnEn = document.getElementById("btn-en");
+      const body = document.body;
+
+      // 1. ブラウザの記憶から保存された言語を取得（初めての人は 'ja' にする）
+      const savedLang = localStorage.getItem("mokusaku_lang") || "ja";
+
+      // 2. 言語を切り替えて、さらにブラウザに記憶させる専用の関数
+      function setLanguage(lang) {
+        body.setAttribute("data-lang", lang);
+        localStorage.setItem("mokusaku_lang", lang); // ★ここでブラウザにメモさせる
+
+        if (lang === "en") {
+          btnEn.classList.add("active");
+          btnJa.classList.remove("active");
+        } else {
+          btnJa.classList.add("active");
+          btnEn.classList.remove("active");
+        }
+      }
+
+      // 3. ページを開いた瞬間に、記憶していた言語を適用する
+      setLanguage(savedLang);
+
+      // 4. ボタンを押した時の処理
+      btnJa.addEventListener("click", () => setLanguage("ja"));
+      btnEn.addEventListener("click", () => setLanguage("en"));
     </script>
   </body>
 </html>

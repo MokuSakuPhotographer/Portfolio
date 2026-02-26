@@ -179,7 +179,7 @@
         color: var(--text-primary);
       }
 
-      /* SNSボタンのスタイル */
+      /* === SNSボタンのスタイル（アイコン化） === */
       .sns-buttons {
         display: flex;
         justify-content: center;
@@ -191,26 +191,27 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 250px;
-        padding: 15px 0;
-        background-color: var(--bg-dark);
+        width: 60px;
+        height: 60px;
+        background-color: transparent;
         border: 1px solid var(--border-color);
-        border-radius: 4px;
-        color: #fff;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1.1rem;
-        letter-spacing: 0.05em;
+        border-radius: 50%;
+        color: var(--text-primary);
         transition: all 0.3s ease;
       }
+      .sns-btn svg {
+        width: 26px;
+        height: 26px;
+        fill: currentColor;
+      }
       .sns-btn:hover {
-        background-color: var(--accent-orange);
         border-color: var(--accent-orange);
+        color: var(--accent-orange);
         transform: translateY(-3px);
         box-shadow: 0 5px 15px rgba(255, 77, 0, 0.3);
       }
 
-      /* 依頼用テンプレートボックス */
+      /* === 依頼用テンプレートボックス === */
       .template-box {
         background-color: var(--bg-dark);
         border: 1px solid var(--border-color);
@@ -232,17 +233,72 @@
         margin-bottom: 15px;
         color: var(--text-secondary);
       }
-      .template-text {
+
+      /* ▼ 追加：黒枠全体を囲むラッパー ▼ */
+      .template-text-wrapper {
+        position: relative;
         background-color: #000;
-        padding: 20px;
         border-radius: 4px;
-        font-family: monospace;
-        font-size: 0.95rem;
-        color: #ccc;
-        line-height: 1.8;
-        overflow-x: auto;
+        border: 1px solid var(--border-color);
       }
 
+      /* ▼ コピーボタンエリア（黒枠の右上） ▼ */
+      .copy-area {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .template-text {
+        padding: 15px;
+        padding-top: 42px; /* ボタンと文字が重ならないように上部に隙間をあける */
+        font-family: monospace;
+        font-size: 0.9rem;
+        color: #ccc;
+        line-height: 1.35;
+        overflow-x: auto;
+        white-space: pre-wrap; /* 改行をそのまま反映させる */
+      }
+
+      /* ▼ コピーボタンのスタイル（黒枠に馴染むように調整） ▼ */
+      .copy-btn {
+        background-color: #222;
+        color: var(--text-primary);
+        border: 1px solid #444;
+        padding: 6px 15px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .copy-btn svg {
+        margin-bottom: 2px;
+      }
+      .copy-btn:hover {
+        background-color: var(--accent-orange);
+        border-color: var(--accent-orange);
+        color: #fff;
+      }
+      .copy-msg {
+        color: var(--accent-orange);
+        font-size: 0.85rem;
+        font-weight: bold;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        margin-right: 15px;
+      }
+      .copy-msg.is-show {
+        opacity: 1;
+      }
+
+      /* === ポリシーリンク === */
       .policy-link-area {
         text-align: center;
         margin-top: 40px;
@@ -257,6 +313,40 @@
       }
       .policy-link-area a:hover {
         opacity: 0.7;
+      }
+
+      /* ▼▼ 言語切り替えボタンと表示制御のスタイル ▼▼ */
+      .lang-switch {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+      }
+      .lang-switch button {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 5px;
+        transition: color 0.3s ease;
+      }
+      .lang-switch button:hover {
+        color: var(--text-primary);
+      }
+      .lang-switch button.active {
+        color: var(--accent-orange);
+        pointer-events: none;
+      }
+      .lang-switch span {
+        color: var(--border-color);
+        margin: 0 2px;
+      }
+      body[data-lang="ja"] .lang-en {
+        display: none !important;
+      }
+      body[data-lang="en"] .lang-ja {
+        display: none !important;
       }
 
       /* === スクロールアニメーション用クラス === */
@@ -359,6 +449,11 @@
               alt=""
             />Contact</a
           >
+          <div class="lang-switch">
+            <button id="btn-ja" class="active">JP</button>
+            <span>/</span>
+            <button id="btn-en">EN</button>
+          </div>
         </nav>
       </div>
     </header>
@@ -367,7 +462,14 @@
       <h1 class="contact-page-title js-scroll-trigger">Contact</h1>
 
       <p class="contact-intro js-scroll-trigger">
-        撮影のご依頼、ご相談、またはリリックビデオ制作についてのお問い合わせは、<br />以下のSNSのDM（ダイレクトメッセージ）よりお気軽にご連絡ください。
+        <span class="lang-ja"
+          >撮影のご依頼、ご相談、またはリリックビデオ制作についてのお問い合わせは、<br />以下のSNSのDM（ダイレクトメッセージ）よりお気軽にご連絡ください。</span
+        >
+        <span class="lang-en"
+          >For photography requests, consultations, or lyric video production
+          inquiries,<br />please feel free to contact me via DM on the following
+          social media.</span
+        >
       </p>
 
       <div class="sns-buttons js-scroll-trigger">
@@ -376,48 +478,121 @@
           target="_blank"
           rel="noopener noreferrer"
           class="sns-btn"
+          aria-label="X (Twitter)"
         >
-          X (Twitter)
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+            />
+          </svg>
         </a>
         <a
           href="https://www.instagram.com/mokusakurock/"
           target="_blank"
           rel="noopener noreferrer"
           class="sns-btn"
+          aria-label="Instagram"
         >
-          Instagram
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"
+            />
+          </svg>
         </a>
       </div>
 
       <div class="template-box js-scroll-trigger">
-        <h3>DM用テンプレート</h3>
+        <h3>
+          <span class="lang-ja">DM用テンプレート</span>
+          <span class="lang-en">DM Template</span>
+        </h3>
         <p>
-          ご依頼の際、以下の項目をコピーして記載いただけますとスムーズです。（未定の部分は「未定」や「相談」で構いません）
+          <span class="lang-ja"
+            >ご依頼の際、以下の項目をコピーして記載いただけますとスムーズです。（未定の部分は「未定」や「相談」で構いません）</span
+          >
+          <span class="lang-en"
+            >To ensure a smooth process, please copy and fill out the template
+            below when requesting a shoot. (If undecided, simply write
+            "TBD")</span
+          >
         </p>
-        <div class="template-text">
-          【撮影のご依頼・ご相談】<br />
-          ・お名前：<br />
-          ・X (Twitter)またはInstagramのアカウント名：<br />
-          ・撮影希望日（複数可）：<br />
-          ・イベント名またはスタジオ名：<br />
-          ・作品名 / キャラクター：<br />
-          ・参加人数（レイヤー様・カメラマン含む）：<br />
-          ・希望する雰囲気やイメージ（あれば）：<br />
-          ・その他ご要望（動画も撮ってほしい等）：
+
+        <div class="template-text-wrapper">
+          <div class="copy-area">
+            <span id="copyMsg" class="copy-msg">
+              <span class="lang-ja">コピーしました！</span>
+              <span class="lang-en">Copied!</span>
+            </span>
+            <button id="copyBtn" class="copy-btn">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                ></path>
+              </svg>
+              <span class="lang-ja">コピー</span>
+              <span class="lang-en">Copy</span>
+            </button>
+          </div>
+
+          <div id="template-text-ja" class="template-text lang-ja">
+            【撮影のご依頼・ご相談】<br />
+            ・お名前：<br />
+            ・X (Twitter)またはInstagramのアカウント名：<br />
+            ・撮影希望日（複数可）：<br />
+            ・イベント名またはスタジオ名：<br />
+            ・作品名 / キャラクター：<br />
+            ・参加人数（レイヤー様・カメラマン含む）：<br />
+            ・希望する雰囲気やイメージ（あれば）：<br />
+            ・その他ご要望（動画も撮ってほしい等）：
+          </div>
+
+          <div id="template-text-en" class="template-text lang-en">
+            [Photography Request / Inquiry]<br />
+            - Name:<br />
+            - X (Twitter) or Instagram Account:<br />
+            - Preferred Date(s):<br />
+            - Event / Studio Name:<br />
+            - Title / Character:<br />
+            - Number of Participants (incl. Cosplayers/Photographers):<br />
+            - Desired Vibe or Image (if any):<br />
+            - Other Requests (e.g., video recording):
+          </div>
         </div>
       </div>
 
       <div class="policy-link-area js-scroll-trigger">
         <p>
-          ※ご連絡の前に、必ず
-          <a href="Policy.html">Shooting Policy（撮影ポリシー）</a>
-          をご一読ください。
+          <span class="lang-ja"
+            >※ご連絡の前に、必ず
+            <a href="Policy.html">Shooting Policy（撮影ポリシー）</a>
+            をご一読ください。</span
+          >
+          <span class="lang-en"
+            >* Before contacting me, please be sure to read the
+            <a href="Policy.html">Shooting Policy</a>.</span
+          >
         </p>
       </div>
     </section>
     <footer class="site-footer">
       &copy; 2026 MokuSaku. All Rights Reserved.<br />
-      当サイトのすべてのコンテンツの無断転載を禁じます。
+      <span class="lang-ja"
+        >当サイトのすべてのコンテンツの無断転載を禁じます。</span
+      >
+      <span class="lang-en"
+        >Unauthorized reproduction of all contents on this site is
+        prohibited.</span
+      >
     </footer>
     <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
 
@@ -473,6 +648,76 @@
           behavior: "smooth", // 滑らかなスクロールを指定
         });
       });
+
+      // === テンプレートのコピー機能（綺麗にお掃除＆確実版） ===
+      const copyBtn = document.getElementById("copyBtn");
+      const copyMsg = document.getElementById("copyMsg");
+
+      copyBtn.addEventListener("click", () => {
+        const currentLang = document.body.getAttribute("data-lang") || "ja";
+        const targetId =
+          currentLang === "en" ? "template-text-en" : "template-text-ja";
+        const rawText = document.getElementById(targetId).innerText;
+
+        // ▼ 追加：いらない空白や空行を綺麗にお掃除する魔法 ▼
+        const textToCopy = rawText
+          .split("\n") // 一旦すべての行をバラバラにする
+          .map((line) => line.trim()) // 各行の最初と最後にある無駄なスペースを消し去る
+          .filter((line) => line !== "") // 空っぽの行を無かったことにする
+          .join("\n"); // 綺麗な改行で再びくっつける
+
+        // ▼ ローカル環境（file:///）でも確実に動くコピーの魔法 ▼
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+
+        // 画面がスクロールしないように見えない場所に配置
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+
+        // 文字を選択状態にする
+        textArea.focus();
+        textArea.select();
+
+        try {
+          document.execCommand("copy");
+
+          copyMsg.classList.add("is-show");
+          setTimeout(() => {
+            copyMsg.classList.remove("is-show");
+          }, 2000);
+        } catch (err) {
+          console.error("コピーに失敗しました", err);
+          alert("お使いのブラウザではコピー機能がサポートされていません。");
+        }
+
+        document.body.removeChild(textArea);
+      });
+      // === 言語切り替え・状態保持の制御 ===
+      const btnJa = document.getElementById("btn-ja");
+      const btnEn = document.getElementById("btn-en");
+      const body = document.body;
+
+      const savedLang = localStorage.getItem("mokusaku_lang") || "ja";
+
+      function setLanguage(lang) {
+        body.setAttribute("data-lang", lang);
+        localStorage.setItem("mokusaku_lang", lang);
+
+        if (lang === "en") {
+          btnEn.classList.add("active");
+          btnJa.classList.remove("active");
+        } else {
+          btnJa.classList.add("active");
+          btnEn.classList.remove("active");
+        }
+      }
+
+      setLanguage(savedLang);
+
+      btnJa.addEventListener("click", () => setLanguage("ja"));
+      btnEn.addEventListener("click", () => setLanguage("en"));
     </script>
   </body>
 </html>
