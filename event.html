@@ -135,6 +135,18 @@
           saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
       }
 
+      /* ▼ 追加：現在見ているページのメニューをオレンジにする魔法 ▼ */
+      nav a.current-page {
+        color: var(--accent-orange);
+      }
+      nav a.current-page::after {
+        width: 100%;
+      }
+      nav a.current-page .nav-icon {
+        filter: brightness(0) saturate(100%) invert(39%) sepia(93%)
+          saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
+      }
+
       /* スマホ表示時のヘッダー調整 */
       @media (max-width: 850px) {
         .header-container {
@@ -502,6 +514,15 @@
     <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
 
     <script>
+      // ▼ 追加：現在見ているページのメニューを自動でハイライト ▼
+      const currentPath = window.location.pathname;
+      const currentFilename =
+        currentPath.substring(currentPath.lastIndexOf("/") + 1) || "index.html";
+      document.querySelectorAll("nav a").forEach((link) => {
+        if (link.getAttribute("href") === currentFilename) {
+          link.classList.add("current-page");
+        }
+      });
       // --- スクロールアニメーションの制御 ---
       const scrollTriggers = document.querySelectorAll(".js-scroll-trigger");
       const cb = function (entries, observer) {
