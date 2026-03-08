@@ -265,7 +265,7 @@
         z-index: 10;
       }
 
-      /* ▼ 修正：PC（マウスがある端末）の時だけホバーアニメーションを有効にする ▼ */
+      /* ▼ 修正：PC（マウスがある端末）のホバーアニメーション ▼ */
       @media (hover: hover) and (pointer: fine) {
         .split-panel:hover {
           flex: 1.8; /* マウスを乗せると少し広がる */
@@ -277,6 +277,30 @@
         .split-panel:hover .panel-title {
           color: var(--accent-orange);
         }
+
+        /* ▼ PC環境でのみ機能する写真のホバー効果 ▼ */
+        .photo-item:hover img {
+          filter: grayscale(0%) contrast(1.05);
+          transform: scale(1.05);
+        }
+      }
+
+      /* ▼ 追加：スマホ（タッチ端末）で1回タップされた時の「ホバー状態」擬似クラス ▼ */
+      .split-panel.is-hovered {
+        flex: 1.8; /* スマホでも1タップ目で広がる（拡大する）ように追加！ */
+      }
+      .split-panel.is-hovered .panel-cover {
+        filter: brightness(0.8) grayscale(0%);
+        transform: scale(1.15);
+      }
+      .split-panel.is-hovered .panel-title {
+        color: var(--accent-orange);
+      }
+
+      /* スマホ用の写真ホバー（1回タップ）状態 */
+      .photo-item.is-hovered img {
+        filter: grayscale(0%) contrast(1.05);
+        transform: scale(1.05);
       }
       /* パネルをクリックして展開した時の状態 */
       .split-panel.is-active {
@@ -375,10 +399,7 @@
         cursor: zoom-in;
       }
 
-      .photo-item:hover img {
-        filter: grayscale(0%) contrast(1.05);
-        transform: scale(1.05);
-      }
+      /* ※ .photo-item:hover は上のPC専用メディアクエリ内に移動しました ※ */
 
       /* 20枚の画像を縦長・横長・正方形でバランスよく散りばめる設定 */
       .photo-item:nth-child(1) {
@@ -1340,6 +1361,19 @@
       document.querySelectorAll(".photo-item img").forEach((img) => {
         img.addEventListener("click", (e) => {
           activeImage = e.target;
+          const parentItem = activeImage.closest(".photo-item"); // ← 画像の親要素（.photo-item）を取得
+
+          // ▼ スマホ（タッチデバイス）における「1回目はホバー、2回目で開く」制御 ▼
+          const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+          if (isTouchDevice && !parentItem.classList.contains("is-hovered")) {
+            // 他のすべての画像のhover状態を解除
+            document.querySelectorAll(".photo-item").forEach((item) => item.classList.remove("is-hovered"));
+            // 今回タップされた画像だけをホバー状態（カラー・拡大）にする
+            parentItem.classList.add("is-hovered");
+            return;
+          }
+
+          // ↓ 以下、2回目のタップ（またはPCでのクリック）によるLightbox展開処理 ↓
           const rect = activeImage.getBoundingClientRect();
           const highResSrc = activeImage.getAttribute("data-highres");
 
@@ -1440,6 +1474,9 @@
           }, 400);
         }
 
+        // ▼ 閉じる時にすべての画像のhover状態（スマホ用）をリセット
+        document.querySelectorAll(".photo-item").forEach((item) => item.classList.remove("is-hovered"));
+
         const rect = activeImage.getBoundingClientRect();
 
         lightboxBg.style.opacity = "0";
@@ -1507,12 +1544,29 @@
         cover.addEventListener("click", (e) => {
           const parentPanel = e.target.closest(".split-panel");
 
+          // ▼ 追加：スマホ（タッチデバイス）における「1回目はホバー、2回目で開く」制御 ▼
+          // マウスではなくタッチかどうかの判定（簡易的にhover対応可否で判定）
+          const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+          
+          if (isTouchDevice && !parentPanel.classList.contains("is-hovered")) {
+            // 他のパネルのhover状態を解除
+            panels.forEach((p) => p.classList.remove("is-hovered"));
+            // 1回目のタップ：ホバー状態（アニメーション）だけ適用して処理を抜ける
+            parentPanel.classList.add("is-hovered");
+            return;
+          }
+
+          // 以下、PCのクリック時 または スマホで2回目タップ時（実際に展開する処理）
+
           // ▼ 魔法発動：コンテナを全画面化し、ヘッダーを完全に消す！
           if (splitContainer) splitContainer.classList.add("is-fullscreen");
           header.classList.add("is-hidden"); // ← ★これが抜けていました！
 
           // すべてのパネルを一旦隠す状態にする
-          panels.forEach((p) => p.classList.add("is-hidden"));
+          panels.forEach((p) => {
+            p.classList.add("is-hidden");
+            p.classList.remove("is-hovered"); // 展開時にhover状態は不要なので消す
+          });
 
           // クリックされたパネルだけを表示・展開する
           parentPanel.classList.remove("is-hidden");
@@ -1534,7 +1588,7 @@
         header.classList.remove("is-hidden"); // ← ★これも追加
 
         panels.forEach((p) => {
-          p.classList.remove("is-hidden", "is-active");
+          p.classList.remove("is-hidden", "is-active", "is-hovered");
         });
         backBtn.classList.remove("is-show");
         document.body.classList.remove("is-panel-open");

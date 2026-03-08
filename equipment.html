@@ -8,6 +8,11 @@
       href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
       rel="stylesheet"
     />
+    <!-- FontAwesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
       html {
         scrollbar-gutter: stable;
@@ -200,7 +205,7 @@
 
       /* カテゴリの枠を消してスッキリさせる */
       .gear-category {
-        margin-bottom: 50px;
+        margin-bottom: 35px; /* カテゴリ間の余白を減らす */
       }
 
       /* 見出しをスタイリッシュに */
@@ -216,15 +221,13 @@
         align-items: center;
       }
 
-      /* 見出しの左にオレンジのアクセントライン */
-      .gear-category h2::before {
-        content: "";
-        display: inline-block;
-        width: 4px;
-        height: 20px;
-        background-color: var(--accent-orange);
+      /* アイコンとテキストの間隔調整 */
+      .gear-category h2 i {
+        color: var(--accent-orange);
         margin-right: 12px;
-        border-radius: 2px;
+        font-size: 1.3rem;
+        width: 30px; /* アイコンの幅を揃えて縦のラインをきれいに見せる */
+        text-align: center;
       }
 
       /* ▼▼▼ 追加・変更：カード型グリッドレイアウト ▼▼▼ */
@@ -240,27 +243,28 @@
         margin: 0;
       }
 
-      /* カード内の文字レイアウトを整理 */
+      /* カード内の文字レイアウトを整理してコンパクト化 */
       .gear-list li {
         position: relative;
         background-color: var(--bg-dark);
         border: 1px solid var(--border-color);
         border-radius: 6px;
-        padding: 20px;
+        padding: 15px; /* 上下左右の余白を少し戻してバランスを調整 */
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: flex-start; /* テキストを上端で揃える */
         transition: all 0.3s ease;
-        /* ↓ リンクがない場合でも文字がはみ出さないように調整 */
-        min-height: 80px;
+        min-height: 80px; /* カードの最小の高さを少し持たせて揃えやすくする */
       }
 
       /* ソフトウェア名（太字部分）の調整 */
-      .gear-list li span {
+      .gear-list li > span {
+        display: block;
         color: var(--text-primary);
         font-weight: bold;
-        font-size: 1.05rem;
-        margin-bottom: 5px; /* 説明文との間隔 */
+        font-size: 1rem; /* 少しだけフォントサイズを下げてスッキリ */
+        margin-bottom: 2px; /* 説明文との間隔を詰める */
+        padding-right: 25px; /* 右上の矢印アイコンエリアを避けるための余白をaタグと共通化 */
       }
       /* ▼ 追加：説明文（small）の中の言語設定が太字にならないようにリセット ▼ */
       .gear-list small span {
@@ -305,10 +309,10 @@
       .gear-list a::after {
         content: "↗";
         position: absolute;
-        top: 20px;
-        right: 20px;
+        top: 15px;
+        right: 15px; /* 余白削減に合わせて矢印の位置も調整 */
         color: var(--text-secondary);
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         transition: all 0.3s ease;
       }
 
@@ -324,12 +328,12 @@
       /* （廃盤）などの注釈をバッジ風にデザイン */
       /* 機材の注釈（説明文）を自然なテキストにデザイン */
       .gear-list small {
-        display: block; /* 改行して機材名の下に配置 */
-        margin-top: 8px; /* 機材名との間に少し余白を作る */
+        display: block;
+        margin-top: 4px; /* 機材名との間に少しだけ余白を作る */
         color: var(--text-secondary); /* 控えめなグレー */
-        font-size: 0.85rem;
+        font-size: 0.8rem; /* 少し小さくしてスッキリ */
         font-weight: normal; /* 太字を解除して読みやすく */
-        line-height: 1.5;
+        line-height: 1.4;
         letter-spacing: 0.05em;
         position: relative;
         z-index: 2; /* リンクの上に出す */
@@ -489,6 +493,47 @@
         transform: rotate(45deg);
       }
 
+      /* === すべて開く/閉じるボタンのスタイル === */
+      .toggle-all-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      .toggle-all-btn {
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 5px 15px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .toggle-all-btn i {
+        font-size: 0.9rem;
+      }
+      .toggle-all-btn:hover {
+        color: var(--accent-orange);
+        border-color: var(--accent-orange);
+      }
+
+      /* スマホ表示時の調整（すべて開く/閉じるボタン） */
+      @media (max-width: 600px) {
+        .toggle-all-container {
+          justify-content: space-between;
+          gap: 10px;
+        }
+        .toggle-all-btn {
+          flex: 1; /* 横幅いっぱいに均等に広げる */
+          justify-content: center; /* アイコンとテキストを中央に配置 */
+          padding: 8px 10px; /* タップしやすいように上下の余白を増やす */
+        }
+      }
+
       /* スムーズに開閉するためのラッパー設定（CSS Gridの魔法） */
       .toggle-wrapper {
         display: grid;
@@ -571,10 +616,27 @@
         >
       </p>
 
+      <!-- ▼ 追加：すべて開く/閉じるボタン ▼ -->
+      <div class="toggle-all-container js-scroll-trigger">
+        <button id="openAllBtn" class="toggle-all-btn">
+          <i class="fa-solid fa-angles-down"></i>
+          <span class="lang-ja">すべて開く</span>
+          <span class="lang-en">Expand All</span>
+        </button>
+        <button id="closeAllBtn" class="toggle-all-btn">
+          <i class="fa-solid fa-angles-up"></i>
+          <span class="lang-ja">すべて閉じる</span>
+          <span class="lang-en">Collapse All</span>
+        </button>
+      </div>
+
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">カメラ</span>
-          <span class="lang-en">Camera</span>
+          <i class="fa-solid fa-camera"></i>
+          <div>
+            <span class="lang-ja">カメラ</span>
+            <span class="lang-en">Camera</span>
+          </div>
         </h2>
         <ul class="gear-list">
           <li>
@@ -610,8 +672,11 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">レンズ</span>
-          <span class="lang-en">Lens</span>
+          <i class="fa-solid fa-camera-retro"></i>
+          <div>
+            <span class="lang-ja">レンズ</span>
+            <span class="lang-en">Lens</span>
+          </div>
         </h2>
         <ul class="gear-list">
           <li>
@@ -704,8 +769,11 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">周辺機器</span>
-          <span class="lang-en">Accessories</span>
+          <i class="fa-solid fa-battery-full"></i>
+          <div>
+            <span class="lang-ja">周辺機器</span>
+            <span class="lang-en">Accessories</span>
+          </div>
         </h2>
         <ul class="gear-list">
           <li>
@@ -791,8 +859,11 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">三脚・スタビライザー</span>
-          <span class="lang-en">Tripods & Stabilizers</span>
+          <i class="fa-solid fa-camera-rotate"></i>
+          <div>
+            <span class="lang-ja">三脚・スタビライザー</span>
+            <span class="lang-en">Tripods & Stabilizers</span>
+          </div>
         </h2>
         <ul class="gear-list">
           <li>
@@ -885,8 +956,11 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">ストラップ・ホルダー</span>
-          <span class="lang-en">Straps & Holders</span>
+          <i class="fa-solid fa-link"></i>
+          <div>
+            <span class="lang-ja">ストラップ・ホルダー</span>
+            <span class="lang-en">Straps & Holders</span>
+          </div>
         </h2>
         <ul class="gear-list">
           <li>
@@ -975,8 +1049,11 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">バッグ</span>
-          <span class="lang-en">Bags</span>
+          <i class="fa-solid fa-suitcase"></i>
+          <div>
+            <span class="lang-ja">バッグ</span>
+            <span class="lang-en">Bags</span>
+          </div>
         </h2>
         <ul class="gear-list">
           <li>
@@ -1035,8 +1112,11 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">ライト・補助光</span>
-          <span class="lang-en">Lighting</span>
+          <i class="fa-regular fa-lightbulb"></i>
+          <div>
+            <span class="lang-ja">ライト・補助光</span>
+            <span class="lang-en">Lighting</span>
+          </div>
         </h2>
         <ul class="gear-list">
           <li>
@@ -1164,8 +1244,11 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">レンズフィルター</span>
-          <span class="lang-en">Filters</span>
+          <i class="fa-solid fa-filter"></i>
+          <div>
+            <span class="lang-ja">レンズフィルター</span>
+            <span class="lang-en">Filters</span>
+          </div>
         </h2>
         <ul class="gear-list">
           <li>
@@ -1342,8 +1425,11 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">その他</span>
-          <span class="lang-en">Others</span>
+          <i class="fa-solid fa-box-open"></i>
+          <div>
+            <span class="lang-ja">その他</span>
+            <span class="lang-en">Others</span>
+          </div>
         </h2>
         <ul class="gear-list">
           <li>
@@ -1374,8 +1460,11 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">使用ソフト</span>
-          <span class="lang-en">Software</span>
+          <i class="fa-solid fa-laptop-code"></i>
+          <div>
+            <span class="lang-ja">使用ソフト</span>
+            <span class="lang-en">Software</span>
+          </div>
         </h2>
         <ul class="gear-list">
           <li>
@@ -1442,8 +1531,11 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <span class="lang-ja">PCスペック</span>
-          <span class="lang-en">PC Specs</span>
+          <i class="fa-solid fa-desktop"></i>
+          <div>
+            <span class="lang-ja">PCスペック</span>
+            <span class="lang-en">PC Specs</span>
+          </div>
         </h2>
         <div class="pc-specs">
           <dl>
@@ -1529,6 +1621,28 @@
         header.addEventListener("click", () => {
           header.classList.toggle("is-open");
           wrapper.classList.toggle("is-open");
+        });
+      });
+
+      // --- すべて開く / すべて閉じる ボタンの制御 ---
+      const openAllBtn = document.getElementById("openAllBtn");
+      const closeAllBtn = document.getElementById("closeAllBtn");
+
+      openAllBtn.addEventListener("click", () => {
+        document.querySelectorAll(".gear-category").forEach((category) => {
+          const header = category.querySelector("h2");
+          const wrapper = header.nextElementSibling;
+          header.classList.add("is-open");
+          wrapper.classList.add("is-open");
+        });
+      });
+
+      closeAllBtn.addEventListener("click", () => {
+        document.querySelectorAll(".gear-category").forEach((category) => {
+          const header = category.querySelector("h2");
+          const wrapper = header.nextElementSibling;
+          header.classList.remove("is-open");
+          wrapper.classList.remove("is-open");
         });
       });
       // --- ヘッダーのスクロール（自動隠し）制御 ---

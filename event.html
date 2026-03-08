@@ -219,22 +219,11 @@
         display: flex;
         flex-direction: column;
         position: relative;
-        transition:
-          transform 0.3s ease,
-          box-shadow 0.3s ease;
-      }
-      .event-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
       }
 
       .event-card.past {
         border-left-color: var(--status-closed);
         opacity: 0.7;
-      }
-      .event-card.past:hover {
-        transform: none;
-        box-shadow: none;
       }
 
       .event-date {
@@ -270,6 +259,8 @@
 
       /* === ステータスバッジ（受付中 / 終了）のスタイル === */
       .event-status {
+        text-decoration: none;
+        display: inline-block;
         align-self: flex-start;
         padding: 6px 20px; /* 余白を増やしてボタンらしさを出す */
         border-radius: 25px;
@@ -285,6 +276,11 @@
         border: 1px solid #ff7733;
         color: #fff;
         animation: pulseOrange 2s infinite; /* 光が波打つアニメーション */
+        transition: transform 0.2s ease, filter 0.2s ease;
+      }
+      a.status-open:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
       }
 
       /* 終了：暗いグレーで塗りつぶし、沈んだ印象にする */
@@ -475,10 +471,10 @@
             <span class="lang-ja">東京都板橋区</span>
             <span class="lang-en">Itabashi-ku, Tokyo</span>
           </div>
-          <div class="event-status status-open">
+          <a href="contact.html" class="event-status status-open">
             <span class="lang-ja">撮影依頼 受付中</span>
             <span class="lang-en">Accepting Requests</span>
-          </div>
+          </a>
         </div>
       </div>
 
