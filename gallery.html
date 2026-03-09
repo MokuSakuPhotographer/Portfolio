@@ -44,7 +44,7 @@
         left: 0;
         width: 100vw;
         height: 100vh;
-        background-image: url("images/Camera_a.jpg");
+        background-image: url("images/Camera_a.webp");
         background-size: cover;
         background-position: center;
         opacity: 0.15;
@@ -249,6 +249,7 @@
         filter: brightness(0.4) grayscale(60%);
         transition: all 0.5s ease;
         cursor: pointer;
+        touch-action: manipulation; /* ダブルタップによるブラウザズームを無効化（ピンチズームは有効） */
       }
 
       .panel-title {
@@ -279,6 +280,10 @@
         }
 
         /* ▼ PC環境でのみ機能する写真のホバー効果 ▼ */
+        .photo-item:hover {
+          z-index: 10;
+          box-shadow: 0 0 25px var(--accent-orange);
+        }
         .photo-item:hover img {
           filter: grayscale(0%) contrast(1.05);
           transform: scale(1.05);
@@ -298,6 +303,10 @@
       }
 
       /* スマホ用の写真ホバー（1回タップ）状態 */
+      .photo-item.is-hovered {
+        z-index: 10;
+        box-shadow: 0 0 25px var(--accent-orange);
+      }
       .photo-item.is-hovered img {
         filter: grayscale(0%) contrast(1.05);
         transform: scale(1.05);
@@ -383,9 +392,11 @@
 
       .photo-item {
         position: relative;
-        overflow: hidden;
+        overflow: hidden; /* 画像の角を丸めるために hidden に戻す */
         border-radius: 2px;
         background-color: #000;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1;
       }
 
       .photo-item img {
@@ -397,6 +408,7 @@
           transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
           filter 0.6s ease;
         cursor: zoom-in;
+        touch-action: manipulation; /* ダブルタップによるブラウザズームを無効化（ピンチズームは有効） */
       }
 
       /* ※ .photo-item:hover は上のPC専用メディアクエリ内に移動しました ※ */
@@ -859,7 +871,7 @@
         <div class="split-panel">
           <div
             class="panel-cover"
-            style="background-image: url(&quot;images/thumb_DSC02601.jpg&quot;)"
+            style="background-image: url(&quot;images/DSC02601.webp&quot;)"
           ></div>
           <div class="panel-title">Snap</div>
           <div class="panel-content">
@@ -873,160 +885,160 @@
             <div class="photo-grid">
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC04616.jpg"
-                  data-highres="images/DSC04616.jpg"
+                  src="images/DSC04616.webp"
+                  data-highres="images/DSC04616.webp"
                   alt="Gallery Image 1"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC04604.jpg"
-                  data-highres="images/DSC04604.jpg"
+                  src="images/DSC04604.webp"
+                  data-highres="images/DSC04604.webp"
                   alt="Gallery Image 2"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC00589.jpg"
-                  data-highres="images/DSC00589.jpg"
+                  src="images/DSC00589.webp"
+                  data-highres="images/DSC00589.webp"
                   alt="Gallery Image 3"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC00992.jpg"
-                  data-highres="images/DSC00992.jpg"
+                  src="images/DSC00992.webp"
+                  data-highres="images/DSC00992.webp"
                   alt="Gallery Image 4"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC03561.jpg"
-                  data-highres="images/DSC03561.jpg"
+                  src="images/DSC03561.webp"
+                  data-highres="images/DSC03561.webp"
                   alt="Gallery Image 5"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC02215-Enhanced-NR.jpg"
-                  data-highres="images/DSC02215-Enhanced-NR.jpg"
+                  src="images/DSC02215-Enhanced-NR.webp"
+                  data-highres="images/DSC02215-Enhanced-NR.webp"
                   alt="Gallery Image 6"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC02077.jpg"
-                  data-highres="images/DSC02077.jpg"
+                  src="images/DSC02077.webp"
+                  data-highres="images/DSC02077.webp"
                   alt="Gallery Image 7"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC00252_20230218.jpg"
-                  data-highres="images/DSC00252_20230218.jpg"
+                  src="images/DSC00252_20230218.webp"
+                  data-highres="images/DSC00252_20230218.webp"
                   alt="Gallery Image 8"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC01866.jpg"
-                  data-highres="images/DSC01866.jpg"
+                  src="images/DSC01866.webp"
+                  data-highres="images/DSC01866.webp"
                   alt="Gallery Image 9"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_A7C03670.jpg"
-                  data-highres="images/A7C03670.jpg"
+                  src="images/A7C03670.webp"
+                  data-highres="images/A7C03670.webp"
                   alt="Gallery Image 10"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC06066.jpg"
-                  data-highres="images/DSC06066.jpg"
+                  src="images/DSC06066.webp"
+                  data-highres="images/DSC06066.webp"
                   alt="Gallery Image 11"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_Camera_a.jpg"
-                  data-highres="images/Camera_a.jpg"
+                  src="images/Camera_a.webp"
+                  data-highres="images/Camera_a.webp"
                   alt="Gallery Image 12"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC02047.jpg"
-                  data-highres="images/DSC02047.jpg"
+                  src="images/DSC02047.webp"
+                  data-highres="images/DSC02047.webp"
                   alt="Gallery Image 13"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC01850.jpg"
-                  data-highres="images/DSC01850.jpg"
+                  src="images/DSC01850.webp"
+                  data-highres="images/DSC01850.webp"
                   alt="Gallery Image 14"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC00587_20230401.jpg"
-                  data-highres="images/DSC00587_20230401.jpg"
+                  src="images/DSC00587_20230401.webp"
+                  data-highres="images/DSC00587_20230401.webp"
                   alt="Gallery Image 15"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_20201210-DSC00288.jpg"
-                  data-highres="images/20201210-DSC00288.jpg"
+                  src="images/20201210-DSC00288.webp"
+                  data-highres="images/20201210-DSC00288.webp"
                   alt="Gallery Image 16"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_20201210-DSC00223.jpg"
-                  data-highres="images/20201210-DSC00223.jpg"
+                  src="images/20201210-DSC00223.webp"
+                  data-highres="images/20201210-DSC00223.webp"
                   alt="Gallery Image 17"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC01033.jpg"
-                  data-highres="images/DSC01033.jpg"
+                  src="images/DSC01033.webp"
+                  data-highres="images/DSC01033.webp"
                   alt="Gallery Image 18"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC02601.jpg"
-                  data-highres="images/DSC02601.jpg"
+                  src="images/DSC02601.webp"
+                  data-highres="images/DSC02601.webp"
                   alt="Gallery Image 19"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC00484.jpg"
-                  data-highres="images/DSC00484.jpg"
+                  src="images/DSC00484.webp"
+                  data-highres="images/DSC00484.webp"
                   alt="Gallery Image 20"
                   loading="lazy"
                 />
@@ -1038,7 +1050,7 @@
         <div class="split-panel">
           <div
             class="panel-cover"
-            style="background-image: url(&quot;images/thumb_DSC06507.jpg&quot;)"
+            style="background-image: url(&quot;images/DSC06507.webp&quot;)"
           ></div>
           <div class="panel-title">Portrait</div>
           <div class="panel-content">
@@ -1055,8 +1067,8 @@
             <div class="photo-grid portrait-grid">
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC06507.jpg"
-                  data-highres="images/DSC06507.jpg"
+                  src="images/DSC06507.webp"
+                  data-highres="images/DSC06507.webp"
                   data-caption="Model: 左:なな 右:おゆ💧<br>Character: 左:菅谷 乃羽 右:喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 21"
                   loading="lazy"
@@ -1064,8 +1076,8 @@
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC06520.jpg"
-                  data-highres="images/DSC06520.jpg"
+                  src="images/DSC06520.webp"
+                  data-highres="images/DSC06520.webp"
                   data-caption="Model: なな<br>Character: 菅谷 乃羽 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 22"
                   loading="lazy"
@@ -1074,8 +1086,8 @@
 
               <div class="photo-item size-large">
                 <img
-                  src="images/thumb_DSC06523.jpg"
-                  data-highres="images/DSC06523.jpg"
+                  src="images/DSC06523.webp"
+                  data-highres="images/DSC06523.webp"
                   data-caption="Model: 左:なな 右:おゆ💧<br>Character: 左:菅谷 乃羽 右:喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 23"
                   loading="lazy"
@@ -1084,8 +1096,8 @@
 
               <div class="photo-item size-wide">
                 <img
-                  src="images/thumb_DSC06531.jpg"
-                  data-highres="images/DSC06531.jpg"
+                  src="images/DSC06531.webp"
+                  data-highres="images/DSC06531.webp"
                   data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 24"
                   loading="lazy"
@@ -1094,8 +1106,8 @@
 
               <div class="photo-item size-tall">
                 <img
-                  src="images/thumb_DSC06543.jpg"
-                  data-highres="images/DSC06543.jpg"
+                  src="images/DSC06543.webp"
+                  data-highres="images/DSC06543.webp"
                   data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 25"
                   loading="lazy"
@@ -1103,8 +1115,8 @@
               </div>
               <div class="photo-item size-tall">
                 <img
-                  src="images/thumb_DSC06698.jpg"
-                  data-highres="images/DSC06698.jpg"
+                  src="images/DSC06698.webp"
+                  data-highres="images/DSC06698.webp"
                   data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 26"
                   loading="lazy"
@@ -1113,8 +1125,8 @@
 
               <div class="photo-item size-tall">
                 <img
-                  src="images/thumb_DSC06758.jpg"
-                  data-highres="images/DSC06758.jpg"
+                  src="images/DSC06758.webp"
+                  data-highres="images/DSC06758.webp"
                   data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 27"
                   loading="lazy"
@@ -1122,8 +1134,8 @@
               </div>
               <div class="photo-item size-tall">
                 <img
-                  src="images/thumb_DSC06766.jpg"
-                  data-highres="images/DSC06766.jpg"
+                  src="images/DSC06766.webp"
+                  data-highres="images/DSC06766.webp"
                   data-caption="Model: なな<br>Character: 菅谷 乃羽 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 28"
                   loading="lazy"
@@ -1131,8 +1143,8 @@
               </div>
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC06775.jpg"
-                  data-highres="images/DSC06775.jpg"
+                  src="images/DSC06775.webp"
+                  data-highres="images/DSC06775.webp"
                   data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 29"
                   loading="lazy"
@@ -1141,8 +1153,8 @@
 
               <div class="photo-item">
                 <img
-                  src="images/thumb_DSC06828.jpg"
-                  data-highres="images/DSC06828.jpg"
+                  src="images/DSC06828.webp"
+                  data-highres="images/DSC06828.webp"
                   data-caption="Model: おゆ💧<br>Character: 喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 30"
                   loading="lazy"
@@ -1151,8 +1163,8 @@
 
               <div class="photo-item size-large">
                 <img
-                  src="images/thumb_DSC06838.jpg"
-                  data-highres="images/DSC06838.jpg"
+                  src="images/DSC06838.webp"
+                  data-highres="images/DSC06838.webp"
                   data-caption="Model: 左:おゆ💧 右:なな<br>Character: 左:喜多川 海夢 右:菅谷 乃羽 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 31"
                   loading="lazy"
@@ -1161,8 +1173,8 @@
 
               <div class="photo-item size-tall">
                 <img
-                  src="images/thumb_DSC06864.jpg"
-                  data-highres="images/DSC06864.jpg"
+                  src="images/DSC06864.webp"
+                  data-highres="images/DSC06864.webp"
                   data-caption="Model: なな<br>Character: 菅谷 乃羽 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 32"
                   loading="lazy"
@@ -1171,8 +1183,8 @@
 
               <div class="photo-item size-tall">
                 <img
-                  src="images/thumb_DSC06883.jpg"
-                  data-highres="images/DSC06883.jpg"
+                  src="images/DSC06883.webp"
+                  data-highres="images/DSC06883.webp"
                   data-caption="Model: 左:なな 右:おゆ💧<br>Character: 左:菅谷 乃羽 右:喜多川 海夢 (その着せ替え人形は恋をする)"
                   alt="Gallery Image 33"
                   loading="lazy"
@@ -1186,7 +1198,7 @@
           <div
             class="panel-cover"
             style="
-              background-image: url(&quot;images/thumb_videography.jpg&quot;);
+              background-image: url(&quot;images/thumb_videography.webp&quot;);
             "
           ></div>
           <div class="panel-title">Video</div>
@@ -1295,6 +1307,9 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
     </section>
     <footer class="site-footer">
       &copy; 2026 MokuSaku. All Rights Reserved.<br />
@@ -1401,9 +1416,9 @@
 
           lightboxImg.offsetHeight;
 
-          // アニメーション時間の調整（例として0.3秒）
+          // アニメーション時間の調整（0.4秒で優雅な動きに）
           lightboxImg.style.transition =
-            "all 0.3s cubic-bezier(0.25, 1, 0.5, 1)";
+            "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
           lightboxImg.style.left = "5vw";
           lightboxImg.style.top = "5vh";
           lightboxImg.style.width = "90vw";
@@ -1482,6 +1497,8 @@
         lightboxBg.style.opacity = "0";
         lightboxClose.style.opacity = "0";
         lightboxCaption.classList.remove("is-show");
+        lightboxImg.style.transition =
+          "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
         lightboxImg.style.left = rect.left + "px";
         lightboxImg.style.top = rect.top + "px";
         lightboxImg.style.width = rect.width + "px";
@@ -1495,7 +1512,7 @@
           lightboxImg.style.visibility = "hidden";
           document.body.style.overflow = "";
           activeImage = null;
-        }, 300); // アニメーション時間（0.3秒）と合わせる
+        }, 400); // アニメーション時間（0.4秒）と合わせる
       }
 
       lightboxBg.addEventListener("click", closeLightbox);

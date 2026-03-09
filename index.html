@@ -80,7 +80,7 @@
         left: 0;
         width: 100vw; /* 画面幅に固定 */
         height: 100vh; /* 画面の高さに固定 */
-        background-image: url("images/Camera_a.jpg");
+        background-image: url("images/Camera_a.webp");
         background-size: cover;
         background-position: center;
         opacity: 0.15;
@@ -96,7 +96,7 @@
         border-bottom: 1px solid var(--border-color);
         z-index: 1000;
         backdrop-filter: blur(10px);
-        transition: top 0.3s ease;
+        transition: transform 0.3s ease;
         animation: slideDown 0.8s ease-out forwards;
         transform: translateY(-100%);
       }
@@ -490,25 +490,25 @@
     <div class="hero-section">
       <div
         class="slide active"
-        style="background-image: url(&quot;images/slide_DSC06507.jpg&quot;)"
+        style="background-image: url(&quot;images/DSC06507.webp&quot;)"
       ></div>
       <div
         class="slide"
         style="
-          background-image: url(&quot;images/slide_DSC00587_20230401.jpg&quot;);
+          background-image: url(&quot;images/DSC00587_20230401.webp&quot;);
         "
       ></div>
       <div
         class="slide"
-        style="background-image: url(&quot;images/slide_DSC02047.jpg&quot;)"
+        style="background-image: url(&quot;images/DSC02047.webp&quot;)"
       ></div>
       <div
         class="slide"
-        style="background-image: url(&quot;images/slide_DSC01033.jpg&quot;)"
+        style="background-image: url(&quot;images/DSC01033.webp&quot;)"
       ></div>
       <div
         class="slide"
-        style="background-image: url(&quot;images/slide_DSC04616.jpg&quot;)"
+        style="background-image: url(&quot;images/DSC04616.webp&quot;)"
       ></div>
 
       <div class="welcome-text">
@@ -628,28 +628,20 @@
         }
         // 下にスクロール ＆ 上から50px以上スクロールしている場合のみ隠す
         if (currentScrollY > lastScrollY && currentScrollY > 50) {
-          header.style.top = "-180px"; // ヘッダーの高さ分、画面外（上）に移動させる
+          header.style.transform = "translateY(-100%)"; // ヘッダー高さ分、確実に画面外へ移動
         } else {
           // 上に少しでもスクロールした時、または一番上の時は表示する
-          header.style.top = "0px";
+          header.style.transform = "translateY(0)";
         }
 
         lastScrollY = currentScrollY;
       });
       // --- TOPへ戻るボタンのスムーズスクロール制御 ---
       pageTopBtn.addEventListener("click", (e) => {
-        e.preventDefault(); // 一瞬で一番上に飛ぶ標準の動作をキャンセル
+        e.preventDefault();
         window.scrollTo({
           top: 0,
-          behavior: "smooth", // 滑らかなスクロールを指定
-        });
-      });
-      // --- TOPへ戻るボタンのスムーズスクロール制御 ---
-      pageTopBtn.addEventListener("click", (e) => {
-        e.preventDefault(); // 一瞬で一番上に飛ぶ標準の動作をキャンセル
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth", // 滑らかなスクロールを指定
+          behavior: "smooth",
         });
       });
 

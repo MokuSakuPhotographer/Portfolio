@@ -44,7 +44,7 @@
         left: 0;
         width: 100vw; /* 画面幅に固定 */
         height: 100vh; /* 画面の高さに固定 */
-        background-image: url("images/Camera_a.jpg");
+        background-image: url("images/Camera_a.webp");
         background-size: cover;
         background-position: center;
         opacity: 0.15;
@@ -60,7 +60,7 @@
         border-bottom: 1px solid var(--border-color);
         z-index: 1000;
         backdrop-filter: blur(10px);
-        transition: top 0.3s ease;
+        transition: transform 0.3s ease;
       }
 
       /* ヘッダー内のレイアウト調整 */
@@ -496,7 +496,6 @@
           <span class="lang-en">Please note that in cases of no-shows or repeated malicious last-minute cancellations, I may have to decline future shoot requests.</span>
         </p>
       </div>
-      </div>
     </section>
     <footer class="site-footer">
       &copy; 2026 MokuSaku. All Rights Reserved.<br />
@@ -549,10 +548,10 @@
         }
         // 下にスクロール ＆ 上から50px以上スクロールしている場合のみ隠す
         if (currentScrollY > lastScrollY && currentScrollY > 0) {
-          header.style.top = "-180px"; // ヘッダーの高さ分、画面外（上）に移動させる
+          header.style.transform = "translateY(-100%)"; // ヘッダー高さ分、確実に画面外へ移動
         } else {
           // 上に少しでもスクロールした時、または一番上の時は表示する
-          header.style.top = "0px";
+          header.style.transform = "translateY(0)";
         }
 
         lastScrollY = currentScrollY;
