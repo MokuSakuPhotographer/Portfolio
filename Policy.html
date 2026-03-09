@@ -339,6 +339,12 @@
         color: var(--text-secondary);
         letter-spacing: 0.05em;
       }
+      /* === 画像保護（右クリック・ドラッグ・長押し保存の防止） === */
+      img {
+        user-select: none;
+        -webkit-user-drag: none;
+        -webkit-touch-callout: none;
+      }
     </style>
   </head>
   <body>
@@ -592,6 +598,18 @@
       // 4. ボタンを押した時の処理
       btnJa.addEventListener("click", () => setLanguage("ja"));
       btnEn.addEventListener("click", () => setLanguage("en"));
+
+      // === 画像保護：右クリック・ドラッグの無効化 ===
+      document.addEventListener('contextmenu', function(e) {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+        }
+      }, false);
+      document.addEventListener('dragstart', function(e) {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+        }
+      }, false);
     </script>
   </body>
 </html>
