@@ -413,51 +413,66 @@
 
       /* ※ .photo-item:hover は上のPC専用メディアクエリ内に移動しました ※ */
 
-      /* 20枚の画像を縦長・横長・正方形でバランスよく散りばめる設定 */
-      .photo-item:nth-child(1) {
+      /* 25枚の画像をランダムにタイル状に散りばめる設定 */
+      .photo-grid > .photo-item:nth-child(1) {
         grid-column: span 2;
         grid-row: span 2;
-      } /* 左上の大きなアイキャッチ */
-      .photo-item:nth-child(4) {
-        grid-column: span 2;
-      } /* 横長 */
-      .photo-item:nth-child(6) {
-        grid-column: span 2;
-      } /* 横長 */
-      .photo-item:nth-child(15) {
-        grid-column: span 2;
-        grid-row: span 2;
-      } /* 中央の大きなアイキャッチ */
-      .photo-item:nth-child(12) {
-        grid-column: span 2;
-      } /* 横長 */
-      .photo-item:nth-child(14) {
+      } /* 大：左上アイキャッチ */
+      .photo-grid > .photo-item:nth-child(3) {
         grid-row: span 2;
       } /* 縦長 */
-      .photo-item:nth-child(17) {
-        grid-row: span 2;
-      } /* 縦長 */
-      .photo-item:nth-child(18) {
+      .photo-grid > .photo-item:nth-child(5) {
         grid-column: span 2;
       } /* 横長 */
+      .photo-grid > .photo-item:nth-child(8) {
+        grid-row: span 2;
+      } /* 縦長 */
+      .photo-grid > .photo-item:nth-child(10) {
+        grid-column: span 2;
+      } /* 横長 */
+      .photo-grid > .photo-item:nth-child(13) {
+        grid-column: span 2;
+        grid-row: span 2;
+      } /* 大：中央アイキャッチ */
+      .photo-grid > .photo-item:nth-child(16) {
+        grid-row: span 2;
+      } /* 縦長 */
+      .photo-grid > .photo-item:nth-child(18) {
+        grid-column: span 2;
+      } /* 横長 */
+      .photo-grid > .photo-item:nth-child(20) {
+        grid-row: span 2;
+      } /* 縦長 */
+      .photo-grid > .photo-item:nth-child(22) {
+        grid-column: span 2;
+      } /* 横長 */
+      .photo-grid > .photo-item:nth-child(24) {
+        grid-column: span 2;
+        grid-row: span 2;
+      } /* 大：終盤アイキャッチ */
 
       @media (max-width: 768px) {
         .photo-grid {
           grid-template-columns: repeat(2, 1fr);
-          grid-auto-rows: 200px;
+          grid-auto-rows: 180px;
         }
-        .photo-item {
+        .photo-grid > .photo-item {
           grid-column: span 1 !important;
           grid-row: span 1 !important;
         }
-        /* スマホ時は横長をアクセントとしてリズミカルに配置 */
-        .photo-item:nth-child(1),
-        .photo-item:nth-child(4),
-        .photo-item:nth-child(9),
-        .photo-item:nth-child(12),
-        .photo-item:nth-child(17),
-        .photo-item:nth-child(20) {
+        /* スマホ時はランダム感を出すために横長と縦長を散りばめる */
+        .photo-grid > .photo-item:nth-child(1),
+        .photo-grid > .photo-item:nth-child(7),
+        .photo-grid > .photo-item:nth-child(13),
+        .photo-grid > .photo-item:nth-child(19),
+        .photo-grid > .photo-item:nth-child(25) {
           grid-column: span 2 !important;
+        }
+        .photo-grid > .photo-item:nth-child(3),
+        .photo-grid > .photo-item:nth-child(10),
+        .photo-grid > .photo-item:nth-child(16),
+        .photo-grid > .photo-item:nth-child(22) {
+          grid-row: span 2 !important;
         }
       }
 
@@ -809,6 +824,10 @@
           grid-column: span 2 !important;
           grid-row: span 1 !important;
         }
+        /* スマホ時の縦長は1.5倍の高さで迫力を出す */
+        .split-panel .portrait-grid .photo-item.size-tall {
+          grid-row: span 2 !important;
+        }
       }
       /* === 画像保護（右クリック・ドラッグ・長押し保存の防止） === */
       img {
@@ -891,49 +910,9 @@
             <div class="photo-grid">
               <div class="photo-item">
                 <img
-                  src="images/DSC04616.webp"
-                  data-highres="images/DSC04616.webp"
-                  alt="Gallery Image 1"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC04604.webp"
-                  data-highres="images/DSC04604.webp"
-                  alt="Gallery Image 2"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC00589.webp"
-                  data-highres="images/DSC00589.webp"
-                  alt="Gallery Image 3"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC00992.webp"
-                  data-highres="images/DSC00992.webp"
-                  alt="Gallery Image 4"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC03561.webp"
-                  data-highres="images/DSC03561.webp"
-                  alt="Gallery Image 5"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC02215-Enhanced-NR.webp"
-                  data-highres="images/DSC02215-Enhanced-NR.webp"
-                  alt="Gallery Image 6"
+                  src="images/DSC07177.webp"
+                  data-highres="images/DSC07177.webp"
+                  alt="Snap Photo"
                   loading="lazy"
                 />
               </div>
@@ -941,15 +920,15 @@
                 <img
                   src="images/DSC02077.webp"
                   data-highres="images/DSC02077.webp"
-                  alt="Gallery Image 7"
+                  alt="Snap Photo"
                   loading="lazy"
                 />
               </div>
               <div class="photo-item">
                 <img
-                  src="images/DSC00252_20230218.webp"
-                  data-highres="images/DSC00252_20230218.webp"
-                  alt="Gallery Image 8"
+                  src="images/DSC00992.webp"
+                  data-highres="images/DSC00992.webp"
+                  alt="Snap Photo"
                   loading="lazy"
                 />
               </div>
@@ -957,111 +936,7 @@
                 <img
                   src="images/DSC01866.webp"
                   data-highres="images/DSC01866.webp"
-                  alt="Gallery Image 9"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/A7C03670.webp"
-                  data-highres="images/A7C03670.webp"
-                  alt="Gallery Image 10"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC06066.webp"
-                  data-highres="images/DSC06066.webp"
-                  alt="Gallery Image 11"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/Camera_a.webp"
-                  data-highres="images/Camera_a.webp"
-                  alt="Gallery Image 12"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC02047.webp"
-                  data-highres="images/DSC02047.webp"
-                  alt="Gallery Image 13"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC01850.webp"
-                  data-highres="images/DSC01850.webp"
-                  alt="Gallery Image 14"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC00587_20230401.webp"
-                  data-highres="images/DSC00587_20230401.webp"
-                  alt="Gallery Image 15"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/20201210-DSC00288.webp"
-                  data-highres="images/20201210-DSC00288.webp"
-                  alt="Gallery Image 16"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/20201210-DSC00223.webp"
-                  data-highres="images/20201210-DSC00223.webp"
-                  alt="Gallery Image 17"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC01033.webp"
-                  data-highres="images/DSC01033.webp"
-                  alt="Gallery Image 18"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC02601.webp"
-                  data-highres="images/DSC02601.webp"
-                  alt="Gallery Image 19"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC00484.webp"
-                  data-highres="images/DSC00484.webp"
-                  alt="Gallery Image 20"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC07198.webp"
-                  data-highres="images/DSC07198.webp"
-                  alt="Gallery Image 21"
-                  loading="lazy"
-                />
-              </div>
-              <div class="photo-item">
-                <img
-                  src="images/DSC07177.webp"
-                  data-highres="images/DSC07177.webp"
-                  alt="Gallery Image 22"
+                  alt="Snap Photo"
                   loading="lazy"
                 />
               </div>
@@ -1069,7 +944,31 @@
                 <img
                   src="images/DSC07357.webp"
                   data-highres="images/DSC07357.webp"
-                  alt="Gallery Image 23"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC04616.webp"
+                  data-highres="images/DSC04616.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/20201210-DSC00288.webp"
+                  data-highres="images/20201210-DSC00288.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC00589.webp"
+                  data-highres="images/DSC00589.webp"
+                  alt="Snap Photo"
                   loading="lazy"
                 />
               </div>
@@ -1077,7 +976,111 @@
                 <img
                   src="images/DSC07445.webp"
                   data-highres="images/DSC07445.webp"
-                  alt="Gallery Image 24"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC02215-Enhanced-NR.webp"
+                  data-highres="images/DSC02215-Enhanced-NR.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC01033.webp"
+                  data-highres="images/DSC01033.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC03561.webp"
+                  data-highres="images/DSC03561.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/A7C03670.webp"
+                  data-highres="images/A7C03670.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC00484.webp"
+                  data-highres="images/DSC00484.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC04604.webp"
+                  data-highres="images/DSC04604.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC07198.webp"
+                  data-highres="images/DSC07198.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/20201210-DSC00223.webp"
+                  data-highres="images/20201210-DSC00223.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC06066.webp"
+                  data-highres="images/DSC06066.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC02601.webp"
+                  data-highres="images/DSC02601.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC01850.webp"
+                  data-highres="images/DSC01850.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/Camera_a.webp"
+                  data-highres="images/Camera_a.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC00252_20230218.webp"
+                  data-highres="images/DSC00252_20230218.webp"
+                  alt="Snap Photo"
                   loading="lazy"
                 />
               </div>
@@ -1085,7 +1088,23 @@
                 <img
                   src="images/DSC07465.webp"
                   data-highres="images/DSC07465.webp"
-                  alt="Gallery Image 25"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC02047.webp"
+                  data-highres="images/DSC02047.webp"
+                  alt="Snap Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/DSC00587_20230401.webp"
+                  data-highres="images/DSC00587_20230401.webp"
+                  alt="Snap Photo"
                   loading="lazy"
                 />
               </div>
