@@ -252,6 +252,46 @@
         padding-bottom: 0;
         border-bottom: none;
       }
+
+      /* === 更新履歴の開閉トグル === */
+      .timeline-older {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+      .timeline-older.is-open {
+        grid-template-rows: 1fr;
+      }
+      .timeline-older-inner {
+        overflow: hidden;
+      }
+      .timeline-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 25px auto 0;
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 10px 25px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 0.05em;
+      }
+      .timeline-toggle-btn:hover {
+        color: var(--accent-orange);
+        border-color: var(--accent-orange);
+      }
+      .timeline-toggle-btn .toggle-icon {
+        transition: transform 0.3s ease;
+        font-size: 0.7rem;
+      }
+      .timeline-toggle-btn.is-open .toggle-icon {
+        transform: rotate(180deg);
+      }
       
       /* 光るドット */
       .timeline-dot {
@@ -646,7 +686,20 @@
         <span class="lang-en">Updates</span>
       </h2>
       <div class="timeline-container">
-        
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2026.03.11</div>
+          <div class="timeline-content">
+            <span class="lang-ja">Gearページを更新しました</span>
+            <span class="lang-en">Updated Gear Page</span>
+            <span class="timeline-desc">
+              <span class="lang-ja">Godox FG-100（ストロボハンドグリップ）とGodox ML-CD15（ソフトボックス）を追加しました。</span>
+              <span class="lang-en">Added Godox FG-100 (strobe hand grip) and Godox ML-CD15 (small softbox).</span>
+            </span>
+          </div>
+        </div>
+
         <div class="timeline-item">
           <div class="timeline-dot"></div>
           <div class="timeline-date">2026.03.11</div>
@@ -672,19 +725,30 @@
             </span>
           </div>
         </div>
-        
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-date">2026.03.09</div>
-          <div class="timeline-content">
-            <span class="lang-ja">画像保護機能を導入しました</span>
-            <span class="lang-en">Implemented Image Protection</span>
-            <span class="timeline-desc">
-              <span class="lang-ja">サイト内のすべての画像に対して、右クリックとドラッグによる保存を防止する機能を実装しました。</span>
-              <span class="lang-en">Added features to prevent saving images via right-click and drag on all site images.</span>
-            </span>
+
+        <!-- 過去の更新履歴（トグルで開閉） -->
+        <div class="timeline-older" id="timelineOlder">
+          <div class="timeline-older-inner">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">2026.03.09</div>
+              <div class="timeline-content">
+                <span class="lang-ja">画像保護機能を導入しました</span>
+                <span class="lang-en">Implemented Image Protection</span>
+                <span class="timeline-desc">
+                  <span class="lang-ja">サイト内のすべての画像に対して、右クリックとドラッグによる保存を防止する機能を実装しました。</span>
+                  <span class="lang-en">Added features to prevent saving images via right-click and drag on all site images.</span>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
+
+        <button class="timeline-toggle-btn" id="timelineToggle">
+          <span class="toggle-icon">▼</span>
+          <span class="lang-ja">過去の更新を見る</span>
+          <span class="lang-en">Show older updates</span>
+        </button>
 
       </div>
     </section>
@@ -797,6 +861,25 @@
           top: 0,
           behavior: "smooth",
         });
+      });
+
+      // --- 更新履歴の「過去の更新を見る」トグル制御 ---
+      const timelineToggle = document.getElementById("timelineToggle");
+      const timelineOlder = document.getElementById("timelineOlder");
+
+      timelineToggle.addEventListener("click", () => {
+        const isOpen = timelineOlder.classList.toggle("is-open");
+        timelineToggle.classList.toggle("is-open");
+        // ボタンのテキストを切り替え
+        const jaText = timelineToggle.querySelector(".lang-ja");
+        const enText = timelineToggle.querySelector(".lang-en");
+        if (isOpen) {
+          jaText.textContent = "閉じる";
+          enText.textContent = "Hide older updates";
+        } else {
+          jaText.textContent = "過去の更新を見る";
+          enText.textContent = "Show older updates";
+        }
       });
 
       // ▼ 追加：言語切り替え・状態保持の制御 ▼
