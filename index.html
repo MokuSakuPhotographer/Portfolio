@@ -78,7 +78,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 100vw; /* 画面幅に固定 */
+        width: 100%; /* 100vw だとスクロールバー分ずれるので 100% に */
         height: 100vh; /* 画面の高さに固定 */
         background-image: url("images/Camera_a.webp");
         background-size: cover;
@@ -90,15 +90,16 @@
 
       /* === 追従型ナビゲーション === */
       header {
-        position: sticky;
+        position: fixed;
         top: 0;
+        left: 0;
+        width: 100%;
         background-color: var(--bg-header);
         border-bottom: 1px solid var(--border-color);
         z-index: 1000;
         backdrop-filter: blur(10px);
         transition: transform 0.3s ease;
-        animation: slideDown 0.8s ease-out forwards;
-        transform: translateY(-100%);
+        transform: translateY(0);
       }
 
       /* ヘッダー内のレイアウト調整 */
@@ -200,6 +201,105 @@
           font-size: 2.2rem;
         }
       }
+
+      /* === 見出し共通スタイル === */
+      .section-heading {
+        text-align: center;
+        font-size: 2rem;
+        letter-spacing: 0.1em;
+        margin: 80px 0 40px;
+        color: #fff;
+        text-transform: uppercase;
+      }
+      .section-heading::after {
+        content: "";
+        display: block;
+        width: 40px;
+        height: 3px;
+        background-color: var(--accent-orange);
+        margin: 15px auto 0;
+      }
+
+      /* === 更新履歴 (Timeline) === */
+      .timeline-section {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px 40px;
+      }
+      .timeline-container {
+        position: relative;
+        padding-left: 30px;
+      }
+      /* 縦線 */
+      .timeline-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 11px; /* ドットの中心に合わせる */
+        bottom: 0;
+        width: 2px;
+        background-color: var(--border-color);
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* うっすら区切り線 */
+      }
+      .timeline-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      
+      /* 光るドット */
+      .timeline-dot {
+        position: absolute;
+        top: 6px;
+        left: -30px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--bg-dark); /* 中抜きデザイン */
+        border: 2px solid var(--accent-orange);
+        box-shadow: 0 0 10px rgba(255, 77, 0, 0.5); /* ほのかな発光 */
+        transition: all 0.3s ease;
+        z-index: 1; /* 縦線より上に */
+      }
+      .timeline-item:hover .timeline-dot {
+        background-color: var(--accent-orange);
+        box-shadow: 0 0 15px rgba(255, 77, 0, 0.8);
+        transform: scale(1.2);
+      }
+
+      .timeline-date {
+        font-size: 0.9rem;
+        color: var(--accent-orange);
+        font-weight: bold;
+        letter-spacing: 0.05em;
+        margin-bottom: 5px;
+        font-family: 'Courier New', Courier, monospace; /* 少しデジタルな雰囲気に */
+      }
+      
+      .timeline-content {
+        font-size: 1.05rem;
+        color: var(--text-primary);
+        line-height: 1.5;
+        transition: color 0.3s ease;
+      }
+      .timeline-item:hover .timeline-content {
+        color: #fff; /* ホバー時に文字を明るく */
+      }
+      
+      .timeline-desc {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-top: 8px;
+      }
+
+
 
       /* === メインビジュアル === */
       .hero-section {
@@ -539,6 +639,56 @@
       </a>
     </div>
 
+    <!-- === Update History Section === -->
+    <section class="timeline-section js-scroll-trigger">
+      <h2 class="section-heading">
+        <span class="lang-ja">更新履歴</span>
+        <span class="lang-en">Updates</span>
+      </h2>
+      <div class="timeline-container">
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2026.03.11</div>
+          <div class="timeline-content">
+            <span class="lang-ja">Event Scheduleを更新しました</span>
+            <span class="lang-en">Updated Event Schedule</span>
+            <span class="timeline-desc">
+              <span class="lang-ja">AnimeJapan 2026の参加予定を追加し、各イベントの公式サイトへのリンクを掲載しました。</span>
+              <span class="lang-en">Added AnimeJapan 2026 to upcoming events and included official website links for all listings.</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2026.03.10</div>
+          <div class="timeline-content">
+            <span class="lang-ja">Galleryのレイアウトを調整しました</span>
+            <span class="lang-en">Improved Gallery Layout</span>
+            <span class="timeline-desc">
+              <span class="lang-ja">スナップ写真とポートレートの配置をランダム化し、より動きのあるデザインにリニューアルしました。</span>
+              <span class="lang-en">Randomized the layout of Snap and Portrait photos to create a more dynamic presentation.</span>
+            </span>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2026.03.09</div>
+          <div class="timeline-content">
+            <span class="lang-ja">画像保護機能を導入しました</span>
+            <span class="lang-en">Implemented Image Protection</span>
+            <span class="timeline-desc">
+              <span class="lang-ja">サイト内のすべての画像に対して、右クリックとドラッグによる保存を防止する機能を実装しました。</span>
+              <span class="lang-en">Added features to prevent saving images via right-click and drag on all site images.</span>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <footer class="site-footer">
       &copy; 2026 MokuSaku. All Rights Reserved.<br />
       <span class="lang-ja"
@@ -629,14 +779,12 @@
 
       window.addEventListener("scroll", () => {
         const currentScrollY = window.scrollY;
-        if (Math.abs(currentScrollY - lastScrollY) < 60) {
-          return;
-        }
+        
         // 下にスクロール ＆ 上から50px以上スクロールしている場合のみ隠す
         if (currentScrollY > lastScrollY && currentScrollY > 50) {
           header.style.transform = "translateY(-100%)"; // ヘッダー高さ分、確実に画面外へ移動
-        } else {
-          // 上に少しでもスクロールした時、または一番上の時は表示する
+        } else if (currentScrollY < lastScrollY) {
+          // 上に少しでもスクロールした時は表示する
           header.style.transform = "translateY(0)";
         }
 

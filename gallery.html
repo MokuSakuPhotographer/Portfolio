@@ -42,7 +42,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 100vw;
+        width: 100%;
         height: 100vh;
         background-image: url("images/Camera_a.webp");
         background-size: cover;
@@ -54,8 +54,10 @@
 
       /* === 1. ヘッダーを通常配置に戻し、フェードアウト機能を追加 === */
       header {
-        position: sticky;
+        position: fixed;
         top: 0;
+        left: 0;
+        width: 100%;
         background-color: var(--bg-header);
         border-bottom: 1px solid var(--border-color);
         z-index: 1000;
@@ -1590,15 +1592,10 @@
 
       // ▼ 共通のヘッダー隠し処理関数
       function handleHeaderScroll(currentScrollY) {
-        if (Math.abs(currentScrollY - lastScrollY) < 60) {
-          return;
-        }
         // 下にスクロール ＆ 上から50px以上スクロールしている場合のみ隠す
         if (currentScrollY > lastScrollY && currentScrollY > 50) {
-          // ★ ピクセル指定ではなく、自分の高さ分（-100%）確実に上に移動させる
           header.style.transform = "translateY(-100%)";
-        } else {
-          // 表示する時は元の位置（0）に戻す
+        } else if (currentScrollY < lastScrollY) {
           header.style.transform = "translateY(0)";
         }
         lastScrollY = currentScrollY;
