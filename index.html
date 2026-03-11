@@ -62,6 +62,7 @@
       body {
         margin: 0;
         padding: 0;
+        padding-top: 60px; /* fixed ヘッダーの高さ分だけ押し下げる */
         font-family:
           "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
         color: var(--text-primary);
@@ -69,7 +70,7 @@
         line-height: 1.6;
         scroll-behavior: smooth;
         position: relative;
-        min-height: 100vh; /* 画面の高さが足りなくても背景を維持します */
+        min-height: 100vh;
       }
 
       /* === 追加：背景画像を薄く敷く設定 === */
@@ -188,6 +189,9 @@
 
       /* スマホ表示時のヘッダー調整 */
       @media (max-width: 850px) {
+        body {
+          padding-top: 120px; /* スマホではヘッダーが2行になるため大きめに */
+        }
         .header-container {
           flex-direction: column;
           padding-top: 15px;
