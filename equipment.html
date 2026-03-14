@@ -137,6 +137,7 @@
         height: 16px;
         margin-right: 8px;
         transition: filter 0.3s ease;
+        filter: brightness(0) invert(1); /* 黒い画像でも強制的に白くする */
       }
       nav a:hover .nav-icon {
         filter: brightness(0) saturate(100%) invert(39%) sepia(93%)
@@ -224,12 +225,30 @@
       }
 
       /* アイコンとテキストの間隔調整 */
-      .gear-category h2 i {
+      .gear-category h2 i,
+      .gear-category h2 .header-icon-wrapper,
+      .gear-category h2 .header-gear-icon {
         color: var(--accent-orange);
         margin-right: 12px;
         font-size: 1.3rem;
         width: 30px; /* アイコンの幅を揃えて縦のラインをきれいに見せる */
-        text-align: center;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        object-fit: contain;
+      }
+      
+      /* 画像アイコンをオレンジに着色 */
+      .header-gear-icon {
+        filter: brightness(0) saturate(100%) invert(39%) sepia(93%) saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
+      }
+      
+      .gear-category h2 .header-icon-wrapper svg {
+        width: 24px;
+        height: 24px;
+        stroke: var(--accent-orange);
       }
       
       /* サブカテゴリーの見出しスタイル */
@@ -578,7 +597,7 @@
         <nav>
           <a href="profile.html"
             ><img
-              src="images/Profile.png?v=2"
+              src="images/user.png"
               class="nav-icon"
               alt=""
             />Profile</a
@@ -692,7 +711,7 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <i class="fa-solid fa-camera-retro"></i>
+          <img src="images/aperture.png" class="header-gear-icon" alt="Lens Icon">
           <div>
             <span class="lang-ja">レンズ</span>
             <span class="lang-en">Lens</span>
@@ -879,7 +898,7 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <i class="fa-solid fa-camera-rotate"></i>
+            <img src="images/tripod.png" class="header-gear-icon" alt="Tripod Icon">
           <div>
             <span class="lang-ja">三脚・スタビライザー</span>
             <span class="lang-en">Tripods & Stabilizers</span>
@@ -1086,7 +1105,10 @@
 
       <div class="gear-category js-scroll-trigger">
         <h2>
-          <i class="fa-solid fa-suitcase"></i>
+            <!-- リュックサックのSVGアイコン -->
+            <div class="header-icon-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM9 6V4a3 3 0 0 1 6 0v2M8 12v4M16 12v4M4 10h16"></svg>
+            </div>
           <div>
             <span class="lang-ja">バッグ</span>
             <span class="lang-en">Bags</span>

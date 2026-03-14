@@ -169,6 +169,7 @@
         height: 16px;
         margin-right: 8px;
         transition: filter 0.3s ease;
+        filter: brightness(0) invert(1); /* 黒い画像でも強制的に白くする */
       }
       nav a:hover .nav-icon {
         filter: brightness(0) saturate(100%) invert(39%) sepia(93%)
@@ -592,7 +593,7 @@
         <nav>
           <a href="profile.html"
             ><img
-              src="images/Profile.png?v=2"
+              src="images/user.png"
               class="nav-icon"
               alt=""
             />Profile</a
