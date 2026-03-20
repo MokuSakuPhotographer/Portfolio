@@ -873,6 +873,38 @@
       .see-more-btn.is-hidden {
         display: none;
       }
+      /* --- もっと見るボタン：ローディングアニメーション --- */
+      .see-more-btn.is-loading {
+        position: relative;
+        color: transparent !important;
+        pointer-events: none;
+      }
+      .see-more-btn.is-loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: btn-spin 0.6s linear infinite;
+      }
+      @keyframes btn-spin {
+        to { transform: rotate(360deg); }
+      }
+      /* --- 追加写真のフェードインアニメーション --- */
+      .photo-item.reveal-animate {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      .photo-item.reveal-animate.is-revealed {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.8s cubic-bezier(0.2, 0, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+      }
     </style>
   </head>
   <body>
@@ -1786,10 +1818,32 @@
 
         const btn = buttonContainer.querySelector(".see-more-btn");
         btn.addEventListener("click", () => {
-          // すべて表示
-          items.forEach(item => item.classList.remove("is-hidden"));
-          // ボタンコンテナ自体を隠す
-          buttonContainer.style.display = "none";
+          // ローディング状態にする
+          btn.classList.add("is-loading");
+
+          // 演出のために少し待つ（0.6秒）
+          setTimeout(() => {
+            // 対象のアイテムにアニメーション用クラスを付与して表示
+            let delay = 0;
+            for (let i = threshold; i < items.length; i++) {
+              const item = items[i];
+              item.classList.remove("is-hidden");
+              item.classList.add("reveal-animate");
+              
+              // 少し遅延させてふわっと出す（25枚程度なら違和感なし）
+              setTimeout(() => {
+                item.classList.add("is-revealed");
+              }, delay);
+              delay += 50; // 0.05秒ずつずらす
+            }
+
+            // ボタンコンテナをフェードアウトさせて消す
+            buttonContainer.style.transition = "opacity 0.5s ease";
+            buttonContainer.style.opacity = "0";
+            setTimeout(() => {
+              buttonContainer.style.display = "none";
+            }, 500);
+          }, 600);
         });
       }
 
