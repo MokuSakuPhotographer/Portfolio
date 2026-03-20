@@ -843,6 +843,36 @@
         -webkit-user-drag: none;
         -webkit-touch-callout: none;
       }
+
+      /* === "もっと見る" ボタンのスタイル === */
+      .photo-item.is-hidden {
+        display: none !important;
+      }
+      .see-more-container {
+        text-align: center;
+        margin-top: 40px;
+        margin-bottom: 60px;
+      }
+      .see-more-btn {
+        display: inline-block;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--accent-orange);
+        padding: 12px 30px;
+        border-radius: 4px;
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        transition: all 0.3s ease;
+      }
+      .see-more-btn:hover {
+        background-color: var(--accent-orange);
+        box-shadow: 0 0 15px rgba(255, 77, 0, 0.4);
+      }
+      .see-more-btn.is-hidden {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -1116,6 +1146,12 @@
                   loading="lazy"
                 />
               </div>
+            </div>
+            <div class="see-more-container" id="snap-see-more-container">
+              <button class="see-more-btn" id="snap-see-more-btn">
+                <span class="lang-ja">もっと見る</span>
+                <span class="lang-en">See More</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1730,6 +1766,36 @@
           e.preventDefault();
         }
       }, false);
+
+      // === "See More" Button Logic ===
+      function setupSeeMore(gridSelector, buttonContainerId, threshold = 20) {
+        const grid = document.querySelector(gridSelector);
+        const buttonContainer = document.getElementById(buttonContainerId);
+        if (!grid || !buttonContainer) return;
+
+        const items = grid.querySelectorAll(".photo-item");
+        if (items.length <= threshold) {
+          buttonContainer.style.display = "none";
+          return;
+        }
+
+        // 20枚目以降を隠す
+        for (let i = threshold; i < items.length; i++) {
+          items[i].classList.add("is-hidden");
+        }
+
+        const btn = buttonContainer.querySelector(".see-more-btn");
+        btn.addEventListener("click", () => {
+          // すべて表示
+          items.forEach(item => item.classList.remove("is-hidden"));
+          // ボタンコンテナ自体を隠す
+          buttonContainer.style.display = "none";
+        });
+      }
+
+      // Snapセクションに「もっと見る」を適用
+      // Snapshotパネル（1番目のパネル）内のphoto-gridを対象にする
+      setupSeeMore(".split-panel:nth-child(1) .photo-grid", "snap-see-more-container", 20);
     </script>
   </body>
 </html>
