@@ -801,6 +801,38 @@
         color: var(--accent-orange);
         margin-right: 4px;
       }
+      /* --- もっと見るボタン：ローディングアニメーション --- */
+      .see-more-btn.is-loading {
+        position: relative;
+        color: transparent !important;
+        pointer-events: none;
+      }
+      .see-more-btn.is-loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: btn-spin 0.6s linear infinite;
+      }
+      @keyframes btn-spin {
+        to { transform: rotate(360deg); }
+      }
+      /* --- 追加写真のフェードインアニメーション --- */
+      .photo-item.reveal-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s cubic-bezier(0.2, 0, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+      }
+      .photo-item.reveal-animate.is-revealed {
+        opacity: 1;
+        transform: translateY(0);
+      }
       /* === Portraitセクション専用 タイルレイアウト拡張 === */
       /* Snapの設定と干渉させないためのリセット */
       .split-panel .portrait-grid .photo-item {
@@ -872,56 +904,6 @@
       }
       .see-more-btn.is-hidden {
         display: none;
-      }
-<<<<<<< HEAD
-
-      /* === "もっと見る" 展開時のフェードインアニメーション === */
-      @keyframes photoFadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .photo-item.is-animated {
-        animation: photoFadeInUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        opacity: 0; /* アニメーション開始まで隠す */
-=======
-      /* --- もっと見るボタン：ローディングアニメーション --- */
-      .see-more-btn.is-loading {
-        position: relative;
-        color: transparent !important;
-        pointer-events: none;
-      }
-      .see-more-btn.is-loading::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 20px;
-        height: 20px;
-        margin: -10px 0 0 -10px;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-top-color: #fff;
-        border-radius: 50%;
-        animation: btn-spin 0.6s linear infinite;
-      }
-      @keyframes btn-spin {
-        to { transform: rotate(360deg); }
-      }
-      /* --- 追加写真のフェードインアニメーション --- */
-      .photo-item.reveal-animate {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      .photo-item.reveal-animate.is-revealed {
-        opacity: 1;
-        transform: translateY(0);
-        transition: opacity 0.8s cubic-bezier(0.2, 0, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0, 0.2, 1);
->>>>>>> b68e2aeadd431dc05423289df69006c2538542d8
       }
     </style>
   </head>
@@ -1941,20 +1923,6 @@
 
         const btn = buttonContainer.querySelector(".see-more-btn");
         btn.addEventListener("click", () => {
-<<<<<<< HEAD
-          let delayCount = 0;
-          items.forEach((item, index) => {
-            if (index >= threshold) {
-              item.classList.remove("is-hidden");
-              item.classList.add("is-animated");
-              // 0.1秒ずつずらして表示（等差数列的な遅延）
-              item.style.animationDelay = `${delayCount * 0.1}s`;
-              delayCount++;
-            }
-          });
-          // ボタンコンテナ自体を隠す
-          buttonContainer.style.display = "none";
-=======
           // ローディング状態にする
           btn.classList.add("is-loading");
 
@@ -1967,7 +1935,7 @@
               item.classList.remove("is-hidden");
               item.classList.add("reveal-animate");
               
-              // 少し遅延させてふわっと出す（25枚程度なら違和感なし）
+              // 少し遅延させてふわっと出す
               setTimeout(() => {
                 item.classList.add("is-revealed");
               }, delay);
@@ -1981,7 +1949,6 @@
               buttonContainer.style.display = "none";
             }, 500);
           }, 600);
->>>>>>> b68e2aeadd431dc05423289df69006c2538542d8
         });
       }
 
