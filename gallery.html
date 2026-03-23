@@ -873,6 +873,22 @@
       .see-more-btn.is-hidden {
         display: none;
       }
+
+      /* === "もっと見る" 展開時のフェードインアニメーション === */
+      @keyframes photoFadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .photo-item.is-animated {
+        animation: photoFadeInUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        opacity: 0; /* アニメーション開始まで隠す */
+      }
     </style>
   </head>
   <body>
@@ -1174,6 +1190,105 @@
               >
             </p>
             <div class="photo-grid portrait-grid">
+              <div class="photo-item size-tall">
+                <img
+                  src="images/IMG_3305.JPG"
+                  data-highres="images/IMG_3305.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item size-large">
+                <img
+                  src="images/IMG_3300.JPG"
+                  data-highres="images/IMG_3300.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item size-tall">
+                <img
+                  src="images/IMG_3299.JPG"
+                  data-highres="images/IMG_3299.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item size-tall">
+                <img
+                  src="images/IMG_3296.JPG"
+                  data-highres="images/IMG_3296.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/IMG_3297.JPG"
+                  data-highres="images/IMG_3297.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item size-tall">
+                <img
+                  src="images/IMG_3301.JPG"
+                  data-highres="images/IMG_3301.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/IMG_3295.JPG"
+                  data-highres="images/IMG_3295.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item size-tall">
+                <img
+                  src="images/IMG_3302.JPG"
+                  data-highres="images/IMG_3302.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/IMG_3298.JPG"
+                  data-highres="images/IMG_3298.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item size-tall">
+                <img
+                  src="images/IMG_3303.JPG"
+                  data-highres="images/IMG_3303.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
+              <div class="photo-item">
+                <img
+                  src="images/IMG_3304.JPG"
+                  data-highres="images/IMG_3304.JPG"
+                  data-caption="Model: おゆ💧"
+                  alt="Portrait Photo"
+                  loading="lazy"
+                />
+              </div>
               <div class="photo-item">
                 <img
                   src="images/DSC06507.webp"
@@ -1299,6 +1414,12 @@
                   loading="lazy"
                 />
               </div>
+            </div>
+            <div class="see-more-container" id="portrait-see-more-container">
+              <button class="see-more-btn" id="portrait-see-more-btn">
+                <span class="lang-ja">もっと見る</span>
+                <span class="lang-en">See More</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1786,8 +1907,16 @@
 
         const btn = buttonContainer.querySelector(".see-more-btn");
         btn.addEventListener("click", () => {
-          // すべて表示
-          items.forEach(item => item.classList.remove("is-hidden"));
+          let delayCount = 0;
+          items.forEach((item, index) => {
+            if (index >= threshold) {
+              item.classList.remove("is-hidden");
+              item.classList.add("is-animated");
+              // 0.1秒ずつずらして表示（等差数列的な遅延）
+              item.style.animationDelay = `${delayCount * 0.1}s`;
+              delayCount++;
+            }
+          });
           // ボタンコンテナ自体を隠す
           buttonContainer.style.display = "none";
         });
@@ -1796,6 +1925,9 @@
       // Snapセクションに「もっと見る」を適用
       // Snapshotパネル（1番目のパネル）内のphoto-gridを対象にする
       setupSeeMore(".split-panel:nth-child(1) .photo-grid", "snap-see-more-container", 20);
+
+      // Portraitセクションに「もっと見る」を適用
+      setupSeeMore(".portrait-grid", "portrait-see-more-container", 20);
     </script>
   </body>
 </html>

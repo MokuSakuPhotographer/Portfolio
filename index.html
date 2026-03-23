@@ -191,7 +191,7 @@
       /* スマホ表示時のヘッダー調整 */
       @media (max-width: 850px) {
         body {
-          padding-top: 120px; /* スマホではヘッダーが2行になるため大きめに */
+          padding-top: 160px; /* スマホではヘッダーが多段になるためさらに広げる */
         }
         .header-container {
           flex-direction: column;
@@ -370,43 +370,68 @@
         opacity: 1;
       }
 
-      /* === ウェルカムテキスト === */
+      /* === ウェルカムテキスト：リッチなアニメーション演出 === */
       .welcome-text {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        top: 60px;
+        left: 50px;
         z-index: 5;
         color: #fff;
-        text-align: center;
+        text-align: left;
         font-family: "Dancing Script", cursive;
-        font-size: 5.5rem;
-        line-height: 1.2;
-        text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.8);
+        font-size: 4.5rem;
+        line-height: 1.1;
+        text-shadow: 2px 4px 15px rgba(0, 0, 0, 0.9);
         pointer-events: none;
-        width: 100%;
+        padding-left: 25px;
+      }
+      /* オレンジの縦ライン：上から下へ伸びる */
+      .welcome-text::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background-color: var(--accent-orange);
+        transform: scaleY(0);
+        transform-origin: top;
+        animation: lineGrow 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+      }
+      @keyframes lineGrow {
+        to { transform: scaleY(1); }
+      }
+
+      /* 各単語の順次フェードイン：左から右へ */
+      .welcome-text .line-1,
+      .welcome-text .word-1,
+      .welcome-text .word-2 {
+        display: inline-block;
         opacity: 0;
-        animation: fadeInWelcome 2s ease-out 0.8s forwards;
+        transform: translateX(-25px); /* 左側にオフセット */
+        animation: fadeInLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+      .welcome-text .line-1 { animation-delay: 1.1s; }
+      .welcome-text .word-1 { animation-delay: 1.5s; }
+      .welcome-text .word-2 { animation-delay: 1.9s; margin-left: 0.3em; }
+
+      @keyframes fadeInLeft {
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
       }
 
       .welcome-highlight {
         color: var(--accent-orange);
       }
 
-      @keyframes fadeInWelcome {
-        from {
-          opacity: 0;
-          transform: translate(-50%, -40%);
-        }
-        to {
-          opacity: 0.7;
-          transform: translate(-50%, -50%);
-        }
-      }
-
       @media (max-width: 850px) {
         .welcome-text {
-          font-size: 2.5rem;
+          top: 60px;    /* ヘッダーとの重なりを防ぐためさらに下げる */
+          left: 20px;   /* スマホでは左端に寄せる */
+          font-size: 2.2rem;
+          padding-left: 15px;
         }
       }
 
@@ -641,6 +666,10 @@
     <div class="hero-section">
       <div
         class="slide active"
+        style="background-image: url(&quot;images/IMG_3300.JPG&quot;)"
+      ></div>
+      <div
+        class="slide"
         style="background-image: url(&quot;images/DSC06507.webp&quot;)"
       ></div>
       <div
@@ -663,13 +692,15 @@
       ></div>
 
       <div class="welcome-text">
-        Welcome to<br /><span class="welcome-highlight"
-          >MokuSaku's Photo booth</span
-        >
+        <div class="line-1">Welcome to</div>
+        <div class="line-2 welcome-highlight">
+          <span class="word-1">MokuSaku's</span> <span class="word-2">Photo booth</span>
+        </div>
       </div>
 
       <div class="slide-indicators">
         <div class="dot active"></div>
+        <div class="dot"></div>
         <div class="dot"></div>
         <div class="dot"></div>
         <div class="dot"></div>
@@ -692,6 +723,19 @@
       </h2>
       <div class="timeline-container">
         
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2026.03.24</div>
+          <div class="timeline-content">
+            <span class="lang-ja">Galleryを更新しました</span>
+            <span class="lang-en">Updated Gallery</span>
+            <span class="timeline-desc">
+              <span class="lang-ja">Portraitセクションに新しいポートレート写真を追加しました。</span>
+              <span class="lang-en">Added new portrait photos to the Portrait section in the Gallery.</span>
+            </span>
+          </div>
+        </div>
+
         <div class="timeline-item">
           <div class="timeline-dot"></div>
           <div class="timeline-date">2026.03.14</div>
@@ -718,22 +762,21 @@
           </div>
         </div>
 
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-date">2026.03.11</div>
-          <div class="timeline-content">
-            <span class="lang-ja">Event Scheduleを更新しました</span>
-            <span class="lang-en">Updated Event Schedule</span>
-            <span class="timeline-desc">
-              <span class="lang-ja">AnimeJapan 2026の参加予定を追加し、各イベントの公式サイトへのリンクを掲載しました。</span>
-              <span class="lang-en">Added AnimeJapan 2026 to upcoming events and included official website links for all listings.</span>
-            </span>
-          </div>
-        </div>
-
         <!-- 過去の更新履歴（トグルで開閉） -->
         <div class="timeline-older" id="timelineOlder">
           <div class="timeline-older-inner">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">2026.03.11</div>
+              <div class="timeline-content">
+                <span class="lang-ja">Event Scheduleを更新しました</span>
+                <span class="lang-en">Updated Event Schedule</span>
+                <span class="timeline-desc">
+                  <span class="lang-ja">AnimeJapan 2026の参加予定を追加し、各イベントの公式サイトへのリンクを掲載しました。</span>
+                  <span class="lang-en">Added AnimeJapan 2026 to upcoming events and included official website links for all listings.</span>
+                </span>
+              </div>
+            </div>
             <div class="timeline-item">
               <div class="timeline-dot"></div>
               <div class="timeline-date">2026.03.10</div>
