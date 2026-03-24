@@ -1617,6 +1617,28 @@
       const lightboxCaption = document.getElementById("lightbox-caption");
       let activeImage = null;
 
+      // === ズーム＆パン用の状態管理 ===
+      let lightboxScale = 1;
+      let lbTranslateX = 0;
+      let lbTranslateY = 0;
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let dragStartTX = 0;
+      let dragStartTY = 0;
+
+      function resetLightboxZoom() {
+        lightboxScale = 1;
+        lbTranslateX = 0;
+        lbTranslateY = 0;
+        lightboxImg.style.transform = "none";
+        lightboxImg.style.cursor = "";
+      }
+
+      function applyLightboxTransform() {
+        lightboxImg.style.transform = `translate(${lbTranslateX}px, ${lbTranslateY}px) scale(${lightboxScale})`;
+      }
+
       lightboxImg.style.visibility = "hidden";
 
       document.querySelectorAll(".photo-item img").forEach((img) => {
@@ -1640,6 +1662,7 @@
 
           lightbox.classList.add("active");
           document.body.style.overflow = "hidden";
+          resetLightboxZoom(); // 新しい画像を開いたらズーム状態をリセット
 
           lightboxImg.src = activeImage.src;
           lightboxImg.style.visibility = "visible";
@@ -1707,15 +1730,19 @@
                 }, 400);
               }, 300);
 
-              // ふわっとしたオレンジの光エフェクト（そのまま残す）
+              // ふわっとしたオレンジの光エフェクト
+              resetLightboxZoom();
               lightboxImg.style.transition = "all 0.5s ease-out";
               lightboxImg.style.transform = "scale(1.015)";
               lightboxImg.style.boxShadow = "0 0 100px rgba(255, 77, 0, 0.7)";
 
               setTimeout(() => {
                 lightboxImg.style.transition = "all 0.5s ease-in-out";
-                lightboxImg.style.transform = "scale(1)";
+                lightboxImg.style.transform = "none";
                 lightboxImg.style.boxShadow = "0 0 0px rgba(255, 77, 0, 0)";
+                lightboxScale = 1;
+                lbTranslateX = 0;
+                lbTranslateY = 0;
               }, 500);
             };
           }
@@ -1724,6 +1751,7 @@
 
       function closeLightbox() {
         if (!activeImage) return;
+        resetLightboxZoom(); // ズーム状態をリセットしてから閉じるアニメーションへ
 
         // ▼ 追加：途中で閉じた時のプログレスバーのリセット
         clearInterval(window.progressInterval);
@@ -1763,7 +1791,75 @@
 
       lightboxBg.addEventListener("click", closeLightbox);
       lightboxClose.addEventListener("click", closeLightbox);
-      lightboxImg.addEventListener("click", closeLightbox);
+      // 画像クリック：ズーム中はクリックで閉じない（パン操作と干渉するため）
+      lightboxImg.addEventListener("click", (e) => {
+        if (lightboxScale > 1) {
+          e.stopPropagation();
+          return;
+        }
+        closeLightbox();
+      });
+
+      // === PC用：マウスホイールでズーム ===
+      lightboxImg.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const zoomSpeed = 0.15;
+        const oldScale = lightboxScale;
+
+        if (e.deltaY < 0) {
+          lightboxScale = Math.min(lightboxScale + zoomSpeed, 5);
+        } else {
+          lightboxScale = Math.max(lightboxScale - zoomSpeed, 1);
+        }
+
+        // ズームが1xに戻ったらパン位置もリセット
+        if (lightboxScale <= 1) {
+          lightboxScale = 1;
+          lbTranslateX = 0;
+          lbTranslateY = 0;
+          lightboxImg.style.cursor = "";
+        } else {
+          // マウス位置を中心にズームするための補正
+          const imgRect = lightboxImg.getBoundingClientRect();
+          const cx = e.clientX - imgRect.left - imgRect.width / 2;
+          const cy = e.clientY - imgRect.top - imgRect.height / 2;
+          const scaleDiff = lightboxScale / oldScale;
+          lbTranslateX = cx - scaleDiff * (cx - lbTranslateX);
+          lbTranslateY = cy - scaleDiff * (cy - lbTranslateY);
+          lightboxImg.style.cursor = "grab";
+        }
+
+        lightboxImg.style.transition = "transform 0.15s ease-out";
+        applyLightboxTransform();
+      }, { passive: false });
+
+      // === PC用：ドラッグでパン ===
+      lightboxImg.addEventListener("mousedown", (e) => {
+        if (lightboxScale <= 1) return;
+        e.preventDefault();
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        dragStartTX = lbTranslateX;
+        dragStartTY = lbTranslateY;
+        lightboxImg.style.cursor = "grabbing";
+        lightboxImg.style.transition = "none";
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        lbTranslateX = dragStartTX + (e.clientX - dragStartX);
+        lbTranslateY = dragStartTY + (e.clientY - dragStartY);
+        applyLightboxTransform();
+      });
+
+      window.addEventListener("mouseup", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        if (lightboxScale > 1) {
+          lightboxImg.style.cursor = "grab";
+        }
+      });
 
       // --- ヘッダーのスクロール（自動隠し）制御 ---
       const header = document.querySelector("header");
