@@ -223,6 +223,10 @@
             100vh - 130px
           ); /* ←修正：スマホ画面の高さにピッタリ合わせる */
         }
+        /* モバイル時：Portrait表紙の被写体の顔が見えるように上寄せ */
+        .split-panel:nth-child(2) .panel-cover {
+          background-position: center 20%;
+        }
       }
 
       /* ▼ 修正：パネル展開時に画面全体をジャックする「全画面化」クラス ▼ */
@@ -1169,8 +1173,8 @@
                   alt="Snap Photo"
                   loading="lazy"
                 />
-              </div>
-              <div class="photo-item">
+              </div>about:blank#blocked
+              <div class="photo-item">about:blank#blocked
                 <img
                   src="images/DSC00587_20230401.webp"
                   data-highres="images/DSC00587_20230401.webp"
