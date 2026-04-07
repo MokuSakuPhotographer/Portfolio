@@ -65,8 +65,9 @@
         z-index: 1000;
         backdrop-filter: blur(10px);
         transition:
-          transform 0.4s ease,
-          opacity 0.4s ease;
+          transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform, opacity;
       }
       /* パネル展開時にヘッダーを隠すための魔法のクラス */
       header.is-hidden {
@@ -114,7 +115,7 @@
         font-size: 0.85rem;
         font-weight: bold;
         letter-spacing: 0.05em;
-        transition: all 0.3s ease;
+        transition: color 0.3s ease;
         position: relative;
       }
       nav a:hover {
@@ -214,7 +215,8 @@
         margin-left: calc(50% - 50vw);
         overflow: hidden;
         background-color: transparent;
-        transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        will-change: transform;
       }
       @media (max-width: 850px) {
         .split-container {
@@ -245,8 +247,9 @@
         flex: 1;
         position: relative;
         overflow: hidden;
-        transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1); /* 滑らかに広がる魔法 */
+        transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease; /* 滑らかに広がる魔法 */
         border-right: 1px solid var(--border-color);
+        will-change: flex, opacity;
       }
       .split-panel:last-child {
         border-right: none;
@@ -258,9 +261,11 @@
         inset: 0;
         background-size: cover;
         background-position: center;
+        background-position: center;
         filter: brightness(0.4) grayscale(60%);
-        transition: all 0.5s ease;
+        transition: filter 0.5s ease, transform 0.5s ease;
         cursor: pointer;
+        will-change: filter, transform;
         touch-action: manipulation; /* ダブルタップによるブラウザズームを無効化（ピンチズームは有効） */
       }
 
@@ -274,8 +279,9 @@
         font-size: 3.5rem;
         pointer-events: none;
         text-shadow: 0 5px 15px rgba(0, 0, 0, 0.9);
-        transition: all 0.4s ease;
+        transition: color 0.4s ease, opacity 0.4s ease;
         z-index: 10;
+        will-change: opacity;
       }
 
       /* ▼ 修正：PC（マウスがある端末）のホバーアニメーション ▼ */
@@ -322,6 +328,36 @@
       .photo-item.is-hovered img {
         filter: grayscale(0%) contrast(1.05);
         transform: scale(1.05);
+      }
+
+      /* スマホ：1回タップで表示される「もう一度タップで拡大」テキスト */
+      .photo-tap-hint {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        z-index: 20;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .photo-tap-hint span {
+        background: rgba(0, 0, 0, 0.72);
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: bold;
+        letter-spacing: 0.08em;
+        padding: 7px 13px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 77, 0, 0.7);
+        text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+        white-space: nowrap;
+        backdrop-filter: blur(4px);
+        box-shadow: 0 2px 12px rgba(255, 77, 0, 0.3);
+      }
+      .photo-item.is-hovered .photo-tap-hint {
+        opacity: 0.8;
       }
       /* パネルをクリックして展開した時の状態 */
       .split-panel.is-active {
@@ -407,8 +443,9 @@
         overflow: hidden; /* 画像の角を丸めるために hidden に戻す */
         border-radius: 2px;
         background-color: #000;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
         z-index: 1;
+        will-change: transform, box-shadow;
       }
 
       .photo-item img {
@@ -541,6 +578,51 @@
         background-color: #000;
       }
 
+      /* --- Video Placeholder & Play Button --- */
+      .video-placeholder {
+        position: absolute;
+        inset: 0;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+        overflow: hidden;
+      }
+      .video-placeholder img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.7;
+        transition: opacity 0.3s ease, transform 0.5s ease;
+      }
+      .video-placeholder:hover img {
+        opacity: 0.9;
+        transform: scale(1.05);
+      }
+      .play-button {
+        position: absolute;
+        width: 68px;
+        height: 48px;
+        background-color: rgba(33, 33, 33, 0.8);
+        border-radius: 12%;
+        transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 2;
+      }
+      .play-button::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 55%;
+        transform: translate(-50%, -50%);
+        border-style: solid;
+        border-width: 12px 0 12px 20px;
+        border-color: transparent transparent transparent #fff;
+      }
+      .video-placeholder:hover .play-button {
+        background-color: #ff0000;
+      }
+
       @media (max-width: 768px) {
         .video-wrapper {
           width: 100%;
@@ -577,9 +659,10 @@
       #lightbox-img {
         position: absolute;
         z-index: 2001;
-        object-fit: cover;
+        object-fit: contain; /* Changed from cover to contain for accurate animation */
         cursor: zoom-out;
         border-radius: 2px;
+        will-change: transform, opacity;
       }
       .lightbox-close {
         position: absolute;
@@ -1582,8 +1665,11 @@
                   <div class="lang-ja">春猿火 - 声帯学【Unofficial Lyrics MV】<span class="video-role">リリックアニメーション・文字デザイン</span></div>
                   <div class="lang-en">Harusaruhi - Seitai Gaku【Unofficial Lyrics MV】<span class="video-role">Lyric Animation & Typography</span></div>
                 </div>
-                <div class="video-container">
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/QJC5y2m8DjU?si=zBHiCq1Ytqyyrj98" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="video-container" data-video-id="QJC5y2m8DjU">
+                  <div class="video-placeholder">
+                    <img src="https://img.youtube.com/vi/QJC5y2m8DjU/maxresdefault.jpg" alt="Video Thumbnail" loading="lazy">
+                    <div class="play-button"></div>
+                  </div>
                 </div>
               </div>
 
@@ -1598,8 +1684,11 @@
                     <div class="video-notice">Due to copyright restrictions, playback on this site is limited.<br />Please watch via "Watch on YouTube" in the player.</div>
                   </div>
                 </div>
-                <div class="video-container">
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/PGYyZqQ7RL8?si=BQgE3LzMCedz9DT6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="video-container" data-video-id="PGYyZqQ7RL8">
+                  <div class="video-placeholder">
+                    <img src="https://img.youtube.com/vi/PGYyZqQ7RL8/maxresdefault.jpg" alt="Video Thumbnail" loading="lazy">
+                    <div class="play-button"></div>
+                  </div>
                 </div>
               </div>
 
@@ -1608,8 +1697,11 @@
                   <div class="lang-ja">Orangestar - Encounter【Unofficial Lyrics MV】<span class="video-role">リリックアニメーション・文字デザイン</span></div>
                   <div class="lang-en">Orangestar - Encounter【Unofficial Lyrics MV】<span class="video-role">Lyric Animation & Typography</span></div>
                 </div>
-                <div class="video-container">
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/oIH7E0QpaIk?si=ORMQ0ME5s6R8R08G" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="video-container" data-video-id="oIH7E0QpaIk">
+                  <div class="video-placeholder">
+                    <img src="https://img.youtube.com/vi/oIH7E0QpaIk/maxresdefault.jpg" alt="Video Thumbnail" loading="lazy">
+                    <div class="play-button"></div>
+                  </div>
                 </div>
               </div>
 
@@ -1618,8 +1710,11 @@
                   <div class="lang-ja">2020/12/07 Cinematic Vlog<span class="video-role">映像全般</span></div>
                   <div class="lang-en">2020/12/07 Cinematic Vlog<span class="video-role">Videography</span></div>
                 </div>
-                <div class="video-container">
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/znFlVpuyjmY?si=I7iRmSxaFQq6IErW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="video-container" data-video-id="znFlVpuyjmY">
+                  <div class="video-placeholder">
+                    <img src="https://img.youtube.com/vi/znFlVpuyjmY/maxresdefault.jpg" alt="Video Thumbnail" loading="lazy">
+                    <div class="play-button"></div>
+                  </div>
                 </div>
               </div>
 
@@ -1628,8 +1723,11 @@
                   <div class="lang-ja">ROY - Mily (feat. Elad)【Unofficial Lyrics MV】<span class="video-role">リリックアニメーション・文字デザイン</span></div>
                   <div class="lang-en">ROY - Mily (feat. Elad)【Unofficial Lyrics MV】<span class="video-role">Lyric Animation & Typography</span></div>
                 </div>
-                <div class="video-container">
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/YnO6kyTwodQ?si=gA6Ouzsy0TCeQTb-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="video-container" data-video-id="YnO6kyTwodQ">
+                  <div class="video-placeholder">
+                    <img src="https://img.youtube.com/vi/YnO6kyTwodQ/maxresdefault.jpg" alt="Video Thumbnail" loading="lazy">
+                    <div class="play-button"></div>
+                  </div>
                 </div>
               </div>
 
@@ -1644,8 +1742,11 @@
                     <div class="video-notice">Due to copyright restrictions, playback on this site is limited.<br />Please watch via "Watch on YouTube" in the player.</div>
                   </div>
                 </div>
-                <div class="video-container">
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/Qkblf1rB31c?si=RG0U0b6YB8HYPXte" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="video-container" data-video-id="Qkblf1rB31c">
+                  <div class="video-placeholder">
+                    <img src="https://img.youtube.com/vi/Qkblf1rB31c/maxresdefault.jpg" alt="Video Thumbnail" loading="lazy">
+                    <div class="play-button"></div>
+                  </div>
                 </div>
               </div>
 
@@ -1654,8 +1755,11 @@
                   <div class="lang-ja">Ridy Hudson Love song (Lyric video)<span class="video-role">映像全般</span></div>
                   <div class="lang-en">Ridy Hudson - Love song (Lyric video)<span class="video-role">Videography</span></div>
                 </div>
-                <div class="video-container">
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/h-7ce-ToyDE?si=auTBBz4kF6q6o2vz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="video-container" data-video-id="h-7ce-ToyDE">
+                  <div class="video-placeholder">
+                    <img src="https://img.youtube.com/vi/h-7ce-ToyDE/maxresdefault.jpg" alt="Video Thumbnail" loading="lazy">
+                    <div class="play-button"></div>
+                  </div>
                 </div>
               </div>
 
@@ -1664,8 +1768,11 @@
                   <div class="lang-ja">さめざめ - 裏SHIBUYA<span class="video-role">リリックアニメーション・文字デザイン</span></div>
                   <div class="lang-en">Samezame - Ura SHIBUYA<span class="video-role">Lyric Animation & Typography</span></div>
                 </div>
-                <div class="video-container">
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/zx8EhAOL_Ic?si=hX6iZ63dKWBT4t8g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="video-container" data-video-id="zx8EhAOL_Ic">
+                  <div class="video-placeholder">
+                    <img src="https://img.youtube.com/vi/zx8EhAOL_Ic/maxresdefault.jpg" alt="Video Thumbnail" loading="lazy">
+                    <div class="play-button"></div>
+                  </div>
                 </div>
               </div>
 
@@ -1674,8 +1781,11 @@
                   <div class="lang-ja">さめざめ - 洗脳B<span class="video-role">リリックアニメーション・文字デザイン</span></div>
                   <div class="lang-en">Samezame - Senno B<span class="video-role">Lyric Animation & Typography</span></div>
                 </div>
-                <div class="video-container">
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/8em_5LSJXsk?si=SvJQNxGHgkusEiy6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="video-container" data-video-id="8em_5LSJXsk">
+                  <div class="video-placeholder">
+                    <img src="https://img.youtube.com/vi/8em_5LSJXsk/maxresdefault.jpg" alt="Video Thumbnail" loading="lazy">
+                    <div class="play-button"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1704,6 +1814,20 @@
     </div>
 
     <script>
+      // --- Performance Utilities ---
+      const throttle = (fn) => {
+        let ticking = false;
+        return (...args) => {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              fn(...args);
+              ticking = false;
+            });
+            ticking = true;
+          }
+        };
+      };
+
       // ▼ 追加：現在見ているページのメニューを自動でハイライト ▼
       const currentPath = window.location.pathname;
       const currentFilename = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
@@ -1727,13 +1851,13 @@
       });
 
       const pageTopBtn = document.getElementById("pageTopBtn");
-      window.addEventListener("scroll", () => {
+      window.addEventListener("scroll", throttle(() => {
         if (window.scrollY > 300) {
           pageTopBtn.classList.add("is-show");
         } else {
           pageTopBtn.classList.remove("is-show");
         }
-      });
+      }));
 
       // === 画像拡大（ライトボックス）と高画質読み込みの制御 ===
       const lightbox = document.getElementById("lightbox");
@@ -1757,41 +1881,84 @@
         lightboxScale = 1;
         lbTranslateX = 0;
         lbTranslateY = 0;
-        lightboxImg.style.transform = "none";
+        lightboxImg.style.transform = "translate(-50%, -50%) scale(1)";
         lightboxImg.style.cursor = "";
       }
 
       function applyLightboxTransform() {
-        lightboxImg.style.transform = `translate(${lbTranslateX}px, ${lbTranslateY}px) scale(${lightboxScale})`;
+        lightboxImg.style.transform = `translate(calc(-50% + ${lbTranslateX}px), calc(-50% + ${lbTranslateY}px)) scale(${lightboxScale})`;
       }
 
       lightboxImg.style.visibility = "hidden";
 
+      // スマホ用：各photo-itemにヒントオーバーレイを挿入
+      document.querySelectorAll(".photo-item").forEach((item) => {
+        const hint = document.createElement("div");
+        hint.className = "photo-tap-hint";
+        hint.innerHTML = "<span>もう一度タップで拡大</span>";
+        item.appendChild(hint);
+      });
+
       document.querySelectorAll(".photo-item img").forEach((img) => {
         img.addEventListener("click", (e) => {
           activeImage = e.target;
-          const parentItem = activeImage.closest(".photo-item"); // ← 画像の親要素（.photo-item）を取得
+          const parentItem = activeImage.closest(".photo-item");
 
-          // ▼ スマホ（タッチデバイス）における「1回目はホバー、2回目で開く」制御 ▼
           const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
           if (isTouchDevice && !parentItem.classList.contains("is-hovered")) {
-            // 他のすべての画像のhover状態を解除
             document.querySelectorAll(".photo-item").forEach((item) => item.classList.remove("is-hovered"));
-            // 今回タップされた画像だけをホバー状態（カラー・拡大）にする
             parentItem.classList.add("is-hovered");
             return;
           }
 
-          // ↓ 以下、2回目のタップ（またはPCでのクリック）によるLightbox展開処理 ↓
           const rect = activeImage.getBoundingClientRect();
           const highResSrc = activeImage.getAttribute("data-highres");
 
           lightbox.classList.add("active");
           document.body.style.overflow = "hidden";
-          resetLightboxZoom(); // 新しい画像を開いたらズーム状態をリセット
 
+          // --- FLIP Animation Logic ---
+          // 1. Set initial properties
           lightboxImg.src = activeImage.src;
           lightboxImg.style.visibility = "visible";
+          lightboxImg.style.transition = "none";
+          lightboxImg.style.left = "50%";
+          lightboxImg.style.top = "50%";
+          
+          // 2. Adjust size to fit container (like object-fit: contain)
+          const viewportW = window.innerWidth;
+          const viewportH = window.innerHeight;
+          const containerW = viewportW * 0.9;
+          const containerH = viewportH * 0.9;
+          const imgAspect = activeImage.naturalWidth / activeImage.naturalHeight;
+          
+          let finalW, finalH;
+          if (containerW / containerH > imgAspect) {
+            finalH = containerH;
+            finalW = finalH * imgAspect;
+          } else {
+            finalW = containerW;
+            finalH = finalW / imgAspect;
+          }
+          
+          lightboxImg.style.width = finalW + "px";
+          lightboxImg.style.height = finalH + "px";
+
+          // 3. Calculate "Invert" transform
+          const scaleX = rect.width / finalW;
+          const scaleY = rect.height / finalH;
+          const translateX = (rect.left + rect.width / 2) - viewportW / 2;
+          const translateY = (rect.top + rect.height / 2) - viewportH / 2;
+
+          lightboxImg.style.transform = `translate(calc(-50% + ${translateX}px), calc(-50% + ${translateY}px)) scale(${scaleX}, ${scaleY})`;
+          
+          lightboxImg.offsetHeight; // force reflow
+
+          // 4. Play animation
+          lightboxImg.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease";
+          lightboxImg.style.transform = "translate(-50%, -50%) scale(1)";
+          lightboxImg.style.opacity = "1";
+
           const captionText = activeImage.getAttribute("data-caption");
           if (captionText) {
             lightboxCaption.innerHTML = captionText;
@@ -1801,75 +1968,28 @@
             lightboxCaption.classList.remove("is-show");
           }
 
-          lightboxImg.style.transition = "none";
-          lightboxImg.style.left = rect.left + "px";
-          lightboxImg.style.top = rect.top + "px";
-          lightboxImg.style.width = rect.width + "px";
-          lightboxImg.style.height = rect.height + "px";
-          lightboxImg.style.objectFit = "cover";
-          lightboxImg.style.borderRadius = "2px";
-
-          lightboxImg.offsetHeight;
-
-          // アニメーション時間の調整（0.4秒で優雅な動きに）
-          lightboxImg.style.transition =
-            "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-          lightboxImg.style.left = "5vw";
-          lightboxImg.style.top = "5vh";
-          lightboxImg.style.width = "90vw";
-          lightboxImg.style.height = "90vh";
-          lightboxImg.style.objectFit = "contain";
-          lightboxImg.style.borderRadius = "0px";
-
           if (highResSrc && highResSrc !== activeImage.src) {
-            // ▼ スピナーの代わりにプログレスバーを表示
-            const lightboxProgress =
-              document.getElementById("lightbox-progress");
+            const lightboxProgress = document.getElementById("lightbox-progress");
             lightboxProgress.style.opacity = "1";
-            lightboxProgress.style.width = "15%"; // 最初は15%までスッと伸ばす
+            lightboxProgress.style.width = "15%";
 
-            // 擬似的に進捗を進める（最大85%までランダムに少しずつ伸ばす）
             window.progressInterval = setInterval(() => {
               let currentWidth = parseFloat(lightboxProgress.style.width);
               if (currentWidth < 85) {
-                lightboxProgress.style.width =
-                  currentWidth + Math.random() * 10 + "%";
+                lightboxProgress.style.width = currentWidth + Math.random() * 10 + "%";
               }
             }, 400);
 
             const highResImage = new Image();
             highResImage.src = highResSrc;
-
-            // ▼ 読み込み完了時の処理
             highResImage.onload = () => {
-              // プログレスバーを100%にする
               clearInterval(window.progressInterval);
               lightboxProgress.style.width = "100%";
-
               lightboxImg.src = highResSrc;
-
-              // 0.3秒後にプログレスバーをフェードアウトさせてリセット
               setTimeout(() => {
                 lightboxProgress.style.opacity = "0";
-                setTimeout(() => {
-                  lightboxProgress.style.width = "0%";
-                }, 400);
+                setTimeout(() => { lightboxProgress.style.width = "0%"; }, 400);
               }, 300);
-
-              // ふわっとしたオレンジの光エフェクト
-              resetLightboxZoom();
-              lightboxImg.style.transition = "all 0.5s ease-out";
-              lightboxImg.style.transform = "scale(1.015)";
-              lightboxImg.style.boxShadow = "0 0 100px rgba(255, 77, 0, 0.7)";
-
-              setTimeout(() => {
-                lightboxImg.style.transition = "all 0.5s ease-in-out";
-                lightboxImg.style.transform = "none";
-                lightboxImg.style.boxShadow = "0 0 0px rgba(255, 77, 0, 0)";
-                lightboxScale = 1;
-                lbTranslateX = 0;
-                lbTranslateY = 0;
-              }, 500);
             };
           }
         });
@@ -1877,33 +1997,32 @@
 
       function closeLightbox() {
         if (!activeImage) return;
-        resetLightboxZoom(); // ズーム状態をリセットしてから閉じるアニメーションへ
+        
+        const rect = activeImage.getBoundingClientRect();
+        const viewportW = window.innerWidth;
+        const viewportH = window.innerHeight;
+        
+        // Calculate target scale/translate to return to thumb
+        const currentW = parseFloat(lightboxImg.style.width);
+        const currentH = parseFloat(lightboxImg.style.height);
+        
+        const scaleX = rect.width / currentW;
+        const scaleY = rect.height / currentH;
+        const translateX = (rect.left + rect.width / 2) - viewportW / 2;
+        const translateY = (rect.top + rect.height / 2) - viewportH / 2;
 
-        // ▼ 追加：途中で閉じた時のプログレスバーのリセット
         clearInterval(window.progressInterval);
         const lightboxProgress = document.getElementById("lightbox-progress");
-        if (lightboxProgress) {
-          lightboxProgress.style.opacity = "0";
-          setTimeout(() => {
-            lightboxProgress.style.width = "0%";
-          }, 400);
-        }
-
-        // ▼ 閉じる時にすべての画像のhover状態（スマホ用）をリセット
+        if (lightboxProgress) lightboxProgress.style.opacity = "0";
         document.querySelectorAll(".photo-item").forEach((item) => item.classList.remove("is-hovered"));
-
-        const rect = activeImage.getBoundingClientRect();
 
         lightboxBg.style.opacity = "0";
         lightboxClose.style.opacity = "0";
         lightboxCaption.classList.remove("is-show");
-        lightboxImg.style.transition =
-          "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-        lightboxImg.style.left = rect.left + "px";
-        lightboxImg.style.top = rect.top + "px";
-        lightboxImg.style.width = rect.width + "px";
-        lightboxImg.style.height = rect.height + "px";
-        lightboxImg.style.objectFit = "cover";
+        
+        lightboxImg.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease";
+        lightboxImg.style.transform = `translate(calc(-50% + ${translateX}px), calc(-50% + ${translateY}px)) scale(${scaleX}, ${scaleY})`;
+        lightboxImg.style.opacity = "0";
 
         setTimeout(() => {
           lightbox.classList.remove("active");
@@ -1912,12 +2031,11 @@
           lightboxImg.style.visibility = "hidden";
           document.body.style.overflow = "";
           activeImage = null;
-        }, 400); // アニメーション時間（0.4秒）と合わせる
+        }, 400);
       }
 
       lightboxBg.addEventListener("click", closeLightbox);
       lightboxClose.addEventListener("click", closeLightbox);
-      // 画像クリック：ズーム中はクリックで閉じない（パン操作と干渉するため）
       lightboxImg.addEventListener("click", (e) => {
         if (lightboxScale > 1) {
           e.stopPropagation();
@@ -1938,14 +2056,9 @@
           lightboxScale = Math.max(lightboxScale - zoomSpeed, 1);
         }
 
-        // ズームが1xに戻ったらパン位置もリセット
         if (lightboxScale <= 1) {
-          lightboxScale = 1;
-          lbTranslateX = 0;
-          lbTranslateY = 0;
-          lightboxImg.style.cursor = "";
+          resetLightboxZoom();
         } else {
-          // マウス位置を中心にズームするための補正
           const imgRect = lightboxImg.getBoundingClientRect();
           const cx = e.clientX - imgRect.left - imgRect.width / 2;
           const cy = e.clientY - imgRect.top - imgRect.height / 2;
@@ -1953,10 +2066,8 @@
           lbTranslateX = cx - scaleDiff * (cx - lbTranslateX);
           lbTranslateY = cy - scaleDiff * (cy - lbTranslateY);
           lightboxImg.style.cursor = "grab";
+          applyLightboxTransform();
         }
-
-        lightboxImg.style.transition = "transform 0.15s ease-out";
-        applyLightboxTransform();
       }, { passive: false });
 
       // === PC用：ドラッグでパン ===
@@ -1982,35 +2093,45 @@
       window.addEventListener("mouseup", () => {
         if (!isDragging) return;
         isDragging = false;
-        if (lightboxScale > 1) {
-          lightboxImg.style.cursor = "grab";
-        }
+        if (lightboxScale > 1) lightboxImg.style.cursor = "grab";
       });
 
       // --- ヘッダーのスクロール（自動隠し）制御 ---
       const header = document.querySelector("header");
       let lastScrollY = 0;
 
-      // ▼ 共通のヘッダー隠し処理関数
-      function handleHeaderScroll(currentScrollY) {
-        // 下にスクロール ＆ 上から50px以上スクロールしている場合のみ隠す
+      const handleHeaderScroll = throttle((currentScrollY) => {
         if (currentScrollY > lastScrollY && currentScrollY > 50) {
           header.style.transform = "translateY(-100%)";
         } else if (currentScrollY < lastScrollY) {
           header.style.transform = "translateY(0)";
         }
         lastScrollY = currentScrollY;
-      }
+      });
 
-      // 1. ページ全体（ウィンドウ）のスクロール検知
       window.addEventListener("scroll", () => {
         handleHeaderScroll(window.scrollY);
       });
 
-      // 2. 展開された「パネルの中」のスクロールも検知する
       document.querySelectorAll(".split-panel").forEach((panel) => {
         panel.addEventListener("scroll", () => {
           handleHeaderScroll(panel.scrollTop);
+        });
+      });
+
+      // === Video Click-to-Load Logic ===
+      document.querySelectorAll('.video-container').forEach(container => {
+        container.addEventListener('click', function() {
+          const videoId = this.getAttribute('data-video-id');
+          if (!videoId) return;
+          
+          this.innerHTML = `
+            <iframe width="560" height="315" 
+              src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+              title="YouTube video player" frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen></iframe>
+          `;
         });
       });
 
