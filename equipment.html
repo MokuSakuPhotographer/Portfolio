@@ -4,6 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="images/Prof_icon_favicon.png" />
+
+    <meta property="og:site_name" content="MokuSaku's Photo booth" />
+    <meta property="og:title" content="Gear | MokuSaku's Photo booth" />
+    <meta
+      property="og:description"
+      content="関東を拠点に活動するフォト・ビデオグラファー、MokuSakuが愛用する機材・使用ソフトの一覧です。"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://mokusakuphotographer.github.io/Portfolio/equipment.html"
+    />
+    <meta
+      property="og:image"
+      content="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@SakuMoku137673" />
+    <meta name="twitter:title" content="Gear | MokuSaku's Photo booth" />
+    <meta
+      name="twitter:description"
+      content="関東を拠点に活動するフォト・ビデオグラファー、MokuSakuが愛用する機材・使用ソフトの一覧です。"
+    />
+    <meta
+      name="twitter:image"
+      content="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png"
+    />
+
     <title>Gear | MokuSaku's Photo booth</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
@@ -598,7 +626,7 @@
         <nav>
           <a href="profile.html"
             ><img
-              src="images/user.png"
+              src="images/Profile.png?v=2"
               class="nav-icon"
               alt=""
             />Profile</a
@@ -796,10 +824,10 @@
             >
             <small>
               <span class="lang-ja"
-                >安くて高倍率ですが解像度に難アリ。そろそろ買い替えたい。現在は25-200mm A075Sというこのレンズの後継が同社から発売されています。</span
+                >安くて高倍率ですが解像度に難アリ。そろそろ買い替えたい。現在は25-200mm A075Sというこのレンズの後継が同社から発売されています。※リンクは旧型（A071）です。</span
               >
               <span class="lang-en"
-                >Affordable and high zoom ratio, but the resolution is a bit lacking. I'm looking to replace it soon. Its successor, the 25-200mm A075S, has already been released by the same company.</span
+                >Affordable and high zoom ratio, but the resolution is a bit lacking. I'm looking to replace it soon. Its successor, the 25-200mm A075S, has already been released by the same company. ※The link is for the older model (A071).</span
               >
             </small>
           </li>
@@ -1986,6 +2014,7 @@
       const savedLang = localStorage.getItem("mokusaku_lang") || "ja";
 
       function setLanguage(lang) {
+        document.documentElement.lang = lang; // <html lang="..."> を動的に更新（SEO・アクセシビリティ対応）
         body.setAttribute("data-lang", lang);
         localStorage.setItem("mokusaku_lang", lang);
 

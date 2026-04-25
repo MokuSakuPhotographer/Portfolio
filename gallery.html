@@ -4,6 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="images/Prof_icon_favicon.png" />
+
+    <meta property="og:site_name" content="MokuSaku's Photo booth" />
+    <meta property="og:title" content="Gallery | MokuSaku's Photo booth" />
+    <meta
+      property="og:description"
+      content="関東を拠点に活動するフォト・ビデオグラファー、MokuSakuのポートフォリオギャラリーです。"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://mokusakuphotographer.github.io/Portfolio/gallery.html"
+    />
+    <meta
+      property="og:image"
+      content="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@SakuMoku137673" />
+    <meta name="twitter:title" content="Gallery | MokuSaku's Photo booth" />
+    <meta
+      name="twitter:description"
+      content="関東を拠点に活動するフォト・ビデオグラファー、MokuSakuのポートフォリオギャラリーです。"
+    />
+    <meta
+      name="twitter:image"
+      content="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png"
+    />
+
     <title>Gallery | MokuSaku's Photo booth</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
@@ -1000,7 +1028,7 @@
         <nav>
           <a href="profile.html"
             ><img
-              src="images/user.png"
+              src="images/Profile.png?v=2"
               class="nav-icon"
               alt=""
             />Profile</a
@@ -1045,7 +1073,10 @@
       </div>
     </header>
 
-    <button id="backToMenu" class="back-btn">← BACK TO CATEGORIES</button>
+    <button id="backToMenu" class="back-btn">
+      <span class="lang-ja">← カテゴリーに戻る</span>
+      <span class="lang-en">← BACK TO CATEGORIES</span>
+    </button>
 
     <section class="gallery-container">
       <div class="split-container">
@@ -1357,7 +1388,7 @@
         <div class="split-panel">
           <div
             class="panel-cover"
-            style="background-image: url(&quot;images/IMG_3376.JPG&quot;)"
+            style="background-image: url(&quot;images/IMG_3376.webp&quot;)"
           ></div>
           <div class="panel-title">Portrait</div>
           <div class="panel-content">
@@ -1419,8 +1450,8 @@
               </div>
               <div class="photo-item size-tall">
                 <img
-                  src="images/IMG_3377.JPG"
-                  data-highres="images/IMG_3377.JPG"
+                  src="images/IMG_3377.webp"
+                  data-highres="images/IMG_3377.webp"
                   data-caption="Model: おゆ💧"
                   alt="Portrait Photo"
                   loading="lazy"
@@ -2265,6 +2296,7 @@
       const savedLang = localStorage.getItem("mokusaku_lang") || "ja";
 
       function setLanguage(lang) {
+        document.documentElement.lang = lang; // <html lang="..."> を動的に更新（SEO・アクセシビリティ対応）
         body.setAttribute("data-lang", lang);
         localStorage.setItem("mokusaku_lang", lang);
 
