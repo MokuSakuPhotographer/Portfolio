@@ -618,7 +618,7 @@
         <nav>
           <a href="profile.html"
             ><img
-              src="images/user.png"
+              src="images/Profile.png?v=2"
               class="nav-icon"
               alt=""
             />Profile</a
@@ -794,23 +794,11 @@
               <div class="timeline-dot"></div>
               <div class="timeline-date">2026.03.11</div>
               <div class="timeline-content">
-                <span class="lang-ja">Gearページを更新しました</span>
-                <span class="lang-en">Updated Gear Page</span>
+                <span class="lang-ja">GearページおよびEvent Scheduleを更新しました</span>
+                <span class="lang-en">Updated Gear Page and Event Schedule</span>
                 <span class="timeline-desc">
-                  <span class="lang-ja">Godox FG-100（ストロボハンドグリップ）とGodox ML-CD15（ソフトボックス）を追加しました。</span>
-                  <span class="lang-en">Added Godox FG-100 (strobe hand grip) and Godox ML-CD15 (small softbox).</span>
-                </span>
-              </div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-date">2026.03.11</div>
-              <div class="timeline-content">
-                <span class="lang-ja">Event Scheduleを更新しました</span>
-                <span class="lang-en">Updated Event Schedule</span>
-                <span class="timeline-desc">
-                  <span class="lang-ja">AnimeJapan 2026の参加予定を追加し、各イベントの公式サイトへのリンクを掲載しました。</span>
-                  <span class="lang-en">Added AnimeJapan 2026 to upcoming events and included official website links for all listings.</span>
+                  <span class="lang-ja">Godox FG-100とGodox ML-CD15を追加。AnimeJapan 2026の参加予定と各イベントの公式サイトへのリンクを掲載しました。</span>
+                  <span class="lang-en">Added Godox FG-100 and Godox ML-CD15. Added AnimeJapan 2026 and official website links for all event listings.</span>
                 </span>
               </div>
             </div>
@@ -987,6 +975,7 @@
       const savedLang = localStorage.getItem("mokusaku_lang") || "ja";
 
       function setLanguage(lang) {
+        document.documentElement.lang = lang; // <html lang="..."> を動的に更新（SEO・アクセシビリティ対応）
         body.setAttribute("data-lang", lang);
         localStorage.setItem("mokusaku_lang", lang);
 
