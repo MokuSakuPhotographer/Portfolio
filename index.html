@@ -257,6 +257,12 @@
         padding-bottom: 0;
         border-bottom: none;
       }
+      /* timeline-listの最後でも、後ろにolderがある場合は線と余白を消さない */
+      #timeline-list.has-older .timeline-item:last-child {
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
 
       /* === 更新履歴の開閉トグル === */
       .timeline-older {
@@ -719,122 +725,145 @@
     </div>
 
     <!-- === Update History Section === -->
+    <!--
+      【管理ルール】更新履歴の追加方法
+      - 新しいエントリは #timeline-list の「先頭」に追加してください。
+      - HTML は全件フラットに並べるだけでOKです（新しい順が上）。
+      - 新着3件の表示・それ以外の格納は JavaScript（setupTimeline関数）が自動で行います。
+    -->
     <section class="timeline-section js-scroll-trigger">
       <h2 class="section-heading">
         <span class="lang-ja">更新履歴</span>
         <span class="lang-en">Updates</span>
       </h2>
-      <div class="timeline-container">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-date">2026.04.23</div>
-          <div class="timeline-content">
-            <span class="lang-ja">Galleryを更新しました</span>
-            <span class="lang-en">Updated Gallery</span>
-            <span class="timeline-desc">
-              <span class="lang-ja">Snapに新しい写真を追加しました。</span>
-              <span class="lang-en">Added new photos to the Snap section.</span>
-            </span>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-date">2026.04.14</div>
-          <div class="timeline-content">
-            <span class="lang-ja">Event Scheduleを更新しました</span>
-            <span class="lang-en">Updated Event Schedule</span>
-            <span class="timeline-desc">
-              <span class="lang-ja">acosta! @さいたまスーパーアリーナ TORIOの参加予定を追加しました。</span>
-              <span class="lang-en">Added acosta! @ Saitama Super Arena TORIO to the event schedule.</span>
-            </span>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-date">2026.03.30</div>
-          <div class="timeline-content">
-            <span class="lang-ja">Galleryを更新しました</span>
-            <span class="lang-en">Updated Gallery</span>
-            <span class="timeline-desc">
-              <span class="lang-ja">Portraitに新しい写真を追加しました。</span>
-              <span class="lang-en">Added new photos to the Portrait section.</span>
-            </span>
-          </div>
-        </div>
+      <div class="timeline-container" id="timelineContainer">
+        <div id="timeline-list">
 
-        <!-- 過去の更新履歴（トグルで開閉） -->
-        <div class="timeline-older" id="timelineOlder">
-          <div class="timeline-older-inner">
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-date">2026.03.24</div>
-              <div class="timeline-content">
-                <span class="lang-ja">Galleryを更新しました</span>
-                <span class="lang-en">Updated Gallery</span>
-                <span class="timeline-desc">
-                  <span class="lang-ja">Portraitに新しい写真を追加しました。</span>
-                  <span class="lang-en">Added new photos to the Portrait section.</span>
-                </span>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-date">2026.03.14</div>
-              <div class="timeline-content">
-                <span class="lang-ja">GearページおよびPCスペックを更新しました</span>
-                <span class="lang-en">Updated Gear Page and PC Specs</span>
-                <span class="timeline-desc">
-                  <span class="lang-ja">PCスペックにPC機材を追加、他機材の更新や見やすいよう並び替えを行いました。</span>
-                  <span class="lang-en">Added PC equipment to PC specs, updated other gear and reordered for better visibility.</span>
-                </span>
-              </div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-date">2026.03.11</div>
-              <div class="timeline-content">
-                <span class="lang-ja">GearページおよびEvent Scheduleを更新しました</span>
-                <span class="lang-en">Updated Gear Page and Event Schedule</span>
-                <span class="timeline-desc">
-                  <span class="lang-ja">Godox FG-100とGodox ML-CD15を追加。AnimeJapan 2026の参加予定と各イベントの公式サイトへのリンクを掲載しました。</span>
-                  <span class="lang-en">Added Godox FG-100 and Godox ML-CD15. Added AnimeJapan 2026 and official website links for all event listings.</span>
-                </span>
-              </div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-date">2026.03.10</div>
-              <div class="timeline-content">
-                <span class="lang-ja">Galleryのレイアウトを調整しました</span>
-                <span class="lang-en">Improved Gallery Layout</span>
-                <span class="timeline-desc">
-                  <span class="lang-ja">スナップ写真とポートレートの配置をランダム化し、より動きのあるデザインにリニューアルしました。</span>
-                  <span class="lang-en">Randomized the layout of Snap and Portrait photos to create a more dynamic presentation.</span>
-                </span>
-              </div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-date">2026.03.09</div>
-              <div class="timeline-content">
-                <span class="lang-ja">画像保護機能を導入しました</span>
-                <span class="lang-en">Implemented Image Protection</span>
-                <span class="timeline-desc">
-                  <span class="lang-ja">サイト内のすべての画像に対して、右クリックとドラッグによる保存を防止する機能を実装しました。</span>
-                  <span class="lang-en">Added features to prevent saving images via right-click and drag on all site images.</span>
-                </span>
-              </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.04.27</div>
+            <div class="timeline-content">
+              <span class="lang-ja">GalleryのSnap・Videoを更新しました</span>
+              <span class="lang-en">Updated Gallery Snap &amp; Video</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Snapに新しい写真を7枚追加しました。Videoに「2026/04/26 騎西 藤まつり【Cinematic Vlog】」を追加しました。</span>
+                <span class="lang-en">Added 7 new photos to the Snap section. Added "2026/04/26 Kishi Fuji Festival【Cinematic Vlog】" to the Video section.</span>
+              </span>
             </div>
           </div>
-        </div>
 
-        <button class="timeline-toggle-btn" id="timelineToggle">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.04.23</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Galleryを更新しました</span>
+              <span class="lang-en">Updated Gallery</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Snapに新しい写真を追加しました。</span>
+                <span class="lang-en">Added new photos to the Snap section.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.04.14</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Event Scheduleを更新しました</span>
+              <span class="lang-en">Updated Event Schedule</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">acosta! @さいたまスーパーアリーナ TORIOの参加予定を追加しました。</span>
+                <span class="lang-en">Added acosta! @ Saitama Super Arena TORIO to the event schedule.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.30</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Galleryを更新しました</span>
+              <span class="lang-en">Updated Gallery</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Portraitに新しい写真を追加しました。</span>
+                <span class="lang-en">Added new photos to the Portrait section.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.24</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Galleryを更新しました</span>
+              <span class="lang-en">Updated Gallery</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Portraitに新しい写真を追加しました。</span>
+                <span class="lang-en">Added new photos to the Portrait section.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.14</div>
+            <div class="timeline-content">
+              <span class="lang-ja">GearページおよびPCスペックを更新しました</span>
+              <span class="lang-en">Updated Gear Page and PC Specs</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">PCスペックにPC機材を追加、他機材の更新や見やすいよう並び替えを行いました。</span>
+                <span class="lang-en">Added PC equipment to PC specs, updated other gear and reordered for better visibility.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.11</div>
+            <div class="timeline-content">
+              <span class="lang-ja">GearページおよびEvent Scheduleを更新しました</span>
+              <span class="lang-en">Updated Gear Page and Event Schedule</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Godox FG-100とGodox ML-CD15を追加。AnimeJapan 2026の参加予定と各イベントの公式サイトへのリンクを掲載しました。</span>
+                <span class="lang-en">Added Godox FG-100 and Godox ML-CD15. Added AnimeJapan 2026 and official website links for all event listings.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.10</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Galleryのレイアウトを調整しました</span>
+              <span class="lang-en">Improved Gallery Layout</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">スナップ写真とポートレートの配置をランダム化し、より動きのあるデザインにリニューアルしました。</span>
+                <span class="lang-en">Randomized the layout of Snap and Portrait photos to create a more dynamic presentation.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.09</div>
+            <div class="timeline-content">
+              <span class="lang-ja">画像保護機能を導入しました</span>
+              <span class="lang-en">Implemented Image Protection</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">サイト内のすべての画像に対して、右クリックとドラッグによる保存を防止する機能を実装しました。</span>
+                <span class="lang-en">Added features to prevent saving images via right-click and drag on all site images.</span>
+              </span>
+            </div>
+          </div>
+
+        </div>
+        <!-- 古い履歴の格納先（JavaScriptが自動生成） -->
+        <div class="timeline-older" id="timelineOlder"></div>
+        <button class="timeline-toggle-btn" id="timelineToggle" style="display:none">
           <span class="toggle-icon">▼</span>
           <span class="lang-ja">過去の更新を見る</span>
           <span class="lang-en">Show older updates</span>
         </button>
-
       </div>
     </section>
 
@@ -948,24 +977,48 @@
         });
       });
 
-      // --- 更新履歴の「過去の更新を見る」トグル制御 ---
-      const timelineToggle = document.getElementById("timelineToggle");
-      const timelineOlder = document.getElementById("timelineOlder");
+      // --- 更新履歴：新着3件以外を自動的に「もっと見る」へ格納 ---
+      function setupTimeline(listId, olderId, toggleId, threshold) {
+        const list    = document.getElementById(listId);
+        const older   = document.getElementById(olderId);
+        const toggle  = document.getElementById(toggleId);
+        if (!list || !older || !toggle) return;
 
-      timelineToggle.addEventListener("click", () => {
-        const isOpen = timelineOlder.classList.toggle("is-open");
-        timelineToggle.classList.toggle("is-open");
-        // ボタンのテキストを切り替え
-        const jaText = timelineToggle.querySelector(".lang-ja");
-        const enText = timelineToggle.querySelector(".lang-en");
-        if (isOpen) {
-          jaText.textContent = "閉じる";
-          enText.textContent = "Hide older updates";
-        } else {
-          jaText.textContent = "過去の更新を見る";
-          enText.textContent = "Show older updates";
+        const items = Array.from(list.querySelectorAll('.timeline-item'));
+        if (items.length <= threshold) {
+          // 全件が閾値以内ならボタン不要
+          toggle.style.display = 'none';
+          return;
         }
-      });
+
+        // 新着 threshold 件はそのまま残し、残りを older へ移動
+        const inner = document.createElement('div');
+        inner.className = 'timeline-older-inner';
+        items.slice(threshold).forEach(item => inner.appendChild(item));
+        older.appendChild(inner);
+
+        // クラス付与（CSSで行間を調整するため）
+        list.classList.add('has-older');
+
+        // ボタンを表示
+        toggle.style.display = '';
+
+        toggle.addEventListener('click', () => {
+          const isOpen = older.classList.toggle('is-open');
+          toggle.classList.toggle('is-open');
+          const jaText = toggle.querySelector('.lang-ja');
+          const enText = toggle.querySelector('.lang-en');
+          if (isOpen) {
+            jaText.textContent = '閉じる';
+            enText.textContent = 'Hide older updates';
+          } else {
+            jaText.textContent = '過去の更新を見る';
+            enText.textContent = 'Show older updates';
+          }
+        });
+      }
+
+      setupTimeline('timeline-list', 'timelineOlder', 'timelineToggle', 3);
 
       // ▼ 追加：言語切り替え・状態保持の制御 ▼
       const btnJa = document.getElementById("btn-ja");
