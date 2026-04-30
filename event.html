@@ -1,725 +1,715 @@
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="images/Prof_icon_favicon.png" />
 
-    <meta property="og:site_name" content="MokuSaku's Photo booth" />
-    <meta property="og:title" content="Schedule | MokuSaku's Photo booth" />
-    <meta
-      property="og:description"
-      content="MokuSakuがカメラマンとして参加予定のイベントスケジュール一覧です。"
-    />
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="https://mokusakuphotographer.github.io/Portfolio/event.html"
-    />
-    <meta
-      property="og:image"
-      content="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png"
-    />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@SakuMoku137673" />
-    <meta name="twitter:title" content="Schedule | MokuSaku's Photo booth" />
-    <meta
-      name="twitter:description"
-      content="MokuSakuがカメラマンとして参加予定のイベントスケジュール一覧です。"
-    />
-    <meta
-      name="twitter:image"
-      content="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="images/Prof_icon_favicon.png" />
 
-    <title>Schedule | MokuSaku's Photo booth</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      html {
-        scrollbar-gutter: stable;
-      }
-      /* === SONY風ダークテーマ定義 === */
-      :root {
-        --bg-main: #1a1a1a;
-        --bg-dark: #111111;
-        --bg-header: rgba(30, 30, 30, 0.95);
-        --text-primary: #f0f0f0;
-        --text-secondary: #a0a0a0;
-        --accent-orange: #ff4d00;
-        --border-color: #333333;
-      }
+  <meta property="og:site_name" content="MokuSaku's Photo booth" />
+  <meta property="og:title" content="Schedule | MokuSaku's Photo booth" />
+  <meta property="og:description" content="MokuSakuがカメラマンとして参加予定のイベントスケジュール一覧です。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mokusakuphotographer.github.io/Portfolio/event.html" />
+  <meta property="og:image" content="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@SakuMoku137673" />
+  <meta name="twitter:title" content="Schedule | MokuSaku's Photo booth" />
+  <meta name="twitter:description" content="MokuSakuがカメラマンとして参加予定のイベントスケジュール一覧です。" />
+  <meta name="twitter:image" content="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png" />
 
+  <title>Schedule | MokuSaku's Photo booth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    html {
+      scrollbar-gutter: stable;
+    }
+
+    /* === SONY風ダークテーマ定義 === */
+    :root {
+      --bg-main: #1a1a1a;
+      --bg-dark: #111111;
+      --bg-header: rgba(30, 30, 30, 0.95);
+      --text-primary: #f0f0f0;
+      --text-secondary: #a0a0a0;
+      --accent-orange: #ff4d00;
+      --border-color: #333333;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      padding-top: 60px;
+      font-family:
+        "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+      color: var(--text-primary);
+      background-color: var(--bg-main);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      position: relative;
+      min-height: 100vh;
+      /* 画面の高さが足りなくても背景を維持します */
+    }
+
+    /* === 追加：背景画像を薄く敷く設定 === */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      /* 画面の高さに固定 */
+      background-image: url("images/Camera_a.webp");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.15;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    /* === 追従型ナビゲーション === */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: var(--bg-header);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease;
+    }
+
+    /* ヘッダー内のレイアウト調整 */
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    /* サイトタイトルのスタイル（筆記体） */
+    .site-title {
+      font-family: "Dancing Script", cursive;
+      font-size: 1.8rem;
+      color: var(--accent-orange);
+      /* オレンジ色に統一 */
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.3s ease;
+    }
+
+    /* ホバーした時は白く光るように変更 */
+    .site-title:hover {
+      color: var(--text-primary);
+    }
+
+    nav {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      padding: 15px 0;
+    }
+
+    nav a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-primary);
+      margin: 5px 15px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: var(--accent-orange);
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--accent-orange);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* アイコンの調整 */
+    .nav-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      transition: filter 0.3s ease;
+      filter: brightness(0) invert(1);
+      /* 黒い画像でも強制的に白くする */
+    }
+
+    nav a:hover .nav-icon {
+      filter: brightness(0) saturate(100%) invert(39%) sepia(93%) saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
+    }
+
+    /* ▼ 追加：現在見ているページのメニューをオレンジにする魔法 ▼ */
+    nav a.current-page {
+      color: var(--accent-orange);
+    }
+
+    nav a.current-page::after {
+      width: 100%;
+    }
+
+    nav a.current-page .nav-icon {
+      filter: brightness(0) saturate(100%) invert(39%) sepia(93%) saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
+    }
+
+    /* スマホ表示時のヘッダー調整 */
+    @media (max-width: 850px) {
       body {
-        margin: 0;
-        padding: 0;
-        padding-top: 60px;
-        font-family:
-          "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
-        color: var(--text-primary);
-        background-color: var(--bg-main);
-        line-height: 1.6;
-        scroll-behavior: smooth;
-        position: relative;
-        min-height: 100vh; /* 画面の高さが足りなくても背景を維持します */
+        padding-top: 120px;
       }
 
-      /* === 追加：背景画像を薄く敷く設定 === */
-      body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh; /* 画面の高さに固定 */
-        background-image: url("images/Camera_a.webp");
-        background-size: cover;
-        background-position: center;
-        opacity: 0.15;
-        z-index: -2;
-        pointer-events: none;
-      }
-
-      /* === 追従型ナビゲーション === */
-      header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: var(--bg-header);
-        border-bottom: 1px solid var(--border-color);
-        z-index: 1000;
-        backdrop-filter: blur(10px);
-        transition: transform 0.3s ease;
-      }
-
-      /* ヘッダー内のレイアウト調整 */
       .header-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-        box-sizing: border-box;
-      }
-
-      /* サイトタイトルのスタイル（筆記体） */
-      .site-title {
-        font-family: "Dancing Script", cursive;
-        font-size: 1.8rem;
-        color: var(--accent-orange); /* オレンジ色に統一 */
-        text-decoration: none;
-        white-space: nowrap;
-        transition: color 0.3s ease;
-      }
-      /* ホバーした時は白く光るように変更 */
-      .site-title:hover {
-        color: var(--text-primary);
+        flex-direction: column;
+        padding-top: 15px;
       }
 
       nav {
-        display: flex;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        padding: 15px 0;
-      }
-      nav a {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        color: var(--text-primary);
-        margin: 5px 15px;
-        font-size: 0.85rem;
-        font-weight: bold;
-        letter-spacing: 0.05em;
-        transition: all 0.3s ease;
-        position: relative;
-      }
-      nav a:hover {
-        color: var(--accent-orange);
-      }
-      nav a::after {
-        content: "";
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background-color: var(--accent-orange);
-        transition: width 0.3s ease;
-      }
-      nav a:hover::after {
-        width: 100%;
-      }
-
-      /* アイコンの調整 */
-      .nav-icon {
-        width: 16px;
-        height: 16px;
-        margin-right: 8px;
-        transition: filter 0.3s ease;
-        filter: brightness(0) invert(1); /* 黒い画像でも強制的に白くする */
-      }
-      nav a:hover .nav-icon {
-        filter: brightness(0) saturate(100%) invert(39%) sepia(93%)
-          saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
-      }
-
-      /* ▼ 追加：現在見ているページのメニューをオレンジにする魔法 ▼ */
-      nav a.current-page {
-        color: var(--accent-orange);
-      }
-      nav a.current-page::after {
-        width: 100%;
-      }
-      nav a.current-page .nav-icon {
-        filter: brightness(0) saturate(100%) invert(39%) sepia(93%)
-          saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
-      }
-
-      /* スマホ表示時のヘッダー調整 */
-      @media (max-width: 850px) {
-        body {
-          padding-top: 120px;
-        }
-        .header-container {
-          flex-direction: column;
-          padding-top: 15px;
-        }
-        nav {
-          justify-content: center;
-          padding-top: 5px;
-          padding-bottom: 10px;
-        }
-        .site-title {
-          font-size: 2.2rem;
-        }
-      }
-
-      /* === イベントカレンダー専用スタイル === */
-      .event-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 80px 20px;
-      }
-
-      .event-page-title {
-        text-align: center;
-        font-size: 2rem;
-        letter-spacing: 0.1em;
-        margin-bottom: 20px;
-        color: #fff;
-        text-transform: uppercase;
-      }
-      .event-page-title::after {
-        content: "";
-        display: block;
-        width: 40px;
-        height: 3px;
-        background-color: var(--accent-orange);
-        margin: 15px auto 0;
-      }
-
-      .event-intro {
-        text-align: center;
-        margin-bottom: 50px;
-        color: var(--text-secondary);
-        font-size: 0.95rem;
-      }
-
-      .section-heading {
-        font-size: 1.4rem;
-        color: #fff;
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 10px;
-        margin-bottom: 30px;
-        margin-top: 50px;
-        letter-spacing: 0.05em;
-      }
-
-      .event-list {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-      }
-
-      .event-card {
-        background-color: var(--bg-dark);
-        border: 1px solid var(--border-color);
-        border-left: 4px solid var(--accent-orange);
-        border-radius: 4px;
-        padding: 25px 30px;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-      }
-
-      .event-card.past {
-        border-left-color: #555555;
-        opacity: 0.7;
-      }
-
-      .event-date {
-        font-size: 1.1rem;
-        font-weight: bold;
-        color: var(--accent-orange);
-        margin-bottom: 5px;
-        letter-spacing: 0.05em;
-      }
-      .event-card.past .event-date {
-        color: var(--text-secondary);
-      }
-
-      .event-title {
-        font-size: 1.3rem;
-        color: #fff;
-        margin: 0 0 10px 0;
-        font-weight: bold;
-      }
-
-      .event-location {
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-      }
-      .event-location::before {
-        content: "📍";
-        margin-right: 5px;
-        font-size: 0.8rem;
-      }
-      .event-location a:hover {
-        color: var(--accent-orange) !important;
-      }
-
-      .event-official-site {
-        font-size: 0.9rem;
-        margin-bottom: 15px;
-      }
-      .event-official-site a {
-        color: var(--text-secondary);
-        text-decoration: none;
-        transition: color 0.3s ease;
-      }
-      .event-official-site a:hover {
-        color: var(--accent-orange);
-      }
-
-      /* === ステータスバッジ（受付中 / 終了）のスタイル === */
-      .event-status {
-        text-decoration: none;
-        display: inline-block;
-        align-self: flex-start;
-        padding: 6px 20px; /* 余白を増やしてボタンらしさを出す */
-        border-radius: 25px;
-        font-size: 0.95rem; /* 文字をひと回り大きく */
-        font-weight: bold;
-        letter-spacing: 0.05em;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* 文字をくっきりさせる */
-      }
-
-      /* 受付中：オレンジで塗りつぶし、フワッと光らせる */
-      .status-open {
-        background-color: var(--accent-orange);
-        border: 1px solid #ff7733;
-        color: #fff;
-        animation: pulseOrange 2s infinite; /* 光が波打つアニメーション */
-        transition: transform 0.2s ease, filter 0.2s ease;
-      }
-      a.status-open:hover {
-        transform: scale(1.05);
-        filter: brightness(1.1);
-      }
-
-      /* 終了：暗いグレーで塗りつぶし、沈んだ印象にする */
-      .status-closed {
-        background-color: #333;
-        border: 1px solid #555;
-        color: #aaa;
-      }
-
-      /* ▼ 追加：受付中の光るアニメーション設定 ▼ */
-      @keyframes pulseOrange {
-        0% {
-          box-shadow: 0 0 0 0 rgba(255, 77, 0, 0.7);
-        }
-        70% {
-          box-shadow: 0 0 0 10px rgba(255, 77, 0, 0);
-        }
-        100% {
-          box-shadow: 0 0 0 0 rgba(255, 77, 0, 0);
-        }
-      }
-
-      /* === スクロールアニメーション用クラス === */
-      .js-scroll-trigger {
-        opacity: 0;
-        transform: translateY(30px);
-        transition:
-          opacity 0.8s ease-out,
-          transform 0.8s ease-out;
-      }
-      .js-scroll-trigger.is-visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      /* === TOPへ戻るボタンのスタイル === */
-      .page-top-btn {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 50px;
-        height: 50px;
-        background-color: var(--bg-dark);
-        border: 2px solid var(--border-color);
-        border-radius: 50%;
-        color: var(--text-primary);
-        text-decoration: none;
-        display: flex;
         justify-content: center;
-        align-items: center;
-        font-size: 1.2rem;
-        z-index: 999;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
+        padding-top: 5px;
+        padding-bottom: 10px;
       }
-      .page-top-btn.is-show {
-        opacity: 1;
-        visibility: visible;
-      }
-      .page-top-btn:hover {
-        background-color: var(--accent-orange);
-        border-color: var(--accent-orange);
-        color: #fff;
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
-      }
-      /* ▼▼ 追加：言語切り替えボタンと表示制御のスタイル ▼▼ */
-      .lang-switch {
-        display: flex;
-        align-items: center;
-        margin-left: 15px;
-      }
-      .lang-switch button {
-        background: none;
-        border: none;
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-        font-weight: bold;
-        cursor: pointer;
-        padding: 5px;
-        transition: color 0.3s ease;
-      }
-      .lang-switch button:hover {
-        color: var(--text-primary);
-      }
-      .lang-switch button.active {
-        color: var(--accent-orange);
-        pointer-events: none;
-      }
-      .lang-switch span {
-        color: var(--border-color);
-        margin: 0 2px;
-      }
-      body[data-lang="ja"] .lang-en {
-        display: none !important;
-      }
-      body[data-lang="en"] .lang-ja {
-        display: none !important;
-      }
-      /* === フッター（コピーライト）のスタイル === */
-      .site-footer {
-        text-align: center;
-        padding: 20px 10px;
-        margin-top: 60px;
-        border-top: 1px solid var(--border-color);
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-        letter-spacing: 0.05em;
-      }
-      /* === 画像保護（右クリック・ドラッグ・長押し保存の防止） === */
-      img {
-        user-select: none;
-        -webkit-user-drag: none;
-        -webkit-touch-callout: none;
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <div class="header-container">
-        <a href="index.html" class="site-title">MokuSaku's Photo booth</a>
-        <nav>
-          <a href="profile.html"
-            ><img
-              src="images/Profile.png?v=2"
-              class="nav-icon"
-              alt=""
-            />Profile</a
-          >
-          <a href="Policy.html"
-            ><img
-              src="images/Policy.png?v=2"
-              class="nav-icon"
-              alt=""
-            />Policy</a
-          >
-          <a href="event.html"
-            ><img
-              src="images/Calendar.png?v=2"
-              class="nav-icon"
-              alt=""
-            />Schedule</a
-          >
-          <a href="gallery.html"
-            ><img
-              src="images/Gallery.png?v=2"
-              class="nav-icon"
-              alt=""
-            />Gallery</a
-          >
-          <a href="equipment.html"
-            ><img src="images/Gear.png?v=2" class="nav-icon" alt="" />Gear</a
-          >
-          <a href="contact.html"
-            ><img
-              src="images/Contact.png?v=2"
-              class="nav-icon"
-              alt=""
-            />Contact</a
-          >
 
-          <div class="lang-switch">
-            <button id="btn-ja" class="active">JP</button>
-            <span>/</span>
-            <button id="btn-en">EN</button>
-          </div>
-        </nav>
-      </div>
-    </header>
+      .site-title {
+        font-size: 2.2rem;
+      }
+    }
 
-    <section class="event-container">
-      <h1 class="event-page-title js-scroll-trigger">Event Schedule</h1>
-      <p class="event-intro js-scroll-trigger">
-        <span class="lang-ja"
-          >私がカメラマンとして参加予定のイベント一覧です。<br />撮影のご依頼やご相談は、各SNSのDMよりお気軽にご連絡ください。</span
-        >
-        <span class="lang-en"
-          >Here is the schedule of events I plan to attend as a photographer.<br />For
-          photography requests and inquiries, please feel free to contact me via
-          DM on any of my social media.</span
-        >
+    /* === イベントカレンダー専用スタイル === */
+    .event-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 20px;
+    }
+
+    .event-page-title {
+      text-align: center;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .event-page-title::after {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 3px;
+      background-color: var(--accent-orange);
+      margin: 15px auto 0;
+    }
+
+    .event-intro {
+      text-align: center;
+      margin-bottom: 50px;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .section-heading {
+      font-size: 1.4rem;
+      color: #fff;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+      margin-top: 50px;
+      letter-spacing: 0.05em;
+    }
+
+    .event-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .event-card {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-orange);
+      border-radius: 4px;
+      padding: 25px 30px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .event-card.past {
+      border-left-color: #555555;
+      opacity: 0.7;
+    }
+
+    .event-date {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--accent-orange);
+      margin-bottom: 5px;
+      letter-spacing: 0.05em;
+    }
+
+    .event-card.past .event-date {
+      color: var(--text-secondary);
+    }
+
+    .event-title {
+      font-size: 1.3rem;
+      color: #fff;
+      margin: 0 0 10px 0;
+      font-weight: bold;
+    }
+
+    .event-location {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .event-location::before {
+      content: "📍";
+      margin-right: 5px;
+      font-size: 0.8rem;
+    }
+
+    .event-location a:hover {
+      color: var(--accent-orange) !important;
+    }
+
+    .event-official-site {
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .event-official-site a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .event-official-site a:hover {
+      color: var(--accent-orange);
+    }
+
+    /* === ステータスバッジ（受付中 / 終了）のスタイル === */
+    .event-status {
+      text-decoration: none;
+      display: inline-block;
+      align-self: flex-start;
+      padding: 6px 20px;
+      /* 余白を増やしてボタンらしさを出す */
+      border-radius: 25px;
+      font-size: 0.95rem;
+      /* 文字をひと回り大きく */
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      /* 文字をくっきりさせる */
+    }
+
+    /* 受付中：オレンジで塗りつぶし、フワッと光らせる */
+    .status-open {
+      background-color: var(--accent-orange);
+      border: 1px solid #ff7733;
+      color: #fff;
+      animation: pulseOrange 2s infinite;
+      /* 光が波打つアニメーション */
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    a.status-open:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    /* 終了：暗いグレーで塗りつぶし、沈んだ印象にする */
+    .status-closed {
+      background-color: #333;
+      border: 1px solid #555;
+      color: #aaa;
+    }
+
+    /* ▼ 追加：受付中の光るアニメーション設定 ▼ */
+    @keyframes pulseOrange {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 77, 0, 0.7);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(255, 77, 0, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 77, 0, 0);
+      }
+    }
+
+    /* === スクロールアニメーション用クラス === */
+    .js-scroll-trigger {
+      opacity: 0;
+      transform: translateY(30px);
+      transition:
+        opacity 0.8s ease-out,
+        transform 0.8s ease-out;
+    }
+
+    .js-scroll-trigger.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* === TOPへ戻るボタンのスタイル === */
+    .page-top-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background-color: var(--bg-dark);
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .page-top-btn.is-show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .page-top-btn:hover {
+      background-color: var(--accent-orange);
+      border-color: var(--accent-orange);
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
+    }
+
+    /* ▼▼ 追加：言語切り替えボタンと表示制御のスタイル ▼▼ */
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      margin-left: 15px;
+    }
+
+    .lang-switch button {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 5px;
+      transition: color 0.3s ease;
+    }
+
+    .lang-switch button:hover {
+      color: var(--text-primary);
+    }
+
+    .lang-switch button.active {
+      color: var(--accent-orange);
+      pointer-events: none;
+    }
+
+    .lang-switch span {
+      color: var(--border-color);
+      margin: 0 2px;
+    }
+
+    body[data-lang="ja"] .lang-en {
+      display: none !important;
+    }
+
+    body[data-lang="en"] .lang-ja {
+      display: none !important;
+    }
+
+    /* === フッター（コピーライト）のスタイル === */
+    .site-footer {
+      text-align: center;
+      padding: 20px 10px;
+      margin-top: 60px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    /* === 画像保護（右クリック・ドラッグ・長押し保存の防止） === */
+    img {
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-container">
+      <a href="index.html" class="site-title">MokuSaku's Photo booth</a>
+      <nav>
+        <a href="profile.html"><img src="images/Profile.png?v=2" class="nav-icon" alt="" />Profile</a>
+        <a href="Policy.html"><img src="images/Policy.png?v=2" class="nav-icon" alt="" />Policy</a>
+        <a href="event.html"><img src="images/Calendar.png?v=2" class="nav-icon" alt="" />Schedule</a>
+        <a href="gallery.html"><img src="images/Gallery.png?v=2" class="nav-icon" alt="" />Gallery</a>
+        <a href="equipment.html"><img src="images/Gear.png?v=2" class="nav-icon" alt="" />Gear</a>
+        <a href="contact.html"><img src="images/Contact.png?v=2" class="nav-icon" alt="" />Contact</a>
+
+        <div class="lang-switch">
+          <button id="btn-ja" class="active">JP</button>
+          <span>/</span>
+          <button id="btn-en">EN</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="event-container">
+    <h1 class="event-page-title js-scroll-trigger">Event Schedule</h1>
+    <p class="event-intro js-scroll-trigger">
+      <span class="lang-ja">私がカメラマンとして参加予定のイベント一覧です。<br />撮影のご依頼やご相談は、各SNSのDMよりお気軽にご連絡ください。</span>
+      <span class="lang-en">Here is the schedule of events I plan to attend as a photographer.<br />For
+        photography requests and inquiries, please feel free to contact me via
+        DM on any of my social media.</span>
+    </p>
+
+    <h2 class="section-heading js-scroll-trigger">
+      <span class="lang-ja">今後のイベント予定</span>
+      <span class="lang-en">Upcoming Events</span>
+    </h2>
+    <div class="event-list">
+      <!-- 今後の予定がない場合は以下のコメント解除して表示してください -->
+
+      <p class="event-intro js-scroll-trigger" style="margin-top: 20px;">
+        <span class="lang-ja">現在、確定した予定はありません。決まり次第こちらでお知らせいたします。</span>
+        <span class="lang-en">No upcoming events scheduled at the moment. Stay tuned for updates!</span>
       </p>
 
-      <h2 class="section-heading js-scroll-trigger">
-        <span class="lang-ja">今後のイベント予定</span>
-        <span class="lang-en">Upcoming Events</span>
-      </h2>
-      <div class="event-list">
-        <!-- 今後の予定がない場合は以下のコメント解除して表示してください -->
-        <!--
-        <p class="event-intro js-scroll-trigger" style="margin-top: 20px;">
-          <span class="lang-ja">現在、確定した予定はありません。決まり次第こちらでお知らせいたします。</span>
-          <span class="lang-en">No upcoming events scheduled at the moment. Stay tuned for updates!</span>
-        </p>
-        -->
-        <div class="event-card js-scroll-trigger">
-          <div class="event-date">2026.04.29</div>
-          <h3 class="event-title">
-            <span class="lang-ja">acosta! @さいたまスーパーアリーナ TORIO</span>
-            <span class="lang-en">acosta! @ Saitama Super Arena TORIO</span>
-          </h3>
-          <div class="event-location">
-            <a href="https://www.google.com/maps/search/?api=1&query=さいたまスーパーアリーナ+TORIO" target="_blank" rel="noopener noreferrer" style="color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease;">
-              <span class="lang-ja">さいたまスーパーアリーナ TORIO</span>
-              <span class="lang-en">Saitama Super Arena TORIO</span>
-            </a>
-          </div>
-          <div class="event-official-site">
-            <a href="https://acosta.jp/event/saitama/" target="_blank" rel="noopener noreferrer">
-              <span class="lang-ja">🔗 公式サイトはこちら</span>
-              <span class="lang-en">🔗 Official Website</span>
-            </a>
-          </div>
-          <a href="contact.html" class="event-status status-open">
-            <span class="lang-ja">撮影依頼受付中</span>
-            <span class="lang-en">Now Open</span>
+    </div>
+
+    <h2 class="section-heading js-scroll-trigger">
+      <span class="lang-ja">過去のイベント</span>
+      <span class="lang-en">Past Events</span>
+    </h2>
+    <div class="event-list">
+      <div class="event-card past js-scroll-trigger">
+        <div class="event-date">2026.04.29</div>
+        <h3 class="event-title">
+          <span class="lang-ja">acosta! @さいたまスーパーアリーナ TOIRO</span>
+          <span class="lang-en">acosta! @ Saitama Super Arena TOIRO</span>
+        </h3>
+        <div class="event-location">
+          <a href="https://www.google.com/maps/search/?api=1&query=さいたまスーパーアリーナ+TOIROO" target="_blank"
+            rel="noopener noreferrer"
+            style="color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease;">
+            <span class="lang-ja">さいたまスーパーアリーナ TOIRO</span>
+            <span class="lang-en">Saitama Super Arena TOIRO</span>
           </a>
         </div>
-      </div>
-
-      <h2 class="section-heading js-scroll-trigger">
-        <span class="lang-ja">過去のイベント</span>
-        <span class="lang-en">Past Events</span>
-      </h2>
-      <div class="event-list">
-        <div class="event-card past js-scroll-trigger">
-          <div class="event-date">2026.03.29</div>
-          <h3 class="event-title">
-            <span class="lang-ja">AnimeJapan 2026</span>
-            <span class="lang-en">AnimeJapan 2026</span>
-          </h3>
-          <div class="event-location">
-            <a href="https://www.google.com/maps/search/?api=1&query=東京ビッグサイト" target="_blank" rel="noopener noreferrer" style="color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease;">
-              <span class="lang-ja">東京ビッグサイト</span>
-              <span class="lang-en">Tokyo Big Sight</span>
-            </a>
-          </div>
-          <div class="event-official-site">
-            <a href="https://www.anime-japan.jp/" target="_blank" rel="noopener noreferrer">
-              <span class="lang-ja">🔗 公式サイトはこちら</span>
-              <span class="lang-en">🔗 Official Website</span>
-            </a>
-          </div>
-          <div class="event-status status-closed">
-            <span class="lang-ja">終了しました</span>
-            <span class="lang-en">Closed</span>
-          </div>
+        <div class="event-official-site">
+          <a href="https://acosta.jp/event/saitama/" target="_blank" rel="noopener noreferrer">
+            <span class="lang-ja">🔗 公式サイトはこちら</span>
+            <span class="lang-en">🔗 Official Website</span>
+          </a>
         </div>
-
-        <div class="event-card past js-scroll-trigger">
-          <div class="event-date">2026.02.15</div>
-          <h3 class="event-title">
-            <span class="lang-ja">acosta! @池袋サンシャインシティ</span>
-            <span class="lang-en">acosta! @ Ikebukuro Sunshine City</span>
-          </h3>
-          <div class="event-location">
-            <a href="https://www.google.com/maps/search/?api=1&query=池袋サンシャインシティ" target="_blank" rel="noopener noreferrer" style="color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease;">
-              <span class="lang-ja">池袋サンシャインシティ周辺</span>
-              <span class="lang-en">Around Ikebukuro Sunshine City</span>
-            </a>
-          </div>
-          <div class="event-official-site">
-            <a href="https://acosta.jp/" target="_blank" rel="noopener noreferrer">
-              <span class="lang-ja">🔗 公式サイトはこちら</span>
-              <span class="lang-en">🔗 Official Website</span>
-            </a>
-          </div>
-          <div class="event-status status-closed">
-            <span class="lang-ja">終了しました</span>
-            <span class="lang-en">Closed</span>
-          </div>
+        <div class="event-status status-closed">
+          <span class="lang-ja">終了しました</span>
+          <span class="lang-en">Closed</span>
         </div>
       </div>
-    </section>
-    <footer class="site-footer">
-      &copy; 2026 MokuSaku. All Rights Reserved.<br />
-      <span class="lang-ja"
-        >当サイトのすべてのコンテンツの無断転載を禁じます。</span
-      >
-      <span class="lang-en"
-        >Unauthorized reproduction of all contents on this site is
-        prohibited.</span
-      >
-    </footer>
-    <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
 
-    <script>
-      // ▼ 追加：現在見ているページのメニューを自動でハイライト ▼
-      const currentPath = window.location.pathname;
-      const currentFilename =
-        currentPath.substring(currentPath.lastIndexOf("/") + 1) || "index.html";
-      document.querySelectorAll("nav a").forEach((link) => {
-        if (link.getAttribute("href") === currentFilename) {
-          link.classList.add("current-page");
+      <div class="event-card past js-scroll-trigger">
+        <div class="event-date">2026.03.29</div>
+        <h3 class="event-title">
+          <span class="lang-ja">AnimeJapan 2026</span>
+          <span class="lang-en">AnimeJapan 2026</span>
+        </h3>
+        <div class="event-location">
+          <a href="https://www.google.com/maps/search/?api=1&query=東京ビッグサイト" target="_blank" rel="noopener noreferrer"
+            style="color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease;">
+            <span class="lang-ja">東京ビッグサイト</span>
+            <span class="lang-en">Tokyo Big Sight</span>
+          </a>
+        </div>
+        <div class="event-official-site">
+          <a href="https://www.anime-japan.jp/" target="_blank" rel="noopener noreferrer">
+            <span class="lang-ja">🔗 公式サイトはこちら</span>
+            <span class="lang-en">🔗 Official Website</span>
+          </a>
+        </div>
+        <div class="event-status status-closed">
+          <span class="lang-ja">終了しました</span>
+          <span class="lang-en">Closed</span>
+        </div>
+      </div>
+
+      <div class="event-card past js-scroll-trigger">
+        <div class="event-date">2026.02.15</div>
+        <h3 class="event-title">
+          <span class="lang-ja">acosta! @池袋サンシャインシティ</span>
+          <span class="lang-en">acosta! @ Ikebukuro Sunshine City</span>
+        </h3>
+        <div class="event-location">
+          <a href="https://www.google.com/maps/search/?api=1&query=池袋サンシャインシティ" target="_blank"
+            rel="noopener noreferrer"
+            style="color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease;">
+            <span class="lang-ja">池袋サンシャインシティ周辺</span>
+            <span class="lang-en">Around Ikebukuro Sunshine City</span>
+          </a>
+        </div>
+        <div class="event-official-site">
+          <a href="https://acosta.jp/" target="_blank" rel="noopener noreferrer">
+            <span class="lang-ja">🔗 公式サイトはこちら</span>
+            <span class="lang-en">🔗 Official Website</span>
+          </a>
+        </div>
+        <div class="event-status status-closed">
+          <span class="lang-ja">終了しました</span>
+          <span class="lang-en">Closed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="site-footer">
+    &copy; 2026 MokuSaku. All Rights Reserved.<br />
+    <span class="lang-ja">当サイトのすべてのコンテンツの無断転載を禁じます。</span>
+    <span class="lang-en">Unauthorized reproduction of all contents on this site is
+      prohibited.</span>
+  </footer>
+  <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
+
+  <script>
+    // ▼ 追加：現在見ているページのメニューを自動でハイライト ▼
+    const currentPath = window.location.pathname;
+    const currentFilename =
+      currentPath.substring(currentPath.lastIndexOf("/") + 1) || "index.html";
+    document.querySelectorAll("nav a").forEach((link) => {
+      if (link.getAttribute("href") === currentFilename) {
+        link.classList.add("current-page");
+      }
+    });
+    // --- スクロールアニメーションの制御 ---
+    const scrollTriggers = document.querySelectorAll(".js-scroll-trigger");
+    const cb = function (entries, observer) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
         }
       });
-      // --- スクロールアニメーションの制御 ---
-      const scrollTriggers = document.querySelectorAll(".js-scroll-trigger");
-      const cb = function (entries, observer) {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      };
-      const io = new IntersectionObserver(cb, { rootMargin: "-5% 0px" });
-      scrollTriggers.forEach((trigger) => {
-        io.observe(trigger);
-      });
+    };
+    const io = new IntersectionObserver(cb, { rootMargin: "-5% 0px" });
+    scrollTriggers.forEach((trigger) => {
+      io.observe(trigger);
+    });
 
-      // --- TOPへ戻るボタンの表示制御 ---
-      const pageTopBtn = document.getElementById("pageTopBtn");
-      window.addEventListener("scroll", () => {
-        if (window.scrollY > 300) {
-          pageTopBtn.classList.add("is-show");
-        } else {
-          pageTopBtn.classList.remove("is-show");
-        }
-      });
-      // --- ヘッダーのスクロール（自動隠し）制御 ---
-      const header = document.querySelector("header");
-      let lastScrollY = window.scrollY;
+    // --- TOPへ戻るボタンの表示制御 ---
+    const pageTopBtn = document.getElementById("pageTopBtn");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        pageTopBtn.classList.add("is-show");
+      } else {
+        pageTopBtn.classList.remove("is-show");
+      }
+    });
+    // --- ヘッダーのスクロール（自動隠し）制御 ---
+    const header = document.querySelector("header");
+    let lastScrollY = window.scrollY;
 
-      window.addEventListener("scroll", () => {
-        const currentScrollY = window.scrollY;
-        
-        // 下にスクロール ＆ 上から50px以上スクロールしている場合のみ隠す
-        if (currentScrollY > lastScrollY && currentScrollY > 50) {
-          header.style.transform = "translateY(-100%)";
-        } else if (currentScrollY < lastScrollY) {
-          // 上に少しでもスクロールした時は表示する
-          header.style.transform = "translateY(0)";
-        }
+    window.addEventListener("scroll", () => {
+      const currentScrollY = window.scrollY;
 
-        lastScrollY = currentScrollY;
-      });
-      // --- TOPへ戻るボタンのスムーズスクロール制御 ---
-      pageTopBtn.addEventListener("click", (e) => {
-        e.preventDefault(); // 一瞬で一番上に飛ぶ標準の動作をキャンセル
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth", // 滑らかなスクロールを指定
-        });
-      });
-      // === 言語切り替え・状態保持の制御 ===
-      const btnJa = document.getElementById("btn-ja");
-      const btnEn = document.getElementById("btn-en");
-      const body = document.body;
-
-      // 1. ブラウザの記憶から保存された言語を取得（初めての人は 'ja' にする）
-      const savedLang = localStorage.getItem("mokusaku_lang") || "ja";
-
-      // 2. 言語を切り替えて、さらにブラウザに記憶させる専用の関数
-      function setLanguage(lang) {
-        document.documentElement.lang = lang; // <html lang="..."> を動的に更新
-        body.setAttribute("data-lang", lang);
-        localStorage.setItem("mokusaku_lang", lang); // ★ここでブラウザにメモさせる
-
-        if (lang === "en") {
-          btnEn.classList.add("active");
-          btnJa.classList.remove("active");
-        } else {
-          btnJa.classList.add("active");
-          btnEn.classList.remove("active");
-        }
+      // 下にスクロール ＆ 上から50px以上スクロールしている場合のみ隠す
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        header.style.transform = "translateY(-100%)";
+      } else if (currentScrollY < lastScrollY) {
+        // 上に少しでもスクロールした時は表示する
+        header.style.transform = "translateY(0)";
       }
 
-      // 3. ページを開いた瞬間に、記憶していた言語を適用する
-      setLanguage(savedLang);
+      lastScrollY = currentScrollY;
+    });
+    // --- TOPへ戻るボタンのスムーズスクロール制御 ---
+    pageTopBtn.addEventListener("click", (e) => {
+      e.preventDefault(); // 一瞬で一番上に飛ぶ標準の動作をキャンセル
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // 滑らかなスクロールを指定
+      });
+    });
+    // === 言語切り替え・状態保持の制御 ===
+    const btnJa = document.getElementById("btn-ja");
+    const btnEn = document.getElementById("btn-en");
+    const body = document.body;
 
-      // 4. ボタンを押した時の処理
-      btnJa.addEventListener("click", () => setLanguage("ja"));
-      btnEn.addEventListener("click", () => setLanguage("en"));
+    // 1. ブラウザの記憶から保存された言語を取得（初めての人は 'ja' にする）
+    const savedLang = localStorage.getItem("mokusaku_lang") || "ja";
 
-      // === 画像保護：右クリック・ドラッグの無効化 ===
-      document.addEventListener('contextmenu', function(e) {
-        if (e.target.tagName === 'IMG') {
-          e.preventDefault();
-        }
-      }, false);
-      document.addEventListener('dragstart', function(e) {
-        if (e.target.tagName === 'IMG') {
-          e.preventDefault();
-        }
-      }, false);
-    </script>
-  </body>
+    // 2. 言語を切り替えて、さらにブラウザに記憶させる専用の関数
+    function setLanguage(lang) {
+      document.documentElement.lang = lang; // <html lang="..."> を動的に更新
+      body.setAttribute("data-lang", lang);
+      localStorage.setItem("mokusaku_lang", lang); // ★ここでブラウザにメモさせる
+
+      if (lang === "en") {
+        btnEn.classList.add("active");
+        btnJa.classList.remove("active");
+      } else {
+        btnJa.classList.add("active");
+        btnEn.classList.remove("active");
+      }
+    }
+
+    // 3. ページを開いた瞬間に、記憶していた言語を適用する
+    setLanguage(savedLang);
+
+    // 4. ボタンを押した時の処理
+    btnJa.addEventListener("click", () => setLanguage("ja"));
+    btnEn.addEventListener("click", () => setLanguage("en"));
+
+    // === 画像保護：右クリック・ドラッグの無効化 ===
+    document.addEventListener('contextmenu', function (e) {
+      if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+      }
+    }, false);
+    document.addEventListener('dragstart', function (e) {
+      if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+      }
+    }, false);
+  </script>
+</body>
+
 </html>
