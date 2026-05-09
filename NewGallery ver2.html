@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scattered Void Gallery | MokuSaku's Photo booth</title>
+  <link rel="icon" href="images/Prof_icon_favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background: #000; }
+    body { width: 100%; background: #000; overflow-y: scroll; overflow-x: hidden; }
+    #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+
+    /* --- Overlay UI --- */
+    #overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 100; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(14px);
+      transition: opacity 0.6s ease; pointer-events: auto;
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
+    }
+    #overlay.hidden { opacity: 0; pointer-events: none; }
+    #overlay h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 4.2rem; color: #ffffff; margin-bottom: 8px;
+      text-shadow: 0 0 30px rgba(255,255,255,0.4);
+    }
+    #overlay .subtitle {
+      color: #999; font-size: 1rem; letter-spacing: 0.25em;
+      margin-bottom: 50px; text-transform: uppercase; font-weight: 300;
+    }
+    #overlay .start-btn {
+      background: transparent; border: 1.5px solid #fff;
+      color: #fff; padding: 18px 60px; font-size: 1.1rem;
+      letter-spacing: 0.2em; cursor: pointer; border-radius: 30px;
+      transition: all 0.4s ease; font-weight: 300;
+      text-transform: uppercase;
+    }
+    #overlay .start-btn:hover {
+      background: #fff; color: #000; box-shadow: 0 0 30px rgba(255,255,255,0.3);
+    }
+    #overlay .controls-info {
+      margin-top: 50px; color: #666; font-size: 0.85rem;
+      text-align: center; line-height: 2.4; letter-spacing: 0.1em;
+    }
+    #overlay .controls-info span { color: #aaa; }
+
+    /* --- Category Toggle --- */
+    #category-toggle {
+      position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
+      z-index: 60; display: flex; gap: 24px;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+      padding: 10px 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.15);
+      display: none;
+    }
+    #category-toggle button {
+      background: none; border: none; color: #888; font-size: 0.9rem;
+      letter-spacing: 0.2em; cursor: pointer; text-transform: uppercase;
+      transition: color 0.3s ease; font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    #category-toggle button.active { color: #fff; font-weight: bold; }
+    #category-toggle button:hover { color: #ddd; }
+
+    /* --- Caption popup --- */
+    #caption {
+      position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%);
+      z-index: 50; color: #fff; font-size: 0.9rem;
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+      padding: 16px 32px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      text-align: center; pointer-events: none;
+      opacity: 0; transition: opacity 0.4s ease;
+      max-width: 85vw; letter-spacing: 0.05em;
+      line-height: 1.8; white-space: pre-line;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    #caption.show { opacity: 1; }
+
+    /* --- Back Button --- */
+    #backBtn {
+      position: fixed; top: 30px; left: 30px; z-index: 60;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2); color: #fff;
+      padding: 12px 24px; font-size: 0.85rem;
+      letter-spacing: 0.15em; cursor: pointer; border-radius: 30px;
+      transition: all 0.3s ease; font-weight: 300;
+      display: none;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      text-transform: uppercase;
+    }
+    #backBtn:hover {
+      background: rgba(255,255,255,0.1); border-color: #fff;
+    }
+
+    /* --- Zoom Hint --- */
+    #zoomHint {
+      position: fixed; top: 30px; right: 30px; z-index: 60;
+      color: rgba(255,255,255,0.6); font-size: 0.8rem;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: 0.15em; pointer-events: none; display: none;
+      text-transform: uppercase; text-align: right; line-height: 1.6;
+    }
+
+    /* --- Scroll hint --- */
+    #scrollHint {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      z-index: 50; color: rgba(255,255,255,0.4); font-size: 0.75rem;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: 0.2em; pointer-events: none; display: none;
+      animation: hintPulse 2.5s ease-in-out infinite;
+      text-transform: uppercase;
+    }
+    @keyframes hintPulse {
+      0%, 100% { opacity: 0.2; transform: translate(-50%, 0); }
+      50% { opacity: 0.8; transform: translate(-50%, 5px); }
+    }
+
+    /* --- Loading --- */
+    #loading {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 200; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: #000; color: #fff; font-size: 0.9rem;
+      font-family: 'Helvetica Neue', Arial, sans-serif; letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+    #loading .spinner {
+      width: 40px; height: 40px; border: 2px solid rgba(255,255,255,0.1);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 1s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite; margin-bottom: 24px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading .progress {
+      width: 240px; height: 1px; background: rgba(255,255,255,0.1);
+      margin-top: 20px; overflow: hidden;
+    }
+    #loading .progress-bar {
+      width: 0%; height: 100%; background: #fff;
+      transition: width 0.4s ease;
+    }
+
+    /* --- Cursor --- */
+    body.gallery-active { cursor: default; }
+    body.gallery-active canvas { cursor: crosshair; }
+    body.is-focused canvas { cursor: grab; }
+    body.is-focused.is-dragging canvas { cursor: grabbing; }
+
+    /* --- Vignette --- */
+    #vignette {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 2; pointer-events: none;
+      background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.85) 120%);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    Loading Void...
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+
+  <div id="overlay">
+    <h1>Scattered Void</h1>
+    <p class="subtitle">MokuSaku's Photo booth</p>
+    <button class="start-btn" id="startBtn">Enter Gallery</button>
+    <div class="controls-info">
+      <span>Scroll</span> to explore deep space<br>
+      <span>Click</span> a photo to focus<br>
+      <span>Wheel</span> to zoom, <span>Drag</span> to pan
+    </div>
+  </div>
+
+  <div id="category-toggle">
+    <button id="btn-snap" class="active">Snap</button>
+    <button id="btn-portrait">Portrait</button>
+  </div>
+
+  <div id="vignette"></div>
+  <div id="caption"></div>
+  <button id="backBtn">← Back to Space</button>
+  <div id="zoomHint">Wheel to Zoom<br>Drag to Pan</div>
+  <div id="scrollHint">Scroll Down</div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://esm.sh/three@0.164.1",
+      "three/addons/": "https://esm.sh/three@0.164.1/examples/jsm/"
+    }
+  }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <script type="module">
+    import * as THREE from 'three';
+
+    // =========================================================================
+    //  Constants
+    // =========================================================================
+    const SCROLL_FACTOR = 0.02;
+    const SCROLL_BASE_Z = 10;
+    const Z_SPACING = 4.5;
+    const LOAD_DISTANCE = 35;   // Distance at which to load high-res textures
+    const UNLOAD_DISTANCE = 50; // Distance to dispose texture memory
+    const EYE_HEIGHT = 2;
+
+    // Zoom Constants
+    const DEFAULT_FOCUS_DIST = 3.0;
+    const MIN_ZOOM = 0.8;
+    const MAX_ZOOM = 8.0;
+
+    // =========================================================================
+    //  State
+    // =========================================================================
+    let galleryActive = false;
+    let focusedMesh = null;
+    let isTweening = false;
+    
+    // Zoom and Pan state
+    let currentFocusDist = DEFAULT_FOCUS_DIST;
+    let isDragging = false;
+    let dragDistance = 0;
+    let previousMousePosition = { x: 0, y: 0 };
+    let panOffset = { x: 0, y: 0 };
+
+    // Data state
+    let currentCategory = 'snap';
+    let allPhotosData = [];
+    let totalPhotos = 0;
+    let isFirstLoad = true;
+
+    const photoMeshes = [];
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.setCrossOrigin('anonymous');
+
+    // =========================================================================
+    //  Renderer & Scene setup
+    // =========================================================================
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.domElement.id = 'three-canvas';
+    document.body.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#030303');
+    scene.fog = new THREE.FogExp2('#030303', 0.025);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 150);
+    camera.position.set(0, EYE_HEIGHT, SCROLL_BASE_Z);
+
+    // =========================================================================
+    //  DOM refs
+    // =========================================================================
+    const overlay = document.getElementById('overlay');
+    const captionEl = document.getElementById('caption');
+    const backBtn = document.getElementById('backBtn');
+    const scrollHint = document.getElementById('scrollHint');
+    const zoomHint = document.getElementById('zoomHint');
+    const progressBar = document.getElementById('progressBar');
+    const loadingEl = document.getElementById('loading');
+    const toggleBtnSnap = document.getElementById('btn-snap');
+    const toggleBtnPortrait = document.getElementById('btn-portrait');
+
+    // =========================================================================
+    //  Scroll-driven & Zoom/Pan navigation
+    // =========================================================================
+    function getScrollZ() {
+      return SCROLL_BASE_Z - window.scrollY * SCROLL_FACTOR;
+    }
+
+    // Standard Window Scroll (Navigation)
+    window.addEventListener('scroll', () => {
+      if (!galleryActive || isTweening || focusedMesh) return;
+      camera.position.z = getScrollZ();
+      // Add slight sway based on scroll for a floating feeling
+      camera.position.x = Math.sin(window.scrollY * 0.002) * 0.5;
+      camera.position.y = EYE_HEIGHT + Math.cos(window.scrollY * 0.0015) * 0.3;
+    }, { passive: true });
+
+    // Wheel Event for Zooming when Focused
+    window.addEventListener('wheel', (e) => {
+      if (focusedMesh && !isTweening) {
+        e.preventDefault(); // Stop native scrolling behavior completely during focus
+        
+        // Adjust zoom distance based on wheel delta
+        currentFocusDist += e.deltaY * 0.004;
+        currentFocusDist = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, currentFocusDist));
+        
+        // Apply zoom to camera smoothly
+        gsap.to(camera.position, {
+          z: focusedMesh.userData.worldPos.z + currentFocusDist,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      }
+    }, { passive: false });
+
+    // Drag to Pan when Focused
+    window.addEventListener('mousedown', (e) => {
+      if (focusedMesh && !isTweening) {
+        isDragging = true;
+        dragDistance = 0;
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+        document.body.classList.add('is-dragging');
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDragging && focusedMesh && !isTweening) {
+        const deltaX = e.clientX - previousMousePosition.x;
+        const deltaY = e.clientY - previousMousePosition.y;
+        
+        dragDistance += Math.abs(deltaX) + Math.abs(deltaY);
+        
+        // Pan sensitivity scales with zoom
+        const panSpeed = currentFocusDist * 0.0015;
+        
+        panOffset.x -= deltaX * panSpeed;
+        panOffset.y += deltaY * panSpeed; // Y is inverted in 3D relative to screen
+        
+        // Clamp panning so we don't lose the photo
+        const maxPan = 5.0; 
+        panOffset.x = Math.max(-maxPan, Math.min(maxPan, panOffset.x));
+        panOffset.y = Math.max(-maxPan, Math.min(maxPan, panOffset.y));
+        
+        // Update camera position
+        camera.position.x = focusedMesh.userData.worldPos.x + panOffset.x;
+        camera.position.y = focusedMesh.userData.worldPos.y + panOffset.y;
+        
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+      }
+    });
+
+    window.addEventListener('mouseup', () => { 
+      isDragging = false; 
+      document.body.classList.remove('is-dragging');
+    });
+    window.addEventListener('mouseleave', () => { 
+      isDragging = false; 
+      document.body.classList.remove('is-dragging');
+    });
+
+    // =========================================================================
+    //  Enter gallery & Category Toggle
+    // =========================================================================
+    document.getElementById('startBtn').addEventListener('click', () => {
+      overlay.classList.add('hidden');
+      galleryActive = true;
+      document.body.classList.add('gallery-active');
+      document.getElementById('category-toggle').style.display = 'flex';
+      scrollHint.style.display = 'block';
+      setTimeout(() => { scrollHint.style.display = 'none'; }, 6000);
+    });
+
+    toggleBtnSnap.addEventListener('click', () => switchCategory('snap'));
+    toggleBtnPortrait.addEventListener('click', () => switchCategory('portrait'));
+
+    function switchCategory(category) {
+      if (currentCategory === category || isTweening) return;
+      
+      toggleBtnSnap.classList.toggle('active', category === 'snap');
+      toggleBtnPortrait.classList.toggle('active', category === 'portrait');
+      
+      if (focusedMesh) {
+        returnToScroll();
+      }
+
+      // Small delay to allow return animation if focused
+      setTimeout(() => {
+        loadCategory(category);
+      }, focusedMesh ? 1200 : 0);
+    }
+
+    // =========================================================================
+    //  Lighting
+    // =========================================================================
+    function buildLighting() {
+      scene.add(new THREE.AmbientLight('#ffffff', 0.2));
+      
+      const dirLight = new THREE.DirectionalLight('#ffffff', 1.5);
+      dirLight.position.set(10, 20, 10);
+      scene.add(dirLight);
+
+      const hemiLight = new THREE.HemisphereLight('#111111', '#222233', 1.0);
+      scene.add(hemiLight);
+    }
+
+    // =========================================================================
+    //  Floating Dust/Star Particles
+    // =========================================================================
+    function buildParticles() {
+      const count = 1500;
+      const geo = new THREE.BufferGeometry();
+      const pos = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
+        pos[i * 3] = (Math.random() - 0.5) * 40;
+        pos[i * 3 + 1] = (Math.random() - 0.5) * 40;
+        pos[i * 3 + 2] = SCROLL_BASE_Z - Math.random() * 200;
+      }
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      
+      const canvas = document.createElement('canvas');
+      canvas.width = 16; canvas.height = 16;
+      const ctx = canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.arc(8, 8, 8, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      const ptTex = new THREE.CanvasTexture(canvas);
+
+      const mat = new THREE.PointsMaterial({ 
+        color: '#aaaaaa', 
+        size: 0.15, 
+        map: ptTex,
+        transparent: true, 
+        opacity: 0.4, 
+        depthWrite: false,
+        blending: THREE.AdditiveBlending 
+      });
+      const particles = new THREE.Points(geo, mat);
+      particles.userData.positions = pos;
+      scene.add(particles);
+      return particles;
+    }
+
+    // =========================================================================
+    //  Photo Placeholder & Lazy Loading
+    // =========================================================================
+    const placeholderMat = new THREE.MeshStandardMaterial({ 
+      color: '#080808', roughness: 0.9, metalness: 0.1 
+    });
+
+    function createPhotoPlaceholder(photoData, position) {
+      const group = new THREE.Group();
+      group.position.set(...position);
+
+      group.rotation.x = (Math.random() - 0.5) * 0.1;
+      group.rotation.y = (Math.random() - 0.5) * 0.15;
+      group.rotation.z = (Math.random() - 0.5) * 0.05;
+
+      const photoW = 2.4, photoH = 1.6;
+
+      const frameMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.2 });
+      const frame = new THREE.Mesh(new THREE.PlaneGeometry(photoW + 0.1, photoH + 0.1), frameMat);
+      frame.position.z = -0.01;
+      group.add(frame);
+
+      const photoGeo = new THREE.PlaneGeometry(photoW, photoH);
+      const photoMat = placeholderMat.clone();
+      const photoMesh = new THREE.Mesh(photoGeo, photoMat);
+      
+      photoMesh.userData = {
+        caption: photoData.caption,
+        textureUrl: photoData.src,
+        loaded: false,
+        loading: false,
+        group: group,
+        frame: frame,
+        originalRot: { x: group.rotation.x, y: group.rotation.y, z: group.rotation.z },
+        worldPos: new THREE.Vector3(...position)
+      };
+      
+      group.add(photoMesh);
+      photoMeshes.push(photoMesh);
+      scene.add(group);
+      
+      // Removed PointLight to eliminate white glare reflection
+    }
+
+    function loadTextureForMesh(mesh) {
+      if (mesh.userData.loaded || mesh.userData.loading) return;
+      mesh.userData.loading = true;
+
+      textureLoader.load(mesh.userData.textureUrl, (texture) => {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.minFilter = THREE.LinearMipmapLinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.generateMipmaps = true;
+
+        const aspect = texture.image.width / texture.image.height;
+        const photoW = aspect >= 1 ? 3.8 : 2.8;
+        const photoH = photoW / aspect;
+
+        mesh.geometry.dispose();
+        mesh.geometry = new THREE.PlaneGeometry(photoW, photoH);
+
+        mesh.material.dispose();
+        mesh.material = new THREE.MeshStandardMaterial({
+          map: texture, 
+          roughness: 1.0,  // Increased to remove glare
+          metalness: 0.0,  // Removed metalness
+          emissive: new THREE.Color('#ffffff'),
+          emissiveMap: texture, 
+          emissiveIntensity: 0.08 // Slight self-illumination instead of external light
+        });
+
+        const ud = mesh.userData;
+        ud.frame.geometry.dispose();
+        ud.frame.geometry = new THREE.PlaneGeometry(photoW + 0.1, photoH + 0.1);
+
+        ud.loaded = true;
+        ud.loading = false;
+
+        if (isFirstLoad) {
+          initialLoadCount++;
+          const pct = Math.min(100, (initialLoadCount / initialLoadTotal) * 100);
+          progressBar.style.width = pct + '%';
+          if (initialLoadCount >= initialLoadTotal) {
+            loadingEl.style.display = 'none';
+            isFirstLoad = false;
+          }
+        }
+      }, undefined, () => {
+        mesh.userData.loading = false;
+        if (isFirstLoad) {
+          initialLoadCount++;
+          if (initialLoadCount >= initialLoadTotal) {
+            loadingEl.style.display = 'none';
+            isFirstLoad = false;
+          }
+        }
+      });
+    }
+
+    function unloadTextureForMesh(mesh) {
+      if (!mesh.userData.loaded) return;
+      if (mesh.material.map) {
+        mesh.material.map.dispose();
+        mesh.material.map = null;
+      }
+      if (mesh.material.emissiveMap) {
+        mesh.material.emissiveMap = null;
+      }
+      mesh.material.dispose();
+      mesh.material = placeholderMat.clone();
+      mesh.userData.loaded = false;
+      mesh.userData.loading = false;
+    }
+
+    // =========================================================================
+    //  Load photo data from JSON
+    // =========================================================================
+    let initialLoadCount = 0;
+    let initialLoadTotal = 0;
+
+    async function initPhotos() {
+      try {
+        const resp = await fetch('photos.json');
+        if (!resp.ok) throw new Error('Network response was not ok');
+        const data = await resp.json();
+        
+        allPhotosData = [...(data.left || []), ...(data.right || [])];
+        
+        loadCategory('snap');
+      } catch (err) {
+        console.error('Failed to load photos:', err);
+        loadingEl.style.display = 'none';
+      }
+    }
+
+    function clearGallery() {
+      photoMeshes.forEach(mesh => {
+        scene.remove(mesh.userData.group);
+        if (mesh.userData.loaded && mesh.material.map) {
+          mesh.material.map.dispose();
+        }
+        mesh.material.dispose();
+        mesh.geometry.dispose();
+      });
+      photoMeshes.length = 0;
+    }
+
+    function loadCategory(category) {
+      currentCategory = category;
+      clearGallery();
+
+      // Filter photos
+      const filteredPhotos = allPhotosData.filter(p => {
+        const isSnap = p.caption.toLowerCase().includes('snap photo');
+        return category === 'snap' ? isSnap : !isSnap;
+      });
+
+      totalPhotos = filteredPhotos.length;
+
+      filteredPhotos.forEach((photo, i) => {
+        const side = i % 2 === 0 ? 1 : -1;
+        const baseX = side * (2 + Math.random() * 4); 
+        const baseY = EYE_HEIGHT + (Math.random() - 0.5) * 6; 
+        
+        const z = SCROLL_BASE_Z - 8 - (i * Z_SPACING); 
+        
+        createPhotoPlaceholder(photo, [baseX, baseY, z]);
+      });
+
+      // Reset Camera & Scroll
+      window.scrollTo(0, 0);
+      camera.position.set(0, EYE_HEIGHT, SCROLL_BASE_Z);
+      panOffset = { x: 0, y: 0 };
+
+      // Determine load total for current view
+      const startZ = camera.position.z;
+      initialLoadTotal = photoMeshes.filter(m => 
+        Math.abs(m.userData.worldPos.z - startZ) < LOAD_DISTANCE
+      ).length;
+      initialLoadCount = 0;
+
+      if (initialLoadTotal === 0 && isFirstLoad) {
+        loadingEl.style.display = 'none';
+        isFirstLoad = false;
+      }
+
+      // Manually trigger texture manage to start loading
+      manageTextures();
+
+      // Update document scroll height
+      const totalZDepth = totalPhotos * Z_SPACING + 15;
+      const totalScroll = totalZDepth / SCROLL_FACTOR;
+      document.body.style.height = (window.innerHeight + totalScroll) + 'px';
+    }
+
+    // =========================================================================
+    //  Raycaster + Click-to-Focus
+    // =========================================================================
+    const raycaster = new THREE.Raycaster();
+    raycaster.far = 30;
+
+    renderer.domElement.addEventListener('click', (e) => {
+      if (!galleryActive || isTweening) return;
+
+      // Ignore click if user was dragging
+      if (focusedMesh && dragDistance > 10) {
+        dragDistance = 0;
+        return;
+      }
+
+      const mouse = new THREE.Vector2(
+        (e.clientX / window.innerWidth) * 2 - 1,
+        -(e.clientY / window.innerHeight) * 2 + 1
+      );
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects(photoMeshes, false);
+
+      if (focusedMesh) {
+        returnToScroll();
+        return;
+      }
+
+      if (hits.length > 0 && hits[0].object.userData.loaded) {
+        focusOnPhoto(hits[0].object);
+      }
+    });
+
+    function focusOnPhoto(mesh) {
+      isTweening = true;
+      focusedMesh = mesh;
+      currentFocusDist = DEFAULT_FOCUS_DIST;
+      panOffset = { x: 0, y: 0 };
+      dragDistance = 0;
+      
+      const wp = mesh.userData.worldPos;
+      const group = mesh.userData.group;
+
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('is-focused');
+
+      captionEl.textContent = mesh.userData.caption;
+      captionEl.classList.add('show');
+      backBtn.style.display = 'block';
+      zoomHint.style.display = 'block';
+
+      gsap.to(group.rotation, {
+        x: 0, y: 0, z: 0,
+        duration: 1.0, ease: 'power2.out'
+      });
+
+      gsap.to(camera.position, {
+        x: wp.x, y: wp.y, z: wp.z + currentFocusDist,
+        duration: 1.2, ease: 'power2.inOut',
+        onComplete: () => { isTweening = false; }
+      });
+    }
+
+    function returnToScroll() {
+      if (!focusedMesh) return;
+      isTweening = true;
+      
+      const group = focusedMesh.userData.group;
+      const oRot = focusedMesh.userData.originalRot;
+      gsap.to(group.rotation, {
+        x: oRot.x, y: oRot.y, z: oRot.z,
+        duration: 1.0, ease: 'power2.out'
+      });
+
+      focusedMesh = null;
+
+      document.body.style.overflow = 'scroll';
+      document.body.style.overflowX = 'hidden';
+      document.body.classList.remove('is-focused');
+      document.body.classList.remove('is-dragging');
+
+      captionEl.classList.remove('show');
+      backBtn.style.display = 'none';
+      zoomHint.style.display = 'none';
+
+      const returnZ = getScrollZ();
+      const returnX = Math.sin(window.scrollY * 0.002) * 0.5;
+      const returnY = EYE_HEIGHT + Math.cos(window.scrollY * 0.0015) * 0.3;
+
+      gsap.to(camera.position, {
+        x: returnX, y: returnY, z: returnZ,
+        duration: 1.2, ease: 'power2.inOut',
+        onComplete: () => { isTweening = false; }
+      });
+    }
+
+    backBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      returnToScroll();
+    });
+
+    // =========================================================================
+    //  Texture Management (lazy load / unload)
+    // =========================================================================
+    function manageTextures() {
+      const camZ = camera.position.z;
+      for (const mesh of photoMeshes) {
+        const dist = Math.abs(mesh.userData.worldPos.z - camZ);
+        if (dist < LOAD_DISTANCE) {
+          loadTextureForMesh(mesh);
+        } else if (dist > UNLOAD_DISTANCE && mesh.userData.loaded) {
+          unloadTextureForMesh(mesh);
+        }
+      }
+    }
+
+    // =========================================================================
+    //  Animation Loop
+    // =========================================================================
+    const clock = new THREE.Clock();
+    let texManageTimer = 0;
+    let dustParticles = null;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const delta = clock.getDelta();
+
+      texManageTimer += delta;
+      if (texManageTimer > 0.3) {
+        texManageTimer = 0;
+        manageTextures();
+      }
+
+      if (dustParticles) {
+        const pos = dustParticles.userData.positions;
+        const time = clock.elapsedTime;
+        for (let i = 0; i < pos.length; i += 3) {
+          pos[i] += Math.sin(time * 0.2 + i) * 0.002;
+          pos[i + 1] += Math.cos(time * 0.2 + i) * 0.002;
+        }
+        dustParticles.geometry.attributes.position.needsUpdate = true;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // =========================================================================
+    //  Resize
+    // =========================================================================
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // =========================================================================
+    //  Init
+    // =========================================================================
+    buildLighting();
+    dustParticles = buildParticles();
+    initPhotos();
+    animate();
+  </script>
+</body>
+</html>
