@@ -154,6 +154,20 @@
       z-index: 2; pointer-events: none;
       background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.85) 120%);
     }
+
+    /* --- Mobile Optimization --- */
+    @media (max-width: 768px) {
+      #overlay h1 { font-size: 2.8rem; }
+      #overlay .subtitle { font-size: 0.8rem; margin-bottom: 30px; }
+      #overlay .start-btn { padding: 14px 40px; font-size: 0.9rem; }
+      #overlay .controls-info { margin-top: 30px; font-size: 0.75rem; line-height: 2; }
+      #category-toggle { top: 20px; padding: 8px 16px; gap: 12px; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 320px; }
+      #category-toggle button { font-size: 0.75rem; }
+      #backBtn { top: 20px; left: 20px; padding: 10px 16px; font-size: 0.75rem; }
+      #zoomHint { top: 20px; right: 20px; font-size: 0.7rem; }
+      #caption { bottom: 40px; font-size: 0.8rem; padding: 12px 24px; width: 90%; }
+      #scrollHint { bottom: 20px; font-size: 0.65rem; }
+    }
   </style>
 </head>
 <body>
@@ -169,13 +183,14 @@
     <p class="subtitle">MokuSaku's Photo booth</p>
     <button class="start-btn" id="startBtn">Enter Gallery</button>
     <div class="controls-info">
-      <span>Scroll</span> to explore deep space<br>
-      <span>Click</span> a photo to focus<br>
-      <span>Wheel</span> to zoom, <span>Drag</span> to pan
+      <span>Scroll / Swipe</span> to explore deep space<br>
+      <span>Click / Tap</span> a photo to focus<br>
+      <span>Wheel / Pinch</span> to zoom, <span>Drag</span> to pan
     </div>
   </div>
 
   <div id="category-toggle">
+    <button id="btn-back-gallery">← Gallery</button>
     <button id="btn-snap" class="active">Snap</button>
     <button id="btn-portrait">Portrait</button>
   </div>
@@ -204,9 +219,9 @@
     // =========================================================================
     const SCROLL_FACTOR = 0.02;
     const SCROLL_BASE_Z = 10;
-    const Z_SPACING = 4.5;
-    const LOAD_DISTANCE = 35;   // Distance at which to load high-res textures
-    const UNLOAD_DISTANCE = 50; // Distance to dispose texture memory
+    const Z_SPACING = 3.5;
+    const LOAD_DISTANCE = 65;   // Distance at which to load high-res textures
+    const UNLOAD_DISTANCE = 90; // Distance to dispose texture memory
     const EYE_HEIGHT = 2;
 
     // Zoom Constants
@@ -227,6 +242,12 @@
     let dragDistance = 0;
     let previousMousePosition = { x: 0, y: 0 };
     let panOffset = { x: 0, y: 0 };
+
+    // Explore pan state
+    let explorePanX = 0;
+    let isExploringDrag = false;
+    let explorePreviousMousePosition = { x: 0, y: 0 };
+    const MAX_EXPLORE_PAN_X = 15.0;
 
     // Data state
     let currentCategory = 'snap';
@@ -254,7 +275,7 @@
     scene.background = new THREE.Color('#030303');
     scene.fog = new THREE.FogExp2('#030303', 0.025);
 
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 150);
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
     camera.position.set(0, EYE_HEIGHT, SCROLL_BASE_Z);
 
     // =========================================================================
@@ -281,9 +302,6 @@
     window.addEventListener('scroll', () => {
       if (!galleryActive || isTweening || focusedMesh) return;
       camera.position.z = getScrollZ();
-      // Add slight sway based on scroll for a floating feeling
-      camera.position.x = Math.sin(window.scrollY * 0.002) * 0.5;
-      camera.position.y = EYE_HEIGHT + Math.cos(window.scrollY * 0.0015) * 0.3;
     }, { passive: true });
 
     // Wheel Event for Zooming when Focused
@@ -304,12 +322,16 @@
       }
     }, { passive: false });
 
-    // Drag to Pan when Focused
+    // Drag to Pan
     window.addEventListener('mousedown', (e) => {
       if (focusedMesh && !isTweening) {
         isDragging = true;
         dragDistance = 0;
         previousMousePosition = { x: e.clientX, y: e.clientY };
+        document.body.classList.add('is-dragging');
+      } else if (!focusedMesh && galleryActive && !isTweening) {
+        isExploringDrag = true;
+        explorePreviousMousePosition = { x: e.clientX, y: e.clientY };
         document.body.classList.add('is-dragging');
       }
     });
@@ -337,16 +359,100 @@
         camera.position.y = focusedMesh.userData.worldPos.y + panOffset.y;
         
         previousMousePosition = { x: e.clientX, y: e.clientY };
+      } else if (isExploringDrag && !focusedMesh && galleryActive && !isTweening) {
+        const deltaX = e.clientX - explorePreviousMousePosition.x;
+        explorePanX -= deltaX * 0.01;
+        explorePanX = Math.max(-MAX_EXPLORE_PAN_X, Math.min(MAX_EXPLORE_PAN_X, explorePanX));
+        explorePreviousMousePosition = { x: e.clientX, y: e.clientY };
       }
     });
 
     window.addEventListener('mouseup', () => { 
       isDragging = false; 
+      isExploringDrag = false;
       document.body.classList.remove('is-dragging');
     });
     window.addEventListener('mouseleave', () => { 
       isDragging = false; 
+      isExploringDrag = false;
       document.body.classList.remove('is-dragging');
+    });
+
+    // Touch Events for Mobile (Pan & Zoom)
+    let initialTouchDist = 0;
+
+    window.addEventListener('touchstart', (e) => {
+      if (focusedMesh && !isTweening) {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          dragDistance = 0;
+          previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        } else if (e.touches.length === 2) {
+          isDragging = false;
+          initialTouchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+        }
+      } else if (!focusedMesh && galleryActive && !isTweening) {
+        if (e.touches.length === 1) {
+          isExploringDrag = true;
+          explorePreviousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+      }
+    }, { passive: false });
+
+    window.addEventListener('touchmove', (e) => {
+      if (focusedMesh && !isTweening) {
+        e.preventDefault(); // Stop native scrolling
+        if (e.touches.length === 1 && isDragging) {
+          const deltaX = e.touches[0].clientX - previousMousePosition.x;
+          const deltaY = e.touches[0].clientY - previousMousePosition.y;
+          
+          dragDistance += Math.abs(deltaX) + Math.abs(deltaY);
+          const panSpeed = currentFocusDist * 0.0015;
+          
+          panOffset.x -= deltaX * panSpeed;
+          panOffset.y += deltaY * panSpeed;
+          
+          const maxPan = 5.0; 
+          panOffset.x = Math.max(-maxPan, Math.min(maxPan, panOffset.x));
+          panOffset.y = Math.max(-maxPan, Math.min(maxPan, panOffset.y));
+          
+          camera.position.x = focusedMesh.userData.worldPos.x + panOffset.x;
+          camera.position.y = focusedMesh.userData.worldPos.y + panOffset.y;
+          
+          previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        } else if (e.touches.length === 2) {
+          const dist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          const delta = initialTouchDist - dist;
+          initialTouchDist = dist;
+          
+          currentFocusDist += delta * 0.015;
+          currentFocusDist = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, currentFocusDist));
+          
+          gsap.to(camera.position, {
+            z: focusedMesh.userData.worldPos.z + currentFocusDist,
+            duration: 0.2,
+            ease: 'power2.out'
+          });
+        }
+      } else if (isExploringDrag && !focusedMesh && galleryActive && !isTweening) {
+        if (e.touches.length === 1) {
+          const deltaX = e.touches[0].clientX - explorePreviousMousePosition.x;
+          explorePanX -= deltaX * 0.015;
+          explorePanX = Math.max(-MAX_EXPLORE_PAN_X, Math.min(MAX_EXPLORE_PAN_X, explorePanX));
+          explorePreviousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+      }
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+      isDragging = false;
+      isExploringDrag = false;
     });
 
     // =========================================================================
@@ -359,6 +465,10 @@
       document.getElementById('category-toggle').style.display = 'flex';
       scrollHint.style.display = 'block';
       setTimeout(() => { scrollHint.style.display = 'none'; }, 6000);
+    });
+
+    document.getElementById('btn-back-gallery').addEventListener('click', () => {
+      window.location.href = 'gallery.html';
     });
 
     toggleBtnSnap.addEventListener('click', () => switchCategory('snap'));
@@ -375,62 +485,73 @@
         returnToScroll();
       }
 
-      const delay = focusedMesh ? 1.2 : 0;
+      const delay = focusedMesh ? 1.0 : 0;
 
       // Animate existing photos flying off to the right
+      // Only animate a subset for performance and a cleaner transition
       const groups = photoMeshes.map(m => m.userData.group);
       if (groups.length > 0) {
+        const animateCount = Math.min(groups.length, 12);
         groups.forEach((group, i) => {
-          gsap.to(group.position, {
-            x: group.position.x + 30 + Math.random() * 15,
-            duration: 0.7 + Math.random() * 0.3,
-            delay: delay + i * 0.04,
-            ease: 'power3.in'
-          });
-          gsap.to(group.rotation, {
-            z: group.rotation.z + (Math.random() - 0.5) * 1.5,
-            duration: 0.7 + Math.random() * 0.3,
-            delay: delay + i * 0.04,
-            ease: 'power3.in'
-          });
+          if (i < animateCount) {
+            gsap.to(group.position, {
+              x: group.position.x + 40,
+              duration: 0.6,
+              delay: delay + i * 0.03,
+              ease: 'power2.in'
+            });
+            gsap.to(group.rotation, {
+              z: group.rotation.z + 0.5,
+              duration: 0.6,
+              delay: delay + i * 0.03,
+              ease: 'power2.in'
+            });
+          } else {
+            // Instantly move others
+            group.position.x += 40;
+          }
         });
-        // After last photo finishes flying out, load new category
-        const totalOutDuration = delay + groups.length * 0.04 + 1.0;
+
+        // After exit animation completes, load new category
+        const totalOutDuration = delay + (animateCount * 0.03) + 0.6;
         setTimeout(() => {
           loadCategory(category, true);
         }, totalOutDuration * 1000);
       } else {
-        setTimeout(() => {
-          loadCategory(category, true);
-        }, delay * 1000);
+        loadCategory(category, true);
       }
     }
 
     function animateEntrance() {
       const groups = photoMeshes.map(m => m.userData.group);
+      const animateCount = Math.min(groups.length, 20); // Animate first 20 for impact
+      
       groups.forEach((group, i) => {
-        // Store the target (final) position
         const targetX = group.position.x;
         const targetRotZ = group.rotation.z;
-        // Start from far left, off-screen
-        group.position.x = targetX - 30 - Math.random() * 15;
-        group.rotation.z = targetRotZ - (Math.random() - 0.5) * 1.5;
 
-        gsap.to(group.position, {
-          x: targetX,
-          duration: 0.8 + Math.random() * 0.3,
-          delay: i * 0.04,
-          ease: 'power3.out'
-        });
-        gsap.to(group.rotation, {
-          z: targetRotZ,
-          duration: 0.8 + Math.random() * 0.3,
-          delay: i * 0.04,
-          ease: 'power3.out'
-        });
+        if (i < animateCount) {
+          // Set starting position for animation
+          group.position.x = targetX - 40;
+          group.rotation.z = targetRotZ - 0.5;
+
+          gsap.to(group.position, {
+            x: targetX,
+            duration: 0.8,
+            delay: i * 0.03,
+            ease: 'power2.out'
+          });
+          gsap.to(group.rotation, {
+            z: targetRotZ,
+            duration: 0.8,
+            delay: i * 0.03,
+            ease: 'power2.out'
+          });
+        }
       });
-      // Unlock tweening after last photo lands
-      const totalInDuration = groups.length * 0.04 + 1.1;
+
+      // Unlock tweening after the land animation is reasonably complete
+      const totalInDuration = (animateCount * 0.03) + 1.0;
       setTimeout(() => { isTweening = false; }, totalInDuration * 1000);
     }
 
@@ -449,41 +570,164 @@
     }
 
     // =========================================================================
-    //  Floating Dust/Star Particles
+    //  Textures for Bokeh & Aperture
     // =========================================================================
-    function buildParticles() {
-      const count = 1500;
-      const geo = new THREE.BufferGeometry();
-      const pos = new Float32Array(count * 3);
-      for (let i = 0; i < count; i++) {
-        pos[i * 3] = (Math.random() - 0.5) * 40;
-        pos[i * 3 + 1] = (Math.random() - 0.5) * 40;
-        pos[i * 3 + 2] = SCROLL_BASE_Z - Math.random() * 200;
-      }
-      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-      
+    function createBokehTexture() {
       const canvas = document.createElement('canvas');
-      canvas.width = 16; canvas.height = 16;
+      canvas.width = 128;
+      canvas.height = 128;
       const ctx = canvas.getContext('2d');
+      const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      gradient.addColorStop(0, 'rgba(255,255,255,1.0)');
+      gradient.addColorStop(0.7, 'rgba(255,255,255,0.8)');
+      gradient.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(8, 8, 8, 0, Math.PI * 2);
-      ctx.fillStyle = '#ffffff';
+      ctx.arc(64, 64, 64, 0, Math.PI * 2);
       ctx.fill();
-      const ptTex = new THREE.CanvasTexture(canvas);
+      return new THREE.CanvasTexture(canvas);
+    }
 
-      const mat = new THREE.PointsMaterial({ 
-        color: '#aaaaaa', 
-        size: 0.15, 
-        map: ptTex,
-        transparent: true, 
-        opacity: 0.4, 
+    function createApertureTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 64;
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      const sides = 9; // 9-blade aperture
+      const radius = 30;
+      const center = 32;
+      for (let i = 0; i < sides; i++) {
+        const angle = (i * 2 * Math.PI / sides) - Math.PI / 2;
+        const x = center + radius * Math.cos(angle);
+        const y = center + radius * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // =========================================================================
+    //  Optical Bokeh Backdrop
+    // =========================================================================
+    function buildBokehBackdrop() {
+      const count = 150;
+      const group = new THREE.Group();
+      
+      const colorOrange = new THREE.Color('#ff4d00');
+      // Made indigo brighter and more saturated so it's visible with additive blending
+      const colorIndigo = new THREE.Color('#4a4a8a'); 
+      
+      const texture = createBokehTexture();
+      
+      const matOrange = new THREE.SpriteMaterial({
+        map: texture,
+        color: colorOrange,
+        transparent: true,
+        opacity: 0.25,
+        blending: THREE.AdditiveBlending,
         depthWrite: false,
-        blending: THREE.AdditiveBlending 
+        fog: false // Disable fog so it shines through the distance
       });
-      const particles = new THREE.Points(geo, mat);
-      particles.userData.positions = pos;
-      scene.add(particles);
-      return particles;
+      const matIndigo = new THREE.SpriteMaterial({
+        map: texture,
+        color: colorIndigo,
+        transparent: true,
+        opacity: 0.20,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        fog: false // Disable fog so it shines through the distance
+      });
+
+      const positions = new Float32Array(count * 3);
+      
+      for (let i = 0; i < count; i++) {
+        const isOrange = Math.random() < 0.05; // 5% orange
+        const sprite = new THREE.Sprite(isOrange ? matOrange : matIndigo);
+        
+        // Scatter widely, very far in the background
+        const x = (Math.random() - 0.5) * 800;
+        const y = (Math.random() - 0.5) * 500;
+        const z = SCROLL_BASE_Z - 300 - Math.random() * 600;
+        
+        sprite.position.set(x, y, z);
+        
+        // Massive world-scale size for true bokeh feeling
+        const scale = 80.0 + Math.random() * 200.0;
+        sprite.scale.set(scale, scale, 1);
+        
+        group.add(sprite);
+        positions[i * 3] = x;
+        positions[i * 3 + 1] = y;
+        positions[i * 3 + 2] = z;
+      }
+      
+      group.userData.positions = positions;
+      scene.add(group);
+      return group;
+    }
+
+    // =========================================================================
+    //  Grid & Floor (Tactical Grid)
+    // =========================================================================
+    function buildGrid() {
+      const size = 1000;
+      const divisions = 100;
+      const gridHelper = new THREE.GridHelper(size, divisions, 0x222222, 0x181818);
+      
+      const floorY = -4.0;
+      gridHelper.position.y = floorY;
+      gridHelper.material.transparent = true;
+      gridHelper.material.opacity = 0.2;
+
+      // Distance fading shader
+      const fadeShader = (shader) => {
+        shader.fragmentShader = shader.fragmentShader.replace(
+          '#include <fog_fragment>',
+          `
+          #include <fog_fragment>
+          // Calculate linear distance from camera
+          float depthDist = 1.0 / gl_FragCoord.w;
+          // Fade out between 20 and 250 units away
+          float alphaDecay = 1.0 - smoothstep(20.0, 250.0, depthDist);
+          gl_FragColor.a *= alphaDecay;
+          `
+        );
+      };
+
+      gridHelper.onBeforeCompile = fadeShader;
+      scene.add(gridHelper);
+
+      // Intersection points (Aperture Intersections)
+      const ptsArr = [];
+      const halfSize = size / 2;
+      const step = size / divisions;
+      for (let i = 0; i <= divisions; i++) {
+        for (let j = 0; j <= divisions; j++) {
+          ptsArr.push(-halfSize + i * step, 0, -halfSize + j * step);
+        }
+      }
+      const ptsGeo = new THREE.BufferGeometry();
+      ptsGeo.setAttribute('position', new THREE.Float32BufferAttribute(ptsArr, 3));
+      
+      const ptsMat = new THREE.PointsMaterial({
+        color: 0xff4d00,
+        size: 0.25,
+        transparent: true,
+        opacity: 0.15,
+        map: createApertureTexture(),
+        sizeAttenuation: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      ptsMat.onBeforeCompile = fadeShader;
+      
+      const gridPoints = new THREE.Points(ptsGeo, ptsMat);
+      gridPoints.position.y = floorY;
+      scene.add(gridPoints);
     }
 
     // =========================================================================
@@ -501,7 +745,7 @@
       group.rotation.y = (Math.random() - 0.5) * 0.15;
       group.rotation.z = (Math.random() - 0.5) * 0.05;
 
-      const photoW = 2.4, photoH = 1.6;
+      const photoW = 3.0, photoH = 2.0;
 
       const frameMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.2 });
       const frame = new THREE.Mesh(new THREE.PlaneGeometry(photoW + 0.1, photoH + 0.1), frameMat);
@@ -541,7 +785,8 @@
         texture.generateMipmaps = true;
 
         const aspect = texture.image.width / texture.image.height;
-        const photoW = aspect >= 1 ? 3.8 : 2.8;
+        // Enlarged photos
+        const photoW = aspect >= 1 ? 4.5 : 3.5;
         const photoH = photoW / aspect;
 
         mesh.geometry.dispose();
@@ -612,7 +857,8 @@
         if (!resp.ok) throw new Error('Network response was not ok');
         const data = await resp.json();
         
-        allPhotosData = [...(data.left || []), ...(data.right || [])];
+        // Store the categories separately
+        allPhotosData = data; 
         
         loadCategory('snap');
       } catch (err) {
@@ -637,18 +883,17 @@
       currentCategory = category;
       clearGallery();
 
-      // Filter photos
-      const filteredPhotos = allPhotosData.filter(p => {
-        const isSnap = p.caption.toLowerCase().includes('snap photo');
-        return category === 'snap' ? isSnap : !isSnap;
-      });
+      // Get photos for selected category
+      const filteredPhotos = allPhotosData[category] || [];
 
       totalPhotos = filteredPhotos.length;
 
       filteredPhotos.forEach((photo, i) => {
         const side = i % 2 === 0 ? 1 : -1;
-        const baseX = side * (2 + Math.random() * 4); 
-        const baseY = EYE_HEIGHT + (Math.random() - 0.5) * 6; 
+        // Tightened spread: moved closer to center (2.5 to 8 units away)
+        const baseX = side * (2.5 + Math.random() * 5.5); 
+        // More vertical variation
+        const baseY = EYE_HEIGHT + (Math.random() - 0.4) * 8; 
         
         const z = SCROLL_BASE_Z - 8 - (i * Z_SPACING); 
         
@@ -657,13 +902,15 @@
 
       // Reset Camera & Scroll
       window.scrollTo(0, 0);
+      explorePanX = 0;
       camera.position.set(0, EYE_HEIGHT, SCROLL_BASE_Z);
       panOffset = { x: 0, y: 0 };
 
       // Determine load total for current view
       const startZ = camera.position.z;
-      initialLoadTotal = photoMeshes.filter(m => 
-        Math.abs(m.userData.worldPos.z - startZ) < LOAD_DISTANCE
+      // Load based on distance, but ensure at least the first 16 photos are part of the initial loading screen
+      initialLoadTotal = photoMeshes.filter((m, i) => 
+        i < 16 || Math.abs(m.userData.worldPos.z - startZ) < LOAD_DISTANCE
       ).length;
       initialLoadCount = 0;
 
@@ -723,7 +970,22 @@
     function focusOnPhoto(mesh) {
       isTweening = true;
       focusedMesh = mesh;
-      currentFocusDist = DEFAULT_FOCUS_DIST;
+
+      // Calculate required zoom distance to fit the photo based on aspect ratio
+      const photoW = mesh.geometry.parameters.width;
+      const photoH = mesh.geometry.parameters.height;
+      const aspect = window.innerWidth / window.innerHeight;
+      
+      const fovRad = camera.fov * (Math.PI / 180);
+      const distY = (photoH / 2) / Math.tan(fovRad / 2);
+      
+      const hFovRad = 2 * Math.atan(Math.tan(fovRad / 2) * aspect);
+      const distX = (photoW / 2) / Math.tan(hFovRad / 2);
+      
+      // Select the maximum required distance and add a 15% margin
+      currentFocusDist = Math.max(distX, distY) * 1.15;
+      currentFocusDist = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, currentFocusDist));
+
       panOffset = { x: 0, y: 0 };
       dragDistance = 0;
       
@@ -773,7 +1035,7 @@
       zoomHint.style.display = 'none';
 
       const returnZ = getScrollZ();
-      const returnX = Math.sin(window.scrollY * 0.002) * 0.5;
+      const returnX = (Math.sin(window.scrollY * 0.002) * 0.5) + explorePanX;
       const returnY = EYE_HEIGHT + Math.cos(window.scrollY * 0.0015) * 0.3;
 
       gsap.to(camera.position, {
@@ -808,7 +1070,7 @@
     // =========================================================================
     const clock = new THREE.Clock();
     let texManageTimer = 0;
-    let dustParticles = null;
+    let bokehParticles = null;
 
     function animate() {
       requestAnimationFrame(animate);
@@ -820,14 +1082,19 @@
         manageTextures();
       }
 
-      if (dustParticles) {
-        const pos = dustParticles.userData.positions;
+      if (bokehParticles) {
+        const pos = bokehParticles.userData.positions;
         const time = clock.elapsedTime;
-        for (let i = 0; i < pos.length; i += 3) {
-          pos[i] += Math.sin(time * 0.2 + i) * 0.002;
-          pos[i + 1] += Math.cos(time * 0.2 + i) * 0.002;
+        for (let i = 0; i < bokehParticles.children.length; i++) {
+          const sprite = bokehParticles.children[i];
+          sprite.position.x = pos[i * 3] + Math.sin(time * 0.05 + i) * 15.0;
+          sprite.position.y = pos[i * 3 + 1] + Math.cos(time * 0.05 + i) * 15.0;
         }
-        dustParticles.geometry.attributes.position.needsUpdate = true;
+      }
+
+      if (galleryActive && !focusedMesh && !isTweening) {
+        camera.position.x = (Math.sin(window.scrollY * 0.002) * 0.5) + explorePanX;
+        camera.position.y = EYE_HEIGHT + Math.cos(window.scrollY * 0.0015) * 0.3;
       }
 
       renderer.render(scene, camera);
@@ -846,7 +1113,7 @@
     //  Init
     // =========================================================================
     buildLighting();
-    dustParticles = buildParticles();
+    bokehParticles = buildBokehBackdrop();
     initPhotos();
     animate();
   </script>
