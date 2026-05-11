@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery EC | Stylish Fashion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #ffffff;
+            --primary-text: #1a1a1a;
+            --secondary-text: #666666;
+            --accent-color: #2563eb; /* Blue accent */
+            --border-color: #e5e5e5;
+            --image-bg: #f3f4f6;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- Header & Navigation --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            transition: all var(--transition-speed);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .nav-list {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-list > li {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .nav-list > li > a {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            transition: color var(--transition-speed);
+            cursor: pointer;
+        }
+
+        .nav-list > li > a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width var(--transition-speed) ease;
+        }
+
+        .nav-list > li:hover > a::after,
+        .nav-list > li > a.active::after {
+            width: 100%;
+        }
+
+        .nav-list > li:hover > a,
+        .nav-list > li > a.active {
+            color: var(--accent-color);
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(15px);
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 0.5rem 0;
+            min-width: 160px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-speed) ease;
+            border-radius: 4px;
+        }
+
+        .dropdown::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 10px;
+            height: 10px;
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            border-left: 1px solid var(--border-color);
+        }
+
+        .has-dropdown:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .dropdown li a {
+            display: block;
+            padding: 0.8rem 1.5rem;
+            font-size: 0.85rem;
+            color: var(--secondary-text);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .dropdown li a:hover,
+        .dropdown li a.active {
+            background-color: #f8fafc;
+            color: var(--accent-color);
+            padding-left: 1.8rem;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 50vh;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 80px;
+            background: linear-gradient(135deg, #fdfdfd 0%, #f0f4f8 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(37,99,235,0.03) 0%, transparent 60%);
+            animation: rotateBg 20s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            color: var(--secondary-text);
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        /* --- Gallery Grid --- */
+        .gallery-container {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 5%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 3rem 2rem;
+        }
+
+        /* Product Card */
+        .card {
+            position: relative;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            display: none; /* Hidden by default for filtering */
+        }
+
+        .card.show {
+            display: block;
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card-image {
+            background-color: var(--image-bg);
+            aspect-ratio: 3 / 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+            margin-bottom: 1.2rem;
+        }
+
+        .card-image::before {
+            content: 'No Image';
+            color: #a0aec0;
+            font-weight: 300;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            z-index: 1;
+        }
+
+        /* Abstract patterns for dummy images */
+        .card-image::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, transparent 40%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.02) 55%, transparent 60%);
+            background-size: 20px 20px;
+            transition: transform 0.8s ease;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 2;
+        }
+
+        .btn-view {
+            padding: 0.8rem 2rem;
+            background: var(--primary-text);
+            color: var(--primary-bg);
+            border: none;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border-radius: 30px;
+        }
+
+        .card:hover .card-image::after {
+            transform: scale(1.1);
+        }
+
+        .card:hover .overlay {
+            opacity: 1;
+        }
+
+        .card:hover .btn-view {
+            transform: translateY(0);
+            background: var(--accent-color);
+        }
+
+        .card-info {
+            text-align: center;
+        }
+
+        .card-brand {
+            font-size: 0.75rem;
+            color: var(--secondary-text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .card:hover .card-title {
+            color: var(--accent-color);
+        }
+
+        .card-price {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-list {
+                display: none; /* In a real app, implement hamburger menu */
+            }
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem 1rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header>
+        <div class="logo">GALLERY<span>.</span></div>
+        <nav>
+            <ul class="nav-list">
+                <li><a class="nav-link active" data-filter="all">ALL</a></li>
+                <li class="has-dropdown">
+                    <a class="nav-link" data-filter="brand-eole">EOLE</a>
+                    <ul class="dropdown">
+                        <li><a class="nav-link" data-filter="eole-tops">Tops</a></li>
+                        <li><a class="nav-link" data-filter="eole-outerwear">Outerwear</a></li>
+                        <li><a class="nav-link" data-filter="eole-shoes">Shoes</a></li>
+                        <li><a class="nav-link" data-filter="eole-accessories">Accessories</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a class="nav-link" data-filter="brand-okurih">OKURIH</a>
+                    <ul class="dropdown">
+                        <li><a class="nav-link" data-filter="okurih-tops">Tops</a></li>
+                        <li><a class="nav-link" data-filter="okurih-shoes">Shoes</a></li>
+                        <li><a class="nav-link" data-filter="okurih-accessories">Accessories</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a class="nav-link" data-filter="brand-common">COMMON</a>
+                    <ul class="dropdown">
+                        <li><a class="nav-link" data-filter="common-tops">Tops</a></li>
+                        <li><a class="nav-link" data-filter="common-shoes">Shoes</a></li>
+                        <li><a class="nav-link" data-filter="common-bags">Bags</a></li>
+                        <li><a class="nav-link" data-filter="common-fragrance">Fragrance</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>COLLECTION</h1>
+            <p id="current-category">All Items</p>
+        </div>
+    </section>
+
+    <!-- Gallery Grid -->
+    <main class="gallery-container">
+        <div class="grid" id="product-grid">
+            <!-- Items will be generated by JS -->
+        </div>
+    </main>
+
+    <script>
+        // Product Data
+        const products = [
+            // EOLE (High Brand)
+            { id: 1, brand: 'EOLE', name: 'Premium Collared Shirt', price: '¥32,000', filterClass: 'brand-eole eole-tops' },
+            { id: 2, brand: 'EOLE', name: 'Silk Blend Shirt', price: '¥38,000', filterClass: 'brand-eole eole-tops' },
+            { id: 3, brand: 'EOLE', name: 'Lightweight Parka', price: '¥45,000', filterClass: 'brand-eole eole-tops' },
+            { id: 4, brand: 'EOLE', name: 'Cashmere Long Coat', price: '¥180,000', filterClass: 'brand-eole eole-outerwear' },
+            { id: 5, brand: 'EOLE', name: 'Classic Trench Coat', price: '¥120,000', filterClass: 'brand-eole eole-outerwear' },
+            { id: 6, brand: 'EOLE', name: 'Leather Oxford Shoes', price: '¥75,000', filterClass: 'brand-eole eole-shoes' },
+            { id: 7, brand: 'EOLE', name: 'Silk Patterned Tie', price: '¥18,000', filterClass: 'brand-eole eole-accessories' },
+            { id: 8, brand: 'EOLE', name: 'Titanium Frame Glasses', price: '¥42,000', filterClass: 'brand-eole eole-accessories' },
+            { id: 9, brand: 'EOLE', name: 'Calf Leather Wallet', price: '¥65,000', filterClass: 'brand-eole eole-accessories' },
+            { id: 10, brand: 'EOLE', name: 'Slim Pass Case', price: '¥22,000', filterClass: 'brand-eole eole-accessories' },
+            { id: 11, brand: 'EOLE', name: 'Leather Key Case', price: '¥28,000', filterClass: 'brand-eole eole-accessories' },
+
+            // OKURIH (Street)
+            { id: 12, brand: 'OKURIH', name: 'Heavyweight Logo Parka', price: '¥24,000', filterClass: 'brand-okurih okurih-tops' },
+            { id: 13, brand: 'OKURIH', name: 'Oversized Zip Parka', price: '¥26,000', filterClass: 'brand-okurih okurih-tops' },
+            { id: 14, brand: 'OKURIH', name: 'Tech Sportswear Top', price: '¥18,000', filterClass: 'brand-okurih okurih-tops' },
+            { id: 15, brand: 'OKURIH', name: 'Graphic Trainer', price: '¥16,000', filterClass: 'brand-okurih okurih-tops' },
+            { id: 16, brand: 'OKURIH', name: 'Canvas Slip-on', price: '¥14,000', filterClass: 'brand-okurih okurih-shoes' },
+            { id: 17, brand: 'OKURIH', name: 'Suede Slip-on', price: '¥18,000', filterClass: 'brand-okurih okurih-shoes' },
+            { id: 18, brand: 'OKURIH', name: 'Square Sunglasses', price: '¥12,000', filterClass: 'brand-okurih okurih-accessories' },
+            { id: 19, brand: 'OKURIH', name: 'Nylon Zip Wallet', price: '¥9,000', filterClass: 'brand-okurih okurih-accessories' },
+
+            // COMMON (共通)
+            { id: 20, brand: 'COMMON', name: 'Basic V-Neck T-Shirt', price: '¥5,000', filterClass: 'brand-common common-tops' },
+            { id: 21, brand: 'COMMON', name: 'Heavy Cotton T-Shirt', price: '¥6,500', filterClass: 'brand-common common-tops' },
+            { id: 22, brand: 'COMMON', name: 'Oversized Pocket Tee', price: '¥7,000', filterClass: 'brand-common common-tops' },
+            { id: 23, brand: 'COMMON', name: 'Low-Top Canvas Sneaker', price: '¥12,000', filterClass: 'brand-common common-shoes' },
+            { id: 24, brand: 'COMMON', name: 'Chunky Running Sneaker', price: '¥16,000', filterClass: 'brand-common common-shoes' },
+            { id: 25, brand: 'COMMON', name: 'High-Top Leather Sneaker', price: '¥19,000', filterClass: 'brand-common common-shoes' },
+            { id: 26, brand: 'COMMON', name: 'Everyday Tote Bag', price: '¥15,000', filterClass: 'brand-common common-bags' },
+            { id: 27, brand: 'COMMON', name: 'Nylon Backpack', price: '¥22,000', filterClass: 'brand-common common-bags' },
+            { id: 28, brand: 'COMMON', name: 'Eau de Parfum - Citrus', price: '¥11,000', filterClass: 'brand-common common-fragrance' },
+            { id: 29, brand: 'COMMON', name: 'Eau de Toilette - Wood', price: '¥9,500', filterClass: 'brand-common common-fragrance' },
+            { id: 30, brand: 'COMMON', name: 'Solid Perfume - Floral', price: '¥6,000', filterClass: 'brand-common common-fragrance' }
+        ];
+
+        const grid = document.getElementById('product-grid');
+        const currentCategoryLabel = document.getElementById('current-category');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        // Render Cards
+        function renderCards() {
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = `card show ${product.filterClass}`;
+                card.setAttribute('data-id', product.id);
+                
+                card.innerHTML = `
+                    <div class="card-image">
+                        <div class="overlay">
+                            <button class="btn-view">View Details</button>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-brand">${product.brand}</div>
+                        <h3 class="card-title">${product.name}</h3>
+                        <div class="card-price">${product.price}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        renderCards();
+
+        // Intersection Observer for scroll animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        function observeCards() {
+            const cards = document.querySelectorAll('.card.show');
+            cards.forEach((card, index) => {
+                card.classList.remove('visible');
+                // Staggered animation effect
+                card.style.transitionDelay = \`\${(index % 4) * 0.1}s\`;
+                observer.observe(card);
+            });
+        }
+
+        observeCards();
+
+        // Filtering Logic
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                
+                // Add active class to clicked (and its parent if in dropdown)
+                e.target.classList.add('active');
+                if(e.target.closest('.dropdown')) {
+                    e.target.closest('.has-dropdown').querySelector('a').classList.add('active');
+                }
+
+                const filterValue = e.target.getAttribute('data-filter');
+                
+                // Update Label text
+                if (filterValue === 'all') {
+                    currentCategoryLabel.textContent = 'All Items';
+                } else {
+                    let text = e.target.textContent;
+                    if(e.target.closest('.dropdown')) {
+                        text = e.target.closest('.has-dropdown').querySelector('a').textContent + ' / ' + text;
+                    }
+                    currentCategoryLabel.textContent = text;
+                }
+
+                const cards = document.querySelectorAll('.card');
+                
+                // Hide all cards first with animation
+                cards.forEach(card => {
+                    card.classList.remove('visible');
+                    card.style.transitionDelay = '0s'; // Reset delay for hiding
+                });
+
+                // Wait for hide animation then show filtered
+                setTimeout(() => {
+                    cards.forEach(card => {
+                        if (filterValue === 'all' || card.classList.contains(filterValue)) {
+                            card.classList.add('show');
+                        } else {
+                            card.classList.remove('show');
+                        }
+                    });
+                    // Re-observe newly shown cards for entrance animation
+                    observeCards();
+                }, 400); // Wait for CSS opacity transition
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.padding = '0.5rem 5%';
+                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.05)';
+            } else {
+                header.style.padding = '1rem 5%';
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
