@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Leather Shoes | GALLERY EC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #ffffff;
+            --primary-text: #1a1a1a;
+            --secondary-text: #666666;
+            --accent-color: #2563eb;
+            --border-color: #e5e5e5;
+            --image-bg: #f8f9fa;
+            --transition-speed: 0.6s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            opacity: 0;
+            animation: fadeInPage 1s forwards;
+        }
+
+        @keyframes fadeInPage {
+            to { opacity: 1; }
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- Header --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+        .logo span { color: var(--accent-color); }
+        .nav-back {
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        .nav-back:hover { color: var(--accent-color); }
+
+        /* --- Product Section --- */
+        .product-container {
+            max-width: 1400px;
+            margin: 120px auto 0;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        /* Left: Image */
+        .product-image-wrapper {
+            position: relative;
+            aspect-ratio: 3/4;
+            background-color: var(--image-bg);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            opacity: 0;
+            transform: translateX(-30px);
+            animation: fadeRight var(--transition-speed) 0.2s forwards cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .product-image-wrapper::before {
+            content: 'NO IMAGE';
+            color: #adb5bd;
+            font-weight: 300;
+            letter-spacing: 4px;
+            font-size: 1.2rem;
+            z-index: 2;
+        }
+
+        .product-image-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(0,0,0,0.02) 0%, transparent 70%);
+            animation: pulseBg 4s ease-in-out infinite alternate;
+            z-index: 1;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 1; }
+        }
+
+        @keyframes fadeRight {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Right: Info */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 2rem;
+        }
+
+        .anim-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp var(--transition-speed) forwards cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .d-1 { animation-delay: 0.1s; }
+        .d-2 { animation-delay: 0.2s; }
+        .d-3 { animation-delay: 0.3s; }
+        .d-4 { animation-delay: 0.4s; }
+        .d-5 { animation-delay: 0.5s; }
+        .d-6 { animation-delay: 0.6s; }
+        .d-7 { animation-delay: 0.7s; }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .brand {
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        /* Rating */
+        .rating-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 10px;
+        }
+        .stars-outer {
+            display: inline-block;
+            position: relative;
+            font-size: 1.2rem;
+            color: #e5e5e5;
+            letter-spacing: 2px;
+        }
+        .stars-outer::before {
+            content: '★★★★★';
+        }
+        .stars-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            color: #000000;
+        }
+        .stars-inner::before {
+            content: '★★★★★';
+        }
+        .rating-text {
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+            font-weight: 500;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+        }
+
+        .description {
+            color: var(--secondary-text);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Options */
+        .options-group {
+            margin-bottom: 1.5rem;
+        }
+        .option-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .option-label span {
+            font-weight: 400;
+            color: var(--secondary-text);
+            margin-left: 0.5rem;
+        }
+
+        /* Colors */
+        .color-options {
+            display: flex;
+            gap: 12px;
+        }
+        .color-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .color-btn.active {
+            border: 2px solid #000;
+            box-shadow: 0 0 0 2px #fff inset;
+        }
+
+        /* Sizes */
+        .size-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .size-btn {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            color: var(--primary-text);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 48px;
+            text-align: center;
+        }
+        .size-btn:hover {
+            border-color: #000;
+        }
+        .size-btn.active {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        .btn-size-guide {
+            display: inline-block;
+            margin-top: 0.8rem;
+            background: none;
+            border: none;
+            color: var(--secondary-text);
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            transition: color 0.3s;
+        }
+        .btn-size-guide:hover {
+            color: #000;
+        }
+
+        /* Quantity */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            width: fit-content;
+        }
+        .qty-btn {
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .qty-btn:hover {
+            background: #f8fafc;
+        }
+        .qty-input {
+            width: 50px;
+            height: 40px;
+            border: none;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            outline: none;
+        }
+
+        /* Add to cart */
+        .action-area {
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+        }
+        .btn-add {
+            width: 100%;
+            padding: 1.2rem;
+            background: #ccc;
+            color: #fff;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: not-allowed;
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
+
+        /* Accordions (Custom JS Animation) */
+        .custom-accordion {
+            border-top: 1px solid var(--border-color);
+        }
+        .acc-item {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .acc-header {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 1.2rem 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-text);
+            letter-spacing: 1px;
+        }
+        .acc-header::after {
+            content: '+';
+            font-size: 1.2rem;
+            font-weight: 300;
+            transition: transform 0.3s ease;
+        }
+        .acc-item.is-open .acc-header::after {
+            transform: rotate(45deg);
+        }
+        .acc-content-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .acc-content {
+            padding-bottom: 1.5rem;
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        /* Drawer Overlay */
+        .drawer-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden;
+            transition: all 0.4s ease; z-index: 2000;
+        }
+        .drawer-overlay.show { opacity: 1; visibility: visible; }
+        
+        /* Drawer Content */
+        .drawer-content {
+            position: fixed; top: 0; right: -450px; width: 100%; max-width: 400px; height: 100%;
+            background: #fff; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            z-index: 2001; padding: 2rem; overflow-y: auto;
+        }
+        .drawer-content.show { right: 0; }
+        
+        .drawer-close {
+            position: absolute; top: 20px; right: 20px; background: none; border: none;
+            font-size: 1.5rem; cursor: pointer; color: var(--secondary-text);
+            transition: color 0.3s;
+        }
+        .drawer-close:hover { color: #000; }
+        
+        .size-table {
+            width: 100%; border-collapse: collapse; margin-top: 1rem; text-align: center;
+        }
+        .size-table th {
+            background: #f8f9fa; font-weight: 500; padding: 1rem 0.5rem; border: 1px solid var(--border-color); font-size: 0.9rem;
+        }
+        .size-table td {
+            padding: 1rem 0.5rem; border: 1px solid var(--border-color); font-size: 0.9rem; color: var(--secondary-text);
+        }
+
+        /* Similar Products Section */
+        .similar-section {
+            max-width: 1400px;
+            margin: 6rem auto 4rem;
+            padding: 0 5%;
+            border-top: 1px solid var(--border-color);
+            padding-top: 4rem;
+        }
+        .similar-title {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        .similar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        .similar-card {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .similar-card:hover {
+            transform: translateY(-5px);
+        }
+        .similar-img {
+            aspect-ratio: 3/4;
+            background: var(--image-bg);
+            margin-bottom: 1rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+        .similar-brand {
+            font-size: 0.75rem;
+            color: var(--secondary-text);
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+            letter-spacing: 1px;
+        }
+        .similar-name {
+            font-size: 0.95rem;
+            font-weight: 400;
+            margin-bottom: 0.3rem;
+        }
+        .similar-price {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 900px) {
+            .product-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                margin-top: 100px;
+            }
+            .similar-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><a href="Gallery EC.html">GALLERY<span>.</span></a></div>
+        <a href="Gallery EC.html" class="nav-back">← Back to Gallery</a>
+    </header>
+
+    <main class="product-container">
+        <!-- Image Gallery (No Image) -->
+        <div class="product-image-wrapper">
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-info">
+            <div class="brand anim-item d-1">GALLERY</div>
+            <h1 class="title anim-item d-1">Classic Leather Shoes</h1>
+            
+            <div class="rating-wrapper anim-item d-1">
+                <div class="stars-outer">
+                    <div class="stars-inner" style="width: 98%;"></div>
+                </div>
+                <span class="rating-text">4.9</span>
+            </div>
+
+            <div class="price anim-item d-2">¥24,000 <span style="font-size: 0.8rem; color: #999;">(Tax inc.)</span></div>
+            
+            <p class="description anim-item d-3">
+                厳選された高品質の牛革を使用し、熟練の職人が一針一針丁寧に手作業で仕上げたクラシックなレザーシューズ。履き込むほどに足の形に馴染み、唯一無二のエイジング（経年変化）をお楽しみいただけます。フォーマルからカジュアルダウンまで幅広く活躍する、普遍的なデザインとディテールへの妥協なき拘りが詰まった一足です。
+            </p>
+
+            <div class="options-group anim-item d-4">
+                <span class="option-label">Color:<span id="selected-color">Black</span></span>
+                <div class="color-options">
+                    <button class="color-btn active" style="background-color: #000;" data-color="Black" onclick="selectColor(this)"></button>
+                    <button class="color-btn" style="background-color: #fff;" data-color="White" onclick="selectColor(this)"></button>
+                </div>
+            </div>
+
+            <div class="options-group anim-item d-4">
+                <span class="option-label">Size:<span id="selected-size">26.0</span></span>
+                <div class="size-options">
+                    <button class="size-btn" onclick="selectSize(this)">25.0</button>
+                    <button class="size-btn" onclick="selectSize(this)">25.5</button>
+                    <button class="size-btn active" onclick="selectSize(this)">26.0</button>
+                    <button class="size-btn" onclick="selectSize(this)">26.5</button>
+                    <button class="size-btn" onclick="selectSize(this)">27.0</button>
+                    <button class="size-btn" onclick="selectSize(this)">27.5</button>
+                    <button class="size-btn" onclick="selectSize(this)">28.0</button>
+                </div>
+                <button class="btn-size-guide" onclick="openDrawer()">サイズを確認する</button>
+            </div>
+
+            <div class="options-group anim-item d-5">
+                <span class="option-label">Quantity:</span>
+                <div class="quantity-selector">
+                    <button class="qty-btn" onclick="updateQty(-1)">-</button>
+                    <input type="text" id="qty-input" class="qty-input" value="1" readonly>
+                    <button class="qty-btn" onclick="updateQty(1)">+</button>
+                </div>
+            </div>
+
+            <div class="action-area anim-item d-6">
+                <button class="btn-add" disabled>SOLD OUT</button>
+            </div>
+
+            <div class="custom-accordion anim-item d-7">
+                <div class="acc-item">
+                    <button class="acc-header" onclick="toggleAcc(this)">仕様説明</button>
+                    <div class="acc-content-wrapper">
+                        <div class="acc-content">
+                            ・フィット感：標準的（日本人の足型に合わせたオリジナル木型を使用）。<br>
+                            ・ポケット：なし。<br>
+                            ・透け感：なし。<br>
+                            ・ソール：クッション性に優れたラバーソールを採用し、長時間の歩行でも疲れにくい設計。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="acc-item">
+                    <button class="acc-header" onclick="toggleAcc(this)">使用素材</button>
+                    <div class="acc-content-wrapper">
+                        <div class="acc-content">
+                            アッパー（本体）：100% 牛革（カウレザー）<br>
+                            ソール部分：100% 合成ゴム<br>
+                            ライニング（内張）：100% 豚革
+                        </div>
+                    </div>
+                </div>
+
+                <div class="acc-item">
+                    <button class="acc-header" onclick="toggleAcc(this)">お手入れ方法</button>
+                    <div class="acc-content-wrapper">
+                        <div class="acc-content">
+                            ・本革製品のため、洗濯機、ドラム式洗濯機、乾燥機での丸洗いや乾燥は絶対にお避けください。革の硬化やひび割れ、著しい変形の原因となります。<br>
+                            ・水に濡れた場合や、強い摩擦によって色落ちや衣類（靴下など）への色移りが発生する恐れがありますのでご注意ください。<br>
+                            ・汚れが気になる場合は、専用のレザークリーナーと柔らかい布をご使用ください。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="acc-item">
+                    <button class="acc-header" onclick="toggleAcc(this)">生産情報</button>
+                    <div class="acc-content-wrapper">
+                        <div class="acc-content">
+                            原産国：中国 (Made in China)<br>
+                            ※徹底した品質管理基準をクリアしたファクトリーで製造しています。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Similar Products Section -->
+    <section class="similar-section anim-item d-7">
+        <h2 class="similar-title">SIMILAR PRODUCTS</h2>
+        <div class="similar-grid">
+            <div class="similar-card">
+                <div class="similar-img">NO IMAGE</div>
+                <div class="similar-brand">EOLE</div>
+                <div class="similar-name">Leather Oxford Shoes</div>
+                <div class="similar-price">¥75,000</div>
+            </div>
+            <div class="similar-card">
+                <div class="similar-img">NO IMAGE</div>
+                <div class="similar-brand">COMMON</div>
+                <div class="similar-name">Low-Top Canvas Sneaker</div>
+                <div class="similar-price">¥12,000</div>
+            </div>
+            <div class="similar-card">
+                <div class="similar-img">NO IMAGE</div>
+                <div class="similar-brand">OKURIH</div>
+                <div class="similar-name">Suede Slip-on</div>
+                <div class="similar-price">¥18,000</div>
+            </div>
+            <div class="similar-card">
+                <div class="similar-img">NO IMAGE</div>
+                <div class="similar-brand">COMMON</div>
+                <div class="similar-name">High-Top Leather Sneaker</div>
+                <div class="similar-price">¥19,000</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Size Chart Drawer -->
+    <div id="size-drawer-overlay" class="drawer-overlay" onclick="closeDrawer()"></div>
+    <div id="size-drawer-content" class="drawer-content">
+        <button class="drawer-close" onclick="closeDrawer()">✕</button>
+        <h3 style="font-weight: 400; letter-spacing: 2px; margin-bottom: 0.5rem; margin-top: 1rem;">サイズ表</h3>
+        <p style="font-size: 0.8rem; color: var(--secondary-text); margin-bottom: 2rem;">仕上がり寸 (cm)</p>
+        
+        <table class="size-table" style="font-size: 0.85rem;">
+            <thead>
+                <tr>
+                    <th style="padding: 0.8rem 0.2rem;">サイズ</th>
+                    <th style="padding: 0.8rem 0.2rem;">対応サイズ</th>
+                    <th style="padding: 0.8rem 0.2rem;">足長</th>
+                    <th style="padding: 0.8rem 0.2rem;">足囲</th>
+                    <th style="padding: 0.8rem 0.2rem;">足幅</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>25</td><td>25.0</td><td>26.3</td><td>23.4</td><td>9.4</td></tr>
+                <tr><td>25.5</td><td>25.5</td><td>26.8</td><td>23.8</td><td>9.5</td></tr>
+                <tr><td>26</td><td>26.0</td><td>27.3</td><td>24.2</td><td>9.6</td></tr>
+                <tr><td>26.5</td><td>26.5</td><td>27.8</td><td>24.6</td><td>9.7</td></tr>
+                <tr><td>27</td><td>27.0</td><td>28.3</td><td>25</td><td>9.8</td></tr>
+                <tr><td>27.5</td><td>27.5</td><td>28.8</td><td>25.4</td><td>9.9</td></tr>
+                <tr><td>28</td><td>28.0</td><td>29.3</td><td>25.8</td><td>10</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Custom Accordion Logic
+        function toggleAcc(btn) {
+            const item = btn.parentElement;
+            const wrapper = btn.nextElementSibling;
+            const isOpen = item.classList.contains('is-open');
+            
+            // Close all others
+            document.querySelectorAll('.acc-item').forEach(el => {
+                el.classList.remove('is-open');
+                el.querySelector('.acc-content-wrapper').style.maxHeight = null;
+            });
+
+            // Toggle current
+            if (!isOpen) {
+                item.classList.add('is-open');
+                wrapper.style.maxHeight = wrapper.scrollHeight + "px";
+            }
+        }
+
+        // Drawer Logic
+        function openDrawer() {
+            document.getElementById('size-drawer-overlay').classList.add('show');
+            document.getElementById('size-drawer-content').classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
+        }
+        
+        function closeDrawer() {
+            document.getElementById('size-drawer-overlay').classList.remove('show');
+            document.getElementById('size-drawer-content').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // Option Selection Logic
+        function selectColor(btn) {
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('selected-color').textContent = btn.getAttribute('data-color');
+        }
+
+        function selectSize(btn) {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('selected-size').textContent = btn.textContent;
+        }
+
+        // Quantity Logic
+        function updateQty(change) {
+            const input = document.getElementById('qty-input');
+            let current = parseInt(input.value);
+            let newVal = current + change;
+            if (newVal >= 1 && newVal <= 10) {
+                input.value = newVal;
+            }
+        }
+    </script>
+</body>
+</html>

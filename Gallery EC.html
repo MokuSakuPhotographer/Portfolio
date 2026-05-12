@@ -161,13 +161,13 @@
 
         /* --- Hero Section --- */
         .hero {
-            height: 50vh;
-            min-height: 400px;
+            min-height: 50vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             margin-top: 80px;
+            padding: 4rem 0;
             background: linear-gradient(135deg, #fdfdfd 0%, #f0f4f8 100%);
             position: relative;
             overflow: hidden;
@@ -192,6 +192,7 @@
         .hero-content {
             position: relative;
             z-index: 1;
+            width: 100%;
             animation: fadeUp 1s ease-out;
         }
 
@@ -206,6 +207,60 @@
             color: var(--secondary-text);
             font-size: 1rem;
             letter-spacing: 1px;
+        }
+
+        /* --- Brand Intro --- */
+        .brand-intro-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 5%;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), margin 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .brand-intro-section.show {
+            max-height: 500px;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .brand-intro-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .brand-intro-img {
+            max-width: 100%;
+            height: auto;
+            max-height: 140px;
+            object-fit: contain;
+            margin-bottom: 2rem;
+        }
+
+        .brand-intro-title {
+            font-size: 1.6rem;
+            font-weight: 300;
+            letter-spacing: 6px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .brand-intro-desc {
+            color: var(--secondary-text);
+            font-size: 0.95rem;
+            line-height: 2;
+            letter-spacing: 1px;
+        }
+
+        .brand-intro-line {
+            width: 40px;
+            height: 1px;
+            background: #000;
+            margin: 3rem auto 0;
         }
 
         /* --- Gallery Grid --- */
@@ -344,6 +399,20 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .sold-out-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.85);
+            color: #ffffff;
+            font-size: 0.65rem;
+            padding: 0.4rem 1rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+            z-index: 3;
+            border-radius: 2px;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-list {
@@ -402,6 +471,16 @@
         <div class="hero-content">
             <h1>COLLECTION</h1>
             <p id="current-category">All Items</p>
+            
+            <!-- Brand Intro -->
+            <div id="brand-intro" class="brand-intro-section">
+                <img id="brand-intro-img" class="brand-intro-img" src="" alt="Brand Logo">
+                <div class="brand-intro-text">
+                    <h2 id="brand-intro-title" class="brand-intro-title"></h2>
+                    <p id="brand-intro-desc" class="brand-intro-desc"></p>
+                </div>
+                <div class="brand-intro-line"></div>
+            </div>
         </div>
     </section>
 
@@ -449,7 +528,11 @@
             { id: 27, brand: 'COMMON', name: 'Nylon Backpack', price: '¥22,000', filterClass: 'brand-common common-bags' },
             { id: 28, brand: 'COMMON', name: 'Eau de Parfum - Citrus', price: '¥11,000', filterClass: 'brand-common common-fragrance' },
             { id: 29, brand: 'COMMON', name: 'Eau de Toilette - Wood', price: '¥9,500', filterClass: 'brand-common common-fragrance' },
-            { id: 30, brand: 'COMMON', name: 'Solid Perfume - Floral', price: '¥6,000', filterClass: 'brand-common common-fragrance' }
+            { id: 30, brand: 'COMMON', name: 'Solid Perfume - Floral', price: '¥6,000', filterClass: 'brand-common common-fragrance' },
+            
+            // NEW ITEMS (GALLERY)
+            { id: 31, brand: 'GALLERY', name: 'Original Logo T-Shirt', price: '¥8,800', filterClass: 'brand-common common-tops', soldOut: true, link: 'product-tshirt.html' },
+            { id: 32, brand: 'GALLERY', name: 'Classic Leather Shoes', price: '¥24,000', filterClass: 'brand-common common-shoes', soldOut: true, link: 'product-shoes.html' }
         ];
 
         const grid = document.getElementById('product-grid');
@@ -463,17 +546,24 @@
                 card.className = `card show ${product.filterClass}`;
                 card.setAttribute('data-id', product.id);
                 
+                const href = product.link ? product.link : 'javascript:void(0)';
+                const btnText = product.soldOut ? 'SOLD OUT' : 'View Details';
+                const badge = product.soldOut ? '<div class="sold-out-badge">SOLD OUT</div>' : '';
+                
                 card.innerHTML = `
-                    <div class="card-image">
-                        <div class="overlay">
-                            <button class="btn-view">View Details</button>
+                    <a href="${href}" style="display: block; width: 100%; height: 100%;">
+                        <div class="card-image">
+                            ${badge}
+                            <div class="overlay">
+                                <span class="btn-view" style="display: inline-block; text-align: center; ${product.soldOut ? 'background: #000; color: #fff;' : ''}">${btnText}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-brand">${product.brand}</div>
-                        <h3 class="card-title">${product.name}</h3>
-                        <div class="card-price">${product.price}</div>
-                    </div>
+                        <div class="card-info">
+                            <div class="card-brand">${product.brand}</div>
+                            <h3 class="card-title">${product.name}</h3>
+                            <div class="card-price">${product.price}</div>
+                        </div>
+                    </a>
                 `;
                 grid.appendChild(card);
             });
@@ -502,7 +592,7 @@
             cards.forEach((card, index) => {
                 card.classList.remove('visible');
                 // Staggered animation effect
-                card.style.transitionDelay = \`\${(index % 4) * 0.1}s\`;
+                card.style.transitionDelay = `${(index % 4) * 0.1}s`;
                 observer.observe(card);
             });
         }
@@ -536,16 +626,38 @@
                     currentCategoryLabel.textContent = text;
                 }
 
+                const brandIntro = document.getElementById('brand-intro');
+                const brandImg = document.getElementById('brand-intro-img');
+                const brandTitle = document.getElementById('brand-intro-title');
+                const brandDesc = document.getElementById('brand-intro-desc');
+
                 const cards = document.querySelectorAll('.card');
                 
-                // Hide all cards first with animation
+                // Hide all cards and brand intro first with animation
                 cards.forEach(card => {
                     card.classList.remove('visible');
                     card.style.transitionDelay = '0s'; // Reset delay for hiding
                 });
+                brandIntro.classList.remove('visible');
 
                 // Wait for hide animation then show filtered
                 setTimeout(() => {
+                    if (filterValue === 'brand-eole' || filterValue.startsWith('eole-')) {
+                        brandImg.src = 'images/EC/LOGO/EOLE 1.png';
+                        brandTitle.textContent = 'EOLE';
+                        brandDesc.innerHTML = '洗練されたシルエットと最上級の素材が織りなす、<br>現代のエレガンスを体現するハイエンド・コレクション。';
+                        brandIntro.classList.add('show');
+                        setTimeout(() => brandIntro.classList.add('visible'), 50);
+                    } else if (filterValue === 'brand-okurih' || filterValue.startsWith('okurih-')) {
+                        brandImg.src = 'images/EC/LOGO/Okurih.png';
+                        brandTitle.textContent = 'OKURIH';
+                        brandDesc.innerHTML = 'ストリートカルチャーとモードの融合。<br>既成概念にとらわれない、自由でエッジの効いたスタイル。';
+                        brandIntro.classList.add('show');
+                        setTimeout(() => brandIntro.classList.add('visible'), 50);
+                    } else {
+                        brandIntro.classList.remove('show');
+                    }
+
                     cards.forEach(card => {
                         if (filterValue === 'all' || card.classList.contains(filterValue)) {
                             card.classList.add('show');
