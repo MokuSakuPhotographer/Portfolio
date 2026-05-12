@@ -159,6 +159,43 @@
             padding-left: 1.8rem;
         }
 
+        /* Sub Dropdown Menu */
+        .has-sub-dropdown {
+            position: relative;
+        }
+
+        .sub-dropdown {
+            position: absolute;
+            top: 0;
+            right: 100%;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 0.5rem 0;
+            min-width: 160px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-speed) ease;
+            border-radius: 4px;
+            transform: translateX(15px);
+            z-index: 10;
+            margin-right: 2px;
+        }
+
+        .has-sub-dropdown:hover > .sub-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .has-sub-dropdown > a::before {
+            content: '◂';
+            float: left;
+            margin-right: 10px;
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+
         /* --- Hero Section --- */
         .hero {
             min-height: 50vh;
@@ -442,7 +479,16 @@
                         <li><a class="nav-link" data-filter="eole-tops">Tops</a></li>
                         <li><a class="nav-link" data-filter="eole-outerwear">Outerwear</a></li>
                         <li><a class="nav-link" data-filter="eole-shoes">Shoes</a></li>
-                        <li><a class="nav-link" data-filter="eole-accessories">Accessories</a></li>
+                        <li class="has-sub-dropdown">
+                            <a class="nav-link" data-filter="eole-accessories">Accessories</a>
+                            <ul class="sub-dropdown">
+                                <li><a class="nav-link" data-filter="eole-acc-tie">Tie</a></li>
+                                <li><a class="nav-link" data-filter="eole-acc-glasses">Glasses</a></li>
+                                <li><a class="nav-link" data-filter="eole-acc-wallet">Wallet & Case</a></li>
+                                <li><a class="nav-link" data-filter="eole-acc-bags">Bags</a></li>
+                                <li><a class="nav-link" data-filter="eole-acc-fragrance">Fragrance</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 <li class="has-dropdown">
@@ -450,18 +496,18 @@
                     <ul class="dropdown">
                         <li><a class="nav-link" data-filter="okurih-tops">Tops</a></li>
                         <li><a class="nav-link" data-filter="okurih-shoes">Shoes</a></li>
-                        <li><a class="nav-link" data-filter="okurih-accessories">Accessories</a></li>
+                        <li class="has-sub-dropdown">
+                            <a class="nav-link" data-filter="okurih-accessories">Accessories</a>
+                            <ul class="sub-dropdown">
+                                <li><a class="nav-link" data-filter="okurih-acc-glasses">Glasses</a></li>
+                                <li><a class="nav-link" data-filter="okurih-acc-wallet">Wallet</a></li>
+                                <li><a class="nav-link" data-filter="okurih-acc-bags">Bags</a></li>
+                                <li><a class="nav-link" data-filter="okurih-acc-fragrance">Fragrance</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
-                <li class="has-dropdown">
-                    <a class="nav-link" data-filter="brand-common">COMMON</a>
-                    <ul class="dropdown">
-                        <li><a class="nav-link" data-filter="common-tops">Tops</a></li>
-                        <li><a class="nav-link" data-filter="common-shoes">Shoes</a></li>
-                        <li><a class="nav-link" data-filter="common-bags">Bags</a></li>
-                        <li><a class="nav-link" data-filter="common-fragrance">Fragrance</a></li>
-                    </ul>
-                </li>
+
             </ul>
         </nav>
     </header>
@@ -501,11 +547,11 @@
             { id: 4, brand: 'EOLE', name: 'Cashmere Long Coat', price: '¥180,000', filterClass: 'brand-eole eole-outerwear' },
             { id: 5, brand: 'EOLE', name: 'Classic Trench Coat', price: '¥120,000', filterClass: 'brand-eole eole-outerwear' },
             { id: 6, brand: 'EOLE', name: 'Leather Oxford Shoes', price: '¥75,000', filterClass: 'brand-eole eole-shoes' },
-            { id: 7, brand: 'EOLE', name: 'Silk Patterned Tie', price: '¥18,000', filterClass: 'brand-eole eole-accessories' },
-            { id: 8, brand: 'EOLE', name: 'Titanium Frame Glasses', price: '¥42,000', filterClass: 'brand-eole eole-accessories' },
-            { id: 9, brand: 'EOLE', name: 'Calf Leather Wallet', price: '¥65,000', filterClass: 'brand-eole eole-accessories' },
-            { id: 10, brand: 'EOLE', name: 'Slim Pass Case', price: '¥22,000', filterClass: 'brand-eole eole-accessories' },
-            { id: 11, brand: 'EOLE', name: 'Leather Key Case', price: '¥28,000', filterClass: 'brand-eole eole-accessories' },
+            { id: 7, brand: 'EOLE', name: 'Silk Patterned Tie', price: '¥18,000', filterClass: 'brand-eole eole-accessories eole-acc-tie' },
+            { id: 8, brand: 'EOLE', name: 'Titanium Frame Glasses', price: '¥42,000', filterClass: 'brand-eole eole-accessories eole-acc-glasses' },
+            { id: 9, brand: 'EOLE', name: 'Calf Leather Wallet', price: '¥65,000', filterClass: 'brand-eole eole-accessories eole-acc-wallet' },
+            { id: 10, brand: 'EOLE', name: 'Slim Pass Case', price: '¥22,000', filterClass: 'brand-eole eole-accessories eole-acc-wallet' },
+            { id: 11, brand: 'EOLE', name: 'Leather Key Case', price: '¥28,000', filterClass: 'brand-eole eole-accessories eole-acc-wallet' },
 
             // OKURIH (Street)
             { id: 12, brand: 'OKURIH', name: 'Heavyweight Logo Parka', price: '¥24,000', filterClass: 'brand-okurih okurih-tops' },
@@ -514,25 +560,25 @@
             { id: 15, brand: 'OKURIH', name: 'Graphic Trainer', price: '¥16,000', filterClass: 'brand-okurih okurih-tops' },
             { id: 16, brand: 'OKURIH', name: 'Canvas Slip-on', price: '¥14,000', filterClass: 'brand-okurih okurih-shoes' },
             { id: 17, brand: 'OKURIH', name: 'Suede Slip-on', price: '¥18,000', filterClass: 'brand-okurih okurih-shoes' },
-            { id: 18, brand: 'OKURIH', name: 'Square Sunglasses', price: '¥12,000', filterClass: 'brand-okurih okurih-accessories' },
-            { id: 19, brand: 'OKURIH', name: 'Nylon Zip Wallet', price: '¥9,000', filterClass: 'brand-okurih okurih-accessories' },
+            { id: 18, brand: 'OKURIH', name: 'Square Sunglasses', price: '¥12,000', filterClass: 'brand-okurih okurih-accessories okurih-acc-glasses' },
+            { id: 19, brand: 'OKURIH', name: 'Nylon Zip Wallet', price: '¥9,000', filterClass: 'brand-okurih okurih-accessories okurih-acc-wallet' },
 
-            // COMMON (共通)
-            { id: 20, brand: 'COMMON', name: 'Basic V-Neck T-Shirt', price: '¥5,000', filterClass: 'brand-common common-tops' },
-            { id: 21, brand: 'COMMON', name: 'Heavy Cotton T-Shirt', price: '¥6,500', filterClass: 'brand-common common-tops' },
-            { id: 22, brand: 'COMMON', name: 'Oversized Pocket Tee', price: '¥7,000', filterClass: 'brand-common common-tops' },
-            { id: 23, brand: 'COMMON', name: 'Low-Top Canvas Sneaker', price: '¥12,000', filterClass: 'brand-common common-shoes' },
-            { id: 24, brand: 'COMMON', name: 'Chunky Running Sneaker', price: '¥16,000', filterClass: 'brand-common common-shoes' },
-            { id: 25, brand: 'COMMON', name: 'High-Top Leather Sneaker', price: '¥19,000', filterClass: 'brand-common common-shoes' },
-            { id: 26, brand: 'COMMON', name: 'Everyday Tote Bag', price: '¥15,000', filterClass: 'brand-common common-bags' },
-            { id: 27, brand: 'COMMON', name: 'Nylon Backpack', price: '¥22,000', filterClass: 'brand-common common-bags' },
-            { id: 28, brand: 'COMMON', name: 'Eau de Parfum - Citrus', price: '¥11,000', filterClass: 'brand-common common-fragrance' },
-            { id: 29, brand: 'COMMON', name: 'Eau de Toilette - Wood', price: '¥9,500', filterClass: 'brand-common common-fragrance' },
-            { id: 30, brand: 'COMMON', name: 'Solid Perfume - Floral', price: '¥6,000', filterClass: 'brand-common common-fragrance' },
+            // COMMON (共通) -> Distributed to EOLE & OKURIH
+            { id: 20, brand: 'COMMON', name: 'Basic V-Neck T-Shirt', price: '¥5,000', filterClass: 'brand-eole brand-okurih eole-tops okurih-tops' },
+            { id: 21, brand: 'COMMON', name: 'Heavy Cotton T-Shirt', price: '¥6,500', filterClass: 'brand-eole brand-okurih eole-tops okurih-tops' },
+            { id: 22, brand: 'COMMON', name: 'Oversized Pocket Tee', price: '¥7,000', filterClass: 'brand-eole brand-okurih eole-tops okurih-tops' },
+            { id: 23, brand: 'COMMON', name: 'Low-Top Canvas Sneaker', price: '¥12,000', filterClass: 'brand-eole brand-okurih eole-shoes okurih-shoes' },
+            { id: 24, brand: 'COMMON', name: 'Chunky Running Sneaker', price: '¥16,000', filterClass: 'brand-eole brand-okurih eole-shoes okurih-shoes' },
+            { id: 25, brand: 'COMMON', name: 'High-Top Leather Sneaker', price: '¥19,000', filterClass: 'brand-eole brand-okurih eole-shoes okurih-shoes' },
+            { id: 26, brand: 'COMMON', name: 'Everyday Tote Bag', price: '¥15,000', filterClass: 'brand-eole brand-okurih eole-accessories okurih-accessories eole-acc-bags okurih-acc-bags' },
+            { id: 27, brand: 'COMMON', name: 'Nylon Backpack', price: '¥22,000', filterClass: 'brand-eole brand-okurih eole-accessories okurih-accessories eole-acc-bags okurih-acc-bags' },
+            { id: 28, brand: 'COMMON', name: 'Eau de Parfum - Citrus', price: '¥11,000', filterClass: 'brand-eole brand-okurih eole-accessories okurih-accessories eole-acc-fragrance okurih-acc-fragrance' },
+            { id: 29, brand: 'COMMON', name: 'Eau de Toilette - Wood', price: '¥9,500', filterClass: 'brand-eole brand-okurih eole-accessories okurih-accessories eole-acc-fragrance okurih-acc-fragrance' },
+            { id: 30, brand: 'COMMON', name: 'Solid Perfume - Floral', price: '¥6,000', filterClass: 'brand-eole brand-okurih eole-accessories okurih-accessories eole-acc-fragrance okurih-acc-fragrance' },
             
             // NEW ITEMS (GALLERY)
-            { id: 31, brand: 'GALLERY', name: 'Original Logo T-Shirt', price: '¥8,800', filterClass: 'brand-common common-tops', soldOut: true, link: 'product-tshirt.html' },
-            { id: 32, brand: 'GALLERY', name: 'Classic Leather Shoes', price: '¥24,000', filterClass: 'brand-common common-shoes', soldOut: true, link: 'product-shoes.html' }
+            { id: 31, brand: 'GALLERY', name: 'Original Logo T-Shirt', price: '¥8,800', filterClass: 'brand-eole brand-okurih eole-tops okurih-tops', soldOut: true, link: 'product-tshirt.html' },
+            { id: 32, brand: 'GALLERY', name: 'Classic Leather Shoes', price: '¥24,000', filterClass: 'brand-eole brand-okurih eole-shoes okurih-shoes', soldOut: true, link: 'product-shoes.html' }
         ];
 
         const grid = document.getElementById('product-grid');
@@ -609,7 +655,10 @@
                 
                 // Add active class to clicked (and its parent if in dropdown)
                 e.target.classList.add('active');
-                if(e.target.closest('.dropdown')) {
+                if(e.target.closest('.sub-dropdown')) {
+                    e.target.closest('.has-sub-dropdown').querySelector('a').classList.add('active');
+                    e.target.closest('.has-dropdown').querySelector('a').classList.add('active');
+                } else if(e.target.closest('.dropdown')) {
                     e.target.closest('.has-dropdown').querySelector('a').classList.add('active');
                 }
 
@@ -620,7 +669,11 @@
                     currentCategoryLabel.textContent = 'All Items';
                 } else {
                     let text = e.target.textContent;
-                    if(e.target.closest('.dropdown')) {
+                    if (e.target.closest('.sub-dropdown')) {
+                        const mainTab = e.target.closest('.has-dropdown').querySelector('a').textContent;
+                        const subTab = e.target.closest('.has-sub-dropdown').querySelector('a').textContent;
+                        text = mainTab + ' / ' + subTab + ' / ' + text;
+                    } else if (e.target.closest('.dropdown')) {
                         text = e.target.closest('.has-dropdown').querySelector('a').textContent + ' / ' + text;
                     }
                     currentCategoryLabel.textContent = text;
