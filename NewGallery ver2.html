@@ -488,32 +488,30 @@
       const delay = focusedMesh ? 1.0 : 0;
 
       // Animate existing photos flying off to the right
-      // Only animate a subset for performance and a cleaner transition
       const groups = photoMeshes.map(m => m.userData.group);
       if (groups.length > 0) {
-        const animateCount = Math.min(groups.length, 12);
         groups.forEach((group, i) => {
-          if (i < animateCount) {
-            gsap.to(group.position, {
-              x: group.position.x + 40,
-              duration: 0.6,
-              delay: delay + i * 0.03,
-              ease: 'power2.in'
-            });
-            gsap.to(group.rotation, {
-              z: group.rotation.z + 0.5,
-              duration: 0.6,
-              delay: delay + i * 0.03,
-              ease: 'power2.in'
-            });
-          } else {
-            // Instantly move others
-            group.position.x += 40;
-          }
+          // Calculate an offset that scales with distance so it leaves the frustum
+          const dist = Math.abs(camera.position.z - group.position.z);
+          const flyX = 40 + dist * 1.5;
+          const itemDelay = delay + Math.min(i, 20) * 0.03;
+
+          gsap.to(group.position, {
+            x: group.position.x + flyX,
+            duration: 0.6,
+            delay: itemDelay,
+            ease: 'power2.in'
+          });
+          gsap.to(group.rotation, {
+            z: group.rotation.z + 0.5,
+            duration: 0.6,
+            delay: itemDelay,
+            ease: 'power2.in'
+          });
         });
 
         // After exit animation completes, load new category
-        const totalOutDuration = delay + (animateCount * 0.03) + 0.6;
+        const totalOutDuration = delay + (Math.min(groups.length, 20) * 0.03) + 0.6;
         setTimeout(() => {
           loadCategory(category, true);
         }, totalOutDuration * 1000);
@@ -524,34 +522,34 @@
 
     function animateEntrance() {
       const groups = photoMeshes.map(m => m.userData.group);
-      const animateCount = Math.min(groups.length, 20); // Animate first 20 for impact
       
       groups.forEach((group, i) => {
         const targetX = group.position.x;
         const targetRotZ = group.rotation.z;
+        const dist = Math.abs(camera.position.z - group.position.z);
+        const flyX = 40 + dist * 1.5;
+        const itemDelay = Math.min(i, 20) * 0.03;
 
-        if (i < animateCount) {
-          // Set starting position for animation
-          group.position.x = targetX - 40;
-          group.rotation.z = targetRotZ - 0.5;
+        // Set starting position for animation
+        group.position.x = targetX - flyX;
+        group.rotation.z = targetRotZ - 0.5;
 
-          gsap.to(group.position, {
-            x: targetX,
-            duration: 0.8,
-            delay: i * 0.03,
-            ease: 'power2.out'
-          });
-          gsap.to(group.rotation, {
-            z: targetRotZ,
-            duration: 0.8,
-            delay: i * 0.03,
-            ease: 'power2.out'
-          });
-        }
+        gsap.to(group.position, {
+          x: targetX,
+          duration: 0.8,
+          delay: itemDelay,
+          ease: 'power2.out'
+        });
+        gsap.to(group.rotation, {
+          z: targetRotZ,
+          duration: 0.8,
+          delay: itemDelay,
+          ease: 'power2.out'
+        });
       });
 
       // Unlock tweening after the land animation is reasonably complete
-      const totalInDuration = (animateCount * 0.03) + 1.0;
+      const totalInDuration = (Math.min(groups.length, 20) * 0.03) + 1.0;
       setTimeout(() => { isTweening = false; }, totalInDuration * 1000);
     }
 
