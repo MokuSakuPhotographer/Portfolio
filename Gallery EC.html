@@ -208,6 +208,11 @@
             background: linear-gradient(135deg, #fdfdfd 0%, #f0f4f8 100%);
             position: relative;
             overflow: hidden;
+            transition: background-image 0.5s ease, background-color 0.5s ease;
+        }
+
+        .hero.eole-bg {
+            background: url('images/EOLE_Marble.webp') center/cover no-repeat;
         }
 
         .hero::after {
@@ -219,6 +224,11 @@
             height: 200%;
             background: radial-gradient(circle, rgba(37,99,235,0.03) 0%, transparent 60%);
             animation: rotateBg 20s linear infinite;
+            transition: opacity 0.5s ease;
+        }
+
+        .hero.eole-bg::after {
+            opacity: 0.1;
         }
 
         @keyframes rotateBg {
@@ -291,6 +301,16 @@
             font-size: 0.95rem;
             line-height: 2;
             letter-spacing: 1px;
+        }
+
+        /* Styling for text over EOLE marble background to ensure perfect readability */
+        .hero.eole-bg h1,
+        .hero.eole-bg p#current-category,
+        .hero.eole-bg .brand-intro-title,
+        .hero.eole-bg .brand-intro-desc {
+            color: #000000;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.95), 0 0 10px rgba(255, 255, 255, 0.95), 0 0 5px rgba(255, 255, 255, 0.95);
         }
 
         .brand-intro-line {
@@ -683,6 +703,7 @@
                 const brandImg = document.getElementById('brand-intro-img');
                 const brandTitle = document.getElementById('brand-intro-title');
                 const brandDesc = document.getElementById('brand-intro-desc');
+                const heroSection = document.querySelector('.hero');
 
                 const cards = document.querySelectorAll('.card');
                 
@@ -700,15 +721,18 @@
                         brandTitle.textContent = 'EOLE';
                         brandDesc.innerHTML = '洗練されたシルエットと最上級の素材が織りなす、<br>現代のエレガンスを体現するハイエンド・コレクション。';
                         brandIntro.classList.add('show');
+                        heroSection.classList.add('eole-bg');
                         setTimeout(() => brandIntro.classList.add('visible'), 50);
                     } else if (filterValue === 'brand-okurih' || filterValue.startsWith('okurih-')) {
                         brandImg.src = 'images/EC/LOGO/Okurih.png';
                         brandTitle.textContent = 'OKURIH';
                         brandDesc.innerHTML = 'ストリートカルチャーとモードの融合。<br>既成概念にとらわれない、自由でエッジの効いたスタイル。';
                         brandIntro.classList.add('show');
+                        heroSection.classList.remove('eole-bg');
                         setTimeout(() => brandIntro.classList.add('visible'), 50);
                     } else {
                         brandIntro.classList.remove('show');
+                        heroSection.classList.remove('eole-bg');
                     }
 
                     cards.forEach(card => {
