@@ -94,7 +94,48 @@
             opacity: 0;
             transform: translateY(30px);
             animation: fadeUp var(--transition-speed) 0.2s forwards cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: zoom-in;
         }
+
+        .product-image-wrapper .product-img {
+            width: 100%; height: 100%; object-fit: cover;
+            position: absolute; top: 0; left: 0; z-index: 3;
+            transition: opacity 0.4s ease, transform 0.3s ease;
+            transform-origin: center center;
+        }
+
+        .product-image-wrapper:hover .product-img {
+            transform: scale(1.08);
+        }
+
+        /* Zoom hint icon - removed */
+
+        /* Zoom Modal */
+        .zoom-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 3000; display: none;
+            align-items: center; justify-content: center;
+            cursor: zoom-out;
+        }
+        .zoom-modal.active { display: flex; }
+        .zoom-modal img {
+            max-width: 90vw; max-height: 90vh;
+            object-fit: contain;
+            transform: scale(0.9); opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s ease;
+        }
+        .zoom-modal.active img {
+            transform: scale(1); opacity: 1;
+        }
+        .zoom-modal-close {
+            position: absolute; top: 24px; right: 32px;
+            background: none; border: none;
+            color: #fff; font-size: 2rem;
+            cursor: pointer; z-index: 3001;
+            opacity: 0.7; transition: opacity 0.3s;
+        }
+        .zoom-modal-close:hover { opacity: 1; }
 
         .product-image-wrapper::before {
             content: 'NO IMAGE';
@@ -499,8 +540,8 @@
 
     <main class="product-container">
         <!-- Image Gallery -->
-        <div class="product-image-wrapper">
-            <img src="images/EOLE GraphicsT.webp" alt="EOLE GraphicsT α" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 3;">
+        <div class="product-image-wrapper" onclick="openZoom()">
+            <img id="product-main-img" class="product-img" src="images/EOLE GraphicsT.webp" alt="EOLE GraphicsT α">
         </div>
 
         <!-- Product Info -->
@@ -522,10 +563,10 @@
             </p>
 
             <div class="options-group anim-item d-4">
-                <span class="option-label">Color:<span id="selected-color">Black</span></span>
+                <span class="option-label">Color:<span id="selected-color">White</span></span>
                 <div class="color-options">
-                    <button class="color-btn active" style="background-color: #000;" data-color="Black" onclick="selectColor(this)"></button>
-                    <button class="color-btn" style="background-color: #fff;" data-color="White" onclick="selectColor(this)"></button>
+                    <button class="color-btn" style="background-color: #000;" data-color="Black" data-img="images/EOLE GraphicsT B.webp" onclick="selectColor(this)"></button>
+                    <button class="color-btn active" style="background-color: #fff;" data-color="White" data-img="images/EOLE GraphicsT.webp" onclick="selectColor(this)"></button>
                 </div>
             </div>
 
@@ -633,6 +674,12 @@
         </div>
     </section>
 
+    <!-- Zoom Modal -->
+    <div id="zoom-modal" class="zoom-modal" onclick="closeZoom()">
+        <button class="zoom-modal-close" onclick="closeZoom()">✕</button>
+        <img id="zoom-modal-img" src="" alt="Zoom">
+    </div>
+
     <!-- Size Chart Drawer -->
     <div id="size-drawer-overlay" class="drawer-overlay" onclick="closeDrawer()"></div>
     <div id="size-drawer-content" class="drawer-content">
@@ -699,6 +746,29 @@
             document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('selected-color').textContent = btn.getAttribute('data-color');
+            // Swap product image based on color
+            const imgSrc = btn.getAttribute('data-img');
+            if (imgSrc) {
+                const mainImg = document.getElementById('product-main-img');
+                mainImg.style.opacity = '0';
+                setTimeout(() => {
+                    mainImg.src = imgSrc;
+                    mainImg.style.opacity = '1';
+                }, 300);
+            }
+        }
+
+        // Zoom Modal Logic
+        function openZoom() {
+            const mainImg = document.getElementById('product-main-img');
+            const modal = document.getElementById('zoom-modal');
+            document.getElementById('zoom-modal-img').src = mainImg.src;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeZoom() {
+            document.getElementById('zoom-modal').classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         function selectSize(btn) {
