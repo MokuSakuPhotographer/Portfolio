@@ -492,9 +492,8 @@
         <div class="logo">GALLERY<span>.</span></div>
         <nav>
             <ul class="nav-list">
-                <li><a class="nav-link active" data-filter="all">ALL</a></li>
                 <li class="has-dropdown">
-                    <a class="nav-link" data-filter="brand-eole">EOLE</a>
+                    <a class="nav-link active" data-filter="brand-eole">EOLE</a>
                     <ul class="dropdown">
                         <li><a class="nav-link" data-filter="eole-tops">Tops</a></li>
                         <li><a class="nav-link" data-filter="eole-outerwear">Outerwear</a></li>
@@ -533,17 +532,17 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero eole-bg">
         <div class="hero-content">
             <h1>COLLECTION</h1>
-            <p id="current-category">All Items</p>
+            <p id="current-category">EOLE</p>
             
             <!-- Brand Intro -->
-            <div id="brand-intro" class="brand-intro-section">
-                <img id="brand-intro-img" class="brand-intro-img" src="" alt="Brand Logo">
+            <div id="brand-intro" class="brand-intro-section show visible">
+                <img id="brand-intro-img" class="brand-intro-img" src="images/EC/LOGO/EOLE 1.png" alt="Brand Logo">
                 <div class="brand-intro-text">
-                    <h2 id="brand-intro-title" class="brand-intro-title"></h2>
-                    <p id="brand-intro-desc" class="brand-intro-desc"></p>
+                    <h2 id="brand-intro-title" class="brand-intro-title">EOLE</h2>
+                    <p id="brand-intro-desc" class="brand-intro-desc">洗練されたシルエットと最上級の素材が織りなす、<br>現代のエレガンスを体現するハイエンド・コレクション。</p>
                 </div>
                 <div class="brand-intro-line"></div>
             </div>
@@ -598,7 +597,9 @@
             
             // NEW ITEMS (GALLERY)
             { id: 31, brand: 'GALLERY', name: 'Original Logo T-Shirt', price: '¥8,800', filterClass: 'brand-eole brand-okurih eole-tops okurih-tops', soldOut: true, link: 'product-tshirt.html' },
-            { id: 32, brand: 'GALLERY', name: 'Classic Leather Shoes', price: '¥24,000', filterClass: 'brand-eole brand-okurih eole-shoes okurih-shoes', soldOut: true, link: 'product-shoes.html' }
+            { id: 32, brand: 'GALLERY', name: 'Classic Leather Shoes', price: '¥24,000', filterClass: 'brand-eole brand-okurih eole-shoes okurih-shoes', soldOut: true, link: 'product-shoes.html' },
+            { id: 33, brand: 'EOLE', name: 'EOLE GraphicsT α', price: '¥14,000', filterClass: 'brand-eole eole-tops', link: 'product-tshirt-alpha.html', img: 'images/EOLE GraphicsT.webp' },
+            { id: 34, brand: 'EOLE', name: 'EOLE GraphicsT β', price: '¥14,000', filterClass: 'brand-eole eole-tops', link: 'product-tshirt-beta.html', img: 'images/EOLE GraphicsT_2.webp' }
         ];
 
         const grid = document.getElementById('product-grid');
@@ -609,16 +610,19 @@
         function renderCards() {
             products.forEach(product => {
                 const card = document.createElement('div');
-                card.className = `card show ${product.filterClass}`;
+                const isEole = product.filterClass.includes('brand-eole');
+                card.className = `card ${isEole ? 'show' : ''} ${product.filterClass}`;
                 card.setAttribute('data-id', product.id);
                 
                 const href = product.link ? product.link : 'javascript:void(0)';
                 const btnText = product.soldOut ? 'SOLD OUT' : 'View Details';
                 const badge = product.soldOut ? '<div class="sold-out-badge">SOLD OUT</div>' : '';
+                const imgHtml = product.img ? `<img src="${product.img}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;">` : '';
                 
                 card.innerHTML = `
                     <a href="${href}" style="display: block; width: 100%; height: 100%;">
                         <div class="card-image">
+                            ${imgHtml}
                             ${badge}
                             <div class="overlay">
                                 <span class="btn-view" style="display: inline-block; text-align: center; ${product.soldOut ? 'background: #000; color: #fff;' : ''}">${btnText}</span>
