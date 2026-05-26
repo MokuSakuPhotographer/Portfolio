@@ -244,6 +244,16 @@
       gap: 20px;
     }
 
+    .no-events {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      text-align: center;
+      padding: 30px 20px;
+      border: 1px dashed var(--border-color);
+      border-radius: 4px;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+
     .event-card {
       background-color: var(--bg-dark);
       border: 1px solid var(--border-color);
@@ -509,7 +519,18 @@
       <span class="lang-en">Upcoming Events</span>
     </h2>
     <div class="event-list">
-      <div class="event-card js-scroll-trigger">
+      <p class="no-events js-scroll-trigger">
+        <span class="lang-ja">現在、予定されているイベントはありません。</span>
+        <span class="lang-en">Currently, there are no upcoming events scheduled.</span>
+      </p>
+    </div>
+
+    <h2 class="section-heading js-scroll-trigger">
+      <span class="lang-ja">過去のイベント</span>
+      <span class="lang-en">Past Events</span>
+    </h2>
+    <div class="event-list">
+      <div class="event-card past js-scroll-trigger">
         <div class="event-date">2026.05.24</div>
         <h3 class="event-title">
           <span class="lang-ja">acosta! @池袋サンシャインシティ</span>
@@ -529,19 +550,11 @@
             <span class="lang-en">🔗 Official Website</span>
           </a>
         </div>
-        <a href="contact.html" class="event-status status-open">
-          <span class="lang-ja">依頼受付中</span>
-          <span class="lang-en">Accepting Requests</span>
-        </a>
+        <div class="event-status status-closed">
+          <span class="lang-ja">終了しました</span>
+          <span class="lang-en">Closed</span>
+        </div>
       </div>
-
-    </div>
-
-    <h2 class="section-heading js-scroll-trigger">
-      <span class="lang-ja">過去のイベント</span>
-      <span class="lang-en">Past Events</span>
-    </h2>
-    <div class="event-list">
       <div class="event-card past js-scroll-trigger">
         <div class="event-date">2026.04.29</div>
         <h3 class="event-title">
