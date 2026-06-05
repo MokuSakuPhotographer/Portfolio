@@ -1,0 +1,1863 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:site_name" content="MokuSaku's Photo booth" />
+    <meta property="og:title" content="MokuSaku's Photo booth" />
+    <meta
+      property="og:description"
+      content="関東を拠点に活動するフォト・ビデオグラファー、MokuSakuのポートフォリオサイトです。"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://mokusakuphotographer.github.io/Portfolio/"
+    />
+    <meta
+      property="og:image"
+      content="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@SakuMoku137673" />
+    <meta name="twitter:title" content="MokuSaku's Photo booth" />
+    <meta
+      name="twitter:description"
+      content="関東を拠点に活動するフォト・ビデオグラファー、MokuSakuのポートフォリオサイトです。"
+    />
+    <meta
+      name="twitter:image"
+      content="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png"
+    />
+
+    <link
+      rel="icon"
+      href="images/Prof_icon_favicon.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://mokusakuphotographer.github.io/Portfolio/images/ogp_image.png"
+    />
+    <title>MokuSaku's Photo booth</title>
+    
+    <!-- Google Fonts: Elegant Playfair Display (Serif), modern Inter (Sans-serif), Noto Sans JP (Japanese Sans-serif), Noto Serif JP (Japanese Serif), and Dancing Script (Cursive) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      html {
+        scrollbar-gutter: stable;
+      }
+      /* === プレミアム・シネマティックダークテーマ定義 === */
+      :root {
+        --bg-main: #0a0a0a;
+        --bg-dark: #050505;
+        --bg-header: rgba(10, 10, 10, 0.85);
+        --text-primary: #ffffff;
+        --text-secondary: #a0a0a0;
+        --accent-orange: #ff4d00;
+        --border-color: rgba(255, 255, 255, 0.08);
+        --glass-bg: rgba(18, 18, 18, 0.6);
+        --glass-border: rgba(255, 255, 255, 0.08);
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        padding-top: 60px; /* fixed ヘッダーの高さ */
+        font-family: 'Inter', 'Noto Sans JP', "BIZ UDPGothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+        color: var(--text-primary);
+        background-color: var(--bg-main);
+        line-height: 1.6;
+        scroll-behavior: smooth;
+        position: relative;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* === 背景画像を薄く敷く（全体に高級感のある質感を付加） === */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-image: url("images/Camera_a.webp");
+        background-size: cover;
+        background-position: center;
+        opacity: 0.08;
+        z-index: -2;
+        pointer-events: none;
+      }
+
+      /* === 追従型ナビゲーション（グラスモーフィズム仕様） === */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-header);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 1000;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        transform: translateY(0);
+      }
+
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+      }
+
+      .site-title {
+        font-family: "Dancing Script", cursive;
+        font-size: 1.8rem;
+        color: var(--accent-orange);
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.3s ease;
+      }
+      .site-title:hover {
+        color: var(--text-primary);
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        padding: 15px 0;
+      }
+      nav a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--text-primary);
+        margin: 5px 15px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+      nav a:hover {
+        color: var(--accent-orange);
+      }
+      nav a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--accent-orange);
+        transition: width 0.3s ease;
+      }
+      nav a:hover::after {
+        width: 100%;
+      }
+
+      .nav-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        transition: filter 0.3s ease;
+        filter: brightness(0) invert(1);
+      }
+      nav a:hover .nav-icon {
+        filter: brightness(0) saturate(100%) invert(39%) sepia(93%)
+          saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
+      }
+
+      nav a.current-page {
+        color: var(--accent-orange);
+      }
+      nav a.current-page::after {
+        width: 100%;
+      }
+      nav a.current-page .nav-icon {
+        filter: brightness(0) saturate(100%) invert(39%) sepia(93%)
+          saturate(3501%) hue-rotate(10deg) brightness(102%) contrast(106%);
+      }
+
+      @media (max-width: 850px) {
+        body {
+          padding-top: 150px;
+        }
+        .header-container {
+          flex-direction: column;
+          padding-top: 15px;
+        }
+        nav {
+          justify-content: center;
+          padding-top: 5px;
+          padding-bottom: 10px;
+        }
+        .site-title {
+          font-size: 2rem;
+        }
+      }
+
+      /* === 見出し共通スタイル（シネマティックセリフ） === */
+      .section-heading {
+        text-align: center;
+        font-family: 'Playfair Display', 'Noto Serif JP', "BIZ UDPMincho", "Hiragino Mincho ProN", serif;
+        font-size: 2.5rem;
+        letter-spacing: 0.12em;
+        margin: 100px 0 50px;
+        color: #fff;
+        font-weight: 500;
+        position: relative;
+      }
+      .section-heading::after {
+        content: "";
+        display: block;
+        width: 45px;
+        height: 3px;
+        background-color: var(--accent-orange);
+        margin: 20px auto 0;
+      }
+      .section-heading span {
+        font-size: 0.9rem;
+        font-family: 'Inter', sans-serif;
+        color: var(--text-secondary);
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        margin-top: 8px;
+        font-weight: 600;
+      }
+
+      /* === ヒーローセクション (シネマティックフルスクリーン & 左側テキスト) === */
+      .hero-section {
+        position: relative;
+        width: 100%;
+        height: 90vh;
+        overflow: hidden;
+        background-color: #000;
+      }
+      .hero-slider-container {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+        filter: brightness(0.75);
+        z-index: 1;
+      }
+      .slide.active {
+        opacity: 1;
+        z-index: 2;
+      }
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, rgba(10, 10, 10, 0.85) 0%, rgba(10, 10, 10, 0.45) 45%, transparent 75%),
+                    linear-gradient(to bottom, rgba(10, 10, 10, 0.3) 0%, transparent 25%, transparent 75%, #0a0a0a 100%);
+        z-index: 3;
+        pointer-events: none;
+      }
+
+      .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 8%;
+        transform: translateY(-50%);
+        z-index: 10;
+        color: #fff;
+        max-width: 650px;
+        pointer-events: none;
+      }
+      .hero-content-inner {
+        pointer-events: auto;
+      }
+
+      .hero-label {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent-orange);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        opacity: 0;
+        transform: translateY(15px);
+        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+      }
+      .welcome-main-title {
+        font-family: "Dancing Script", cursive;
+        font-size: 4.2rem;
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 1.2;
+        margin: 0 0 20px 0;
+        letter-spacing: 0.02em;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        transform: translateY(15px);
+        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+      }
+
+      .hero-divider {
+        width: 45px;
+        height: 2px;
+        background-color: var(--accent-orange);
+        margin: 25px 0;
+        opacity: 0;
+        animation: fadeIn 0.8s ease 0.6s forwards;
+      }
+
+      /* タグラインコンテナ（静的表示） */
+      .hero-tagline-container {
+        margin-top: 15px;
+        opacity: 0;
+        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+      }
+      .tagline-eng {
+        font-family: 'Playfair Display', 'Noto Serif JP', "BIZ UDPMincho", "Hiragino Mincho ProN", serif;
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #ffffff;
+        letter-spacing: 0.05em;
+        line-height: 1.4;
+      }
+      .tagline-sub {
+        font-family: 'Inter', 'Noto Sans JP', "BIZ UDPGothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+        font-size: 1.05rem;
+        font-weight: 400;
+        color: var(--text-secondary);
+        margin-top: 6px;
+        letter-spacing: 0.05em;
+        line-height: 1.4;
+      }
+
+      .hero-desc {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        margin-top: 15px;
+        line-height: 1.7;
+        opacity: 0;
+        transform: translateY(15px);
+        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+        max-width: 500px;
+      }
+
+      /* スライダールック＆フィール（ナビゲーション型） */
+      .slider-navigation {
+        position: absolute;
+        bottom: 60px;
+        right: 8%;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        z-index: 10;
+      }
+      .slider-thumbnails {
+        display: flex;
+        gap: 12px;
+      }
+      .thumb-item {
+        width: 80px;
+        height: 50px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: 0.5;
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .thumb-item:hover {
+        opacity: 0.8;
+      }
+      .thumb-item.active {
+        opacity: 1;
+        border-color: var(--accent-orange);
+        box-shadow: 0 0 12px rgba(255, 77, 0, 0.5);
+        transform: scale(1.05);
+      }
+      .slider-arrows {
+        display: flex;
+        gap: 8px;
+      }
+      .slider-arrow {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        width: 38px;
+        height: 38px;
+        border-radius: 2px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+      .slider-arrow:hover {
+        border-color: var(--accent-orange);
+        color: var(--accent-orange);
+        background: rgba(255, 77, 0, 0.1);
+        transform: scale(1.05);
+      }
+      .slider-dots {
+        display: none;
+        gap: 10px;
+        margin: 0 10px;
+      }
+
+      .btn-gallery-hero {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 28px;
+        border: 1px solid var(--accent-orange);
+        color: var(--accent-orange);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        margin-top: 30px;
+        background: transparent;
+        opacity: 0;
+        transform: translateY(15px);
+        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.4s forwards;
+      }
+      .btn-gallery-hero:hover {
+        background: var(--accent-orange);
+        color: #fff;
+        box-shadow: 0 0 15px rgba(255, 77, 0, 0.4);
+        transform: translateY(-2px);
+      }
+      .btn-gallery-hero .arrow {
+        transition: transform 0.3s ease;
+      }
+      .btn-gallery-hero:hover .arrow {
+        transform: translateX(4px);
+      }
+
+      /* blink keyframes removed */
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes fadeIn {
+        to { opacity: 1; }
+      }
+
+      @media (max-width: 768px) {
+        .hero-section {
+          height: 80vh;
+        }
+        .hero-content {
+          left: 5%;
+          right: 5%;
+          width: 90%;
+          max-width: 100%;
+          text-align: center;
+        }
+        .hero-label {
+          font-size: 0.75rem;
+        }
+        .welcome-main-title {
+          font-size: 2.8rem;
+        }
+        .hero-divider {
+          margin: 15px auto;
+        }
+        .tagline-eng {
+          font-size: 1.25rem;
+        }
+        .tagline-sub {
+          font-size: 0.95rem;
+        }
+        .hero-desc {
+          font-size: 0.88rem;
+          margin: 15px auto 0;
+        }
+        .btn-gallery-hero {
+          margin-top: 25px;
+        }
+        .slider-thumbnails {
+          display: none;
+        }
+        .slider-dots {
+          display: flex;
+          align-items: center;
+        }
+        .slider-dots .dot {
+          width: 8px;
+          height: 8px;
+          background: rgba(255, 255, 255, 0.3);
+          border-radius: 50%;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .slider-dots .dot.active {
+          background: var(--accent-orange);
+          transform: scale(1.25);
+          box-shadow: 0 0 6px var(--accent-orange);
+        }
+        .slider-navigation {
+          right: 50%;
+          transform: translateX(50%);
+          bottom: 30px;
+          gap: 10px;
+        }
+        .hero-overlay {
+          background: linear-gradient(to bottom, rgba(10, 10, 10, 0.8) 0%, rgba(10, 10, 10, 0.5) 50%, rgba(10, 10, 10, 0.8) 100%);
+        }
+      }
+
+      /* === ABOUT MOKUSAKU セクション (すりガラス＆背景ぼかし) === */
+      .about-section {
+        position: relative;
+        width: 100%;
+        min-height: 70vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        padding: 100px 20px;
+        box-sizing: border-box;
+      }
+      .about-bg {
+        position: absolute;
+        inset: 0;
+        background-image: url('images/Camera_a.webp');
+        background-size: cover;
+        background-position: center;
+        filter: blur(10px) brightness(0.2);
+        transform: scale(1.05);
+        z-index: 1;
+        pointer-events: none;
+      }
+      .about-card {
+        position: relative;
+        z-index: 2;
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        max-width: 800px;
+        width: 100%;
+        padding: 60px;
+        box-sizing: border-box;
+        text-align: center;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+      }
+      .about-title {
+        font-family: 'Playfair Display', 'Noto Serif JP', "BIZ UDPMincho", "Hiragino Mincho ProN", serif;
+        font-size: 2.2rem;
+        letter-spacing: 0.15em;
+        color: #fff;
+        margin: 0 0 30px 0;
+        font-weight: 500;
+      }
+      .about-title::after {
+        content: "";
+        display: block;
+        width: 45px;
+        height: 3px;
+        background-color: var(--accent-orange);
+        margin: 15px auto 0;
+      }
+      .about-text {
+        font-size: 1.05rem;
+        line-height: 1.9;
+        color: #e0e0e0;
+        margin: 0 auto;
+        max-width: 650px;
+      }
+      .about-text p {
+        margin-bottom: 20px;
+      }
+      .about-text p:last-child {
+        margin-bottom: 0;
+      }
+
+      @media (max-width: 768px) {
+        .about-section {
+          padding: 60px 15px;
+        }
+        .about-card {
+          padding: 40px 20px;
+        }
+        .about-title {
+          font-size: 1.8rem;
+        }
+        .about-text {
+          font-size: 0.95rem;
+          line-height: 1.7;
+        }
+      }
+
+      /* === FEATURED WORKS セクション (3セクション構成) === */
+      .featured-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px 40px;
+      }
+      .featured-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-top: 50px;
+      }
+      .featured-card {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        aspect-ratio: 4/5;
+        background: #000;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        text-decoration: none;
+        display: block;
+      }
+      .featured-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.45;
+        filter: grayscale(80%);
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .featured-card-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(10, 10, 10, 0.9) 10%, rgba(10, 10, 10, 0.2) 60%, transparent);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 30px;
+        z-index: 2;
+      }
+      .featured-card-tag {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: var(--accent-orange);
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        transform: translateY(10px);
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .featured-card-title {
+        font-family: 'Playfair Display', 'Noto Serif JP', "BIZ UDPMincho", "Hiragino Mincho ProN", serif;
+        font-size: 1.8rem;
+        color: #fff;
+        margin: 0 0 10px 0;
+        letter-spacing: 0.05em;
+        font-weight: 500;
+      }
+      .featured-card-desc {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin: 0;
+        transform: translateY(15px);
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s;
+      }
+      
+      /* ホバーアニメーション */
+      .featured-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(255, 77, 0, 0.4);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 77, 0, 0.15);
+      }
+      .featured-card:hover .featured-card-img {
+        opacity: 0.75;
+        filter: grayscale(0%);
+        transform: scale(1.05);
+      }
+      .featured-card:hover .featured-card-tag,
+      .featured-card:hover .featured-card-desc {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      @media (max-width: 850px) {
+        .featured-grid {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+        .featured-card {
+          aspect-ratio: 16/10;
+        }
+        .featured-card-tag,
+        .featured-card-desc {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* === LET'S CREATE セクション (2カラム) === */
+      .create-section {
+        max-width: 1200px;
+        margin: 80px auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: center;
+      }
+      .create-img-wrapper {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        aspect-ratio: 16/11;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .create-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .create-img-wrapper:hover .create-img {
+        transform: scale(1.05);
+      }
+      .create-content {
+        padding: 20px 0;
+      }
+      .create-title {
+        font-family: 'Playfair Display', 'Noto Serif JP', "BIZ UDPMincho", "Hiragino Mincho ProN", serif;
+        font-size: 2.2rem;
+        letter-spacing: 0.1em;
+        color: #fff;
+        margin: 0 0 20px 0;
+        font-weight: 500;
+      }
+      .create-text {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: var(--text-secondary);
+        margin-bottom: 35px;
+      }
+
+      /* プレミアムボタン */
+      .btn-primary {
+        display: inline-block;
+        padding: 15px 40px;
+        background: transparent;
+        color: var(--accent-orange);
+        text-decoration: none;
+        border: 2px solid var(--accent-orange);
+        border-radius: 2px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        cursor: pointer;
+      }
+      .btn-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 100%;
+        background-color: var(--accent-orange);
+        transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: -1;
+      }
+      .btn-primary:hover {
+        color: #fff;
+        box-shadow: 0 0 20px rgba(255, 77, 0, 0.4);
+        transform: translateY(-3px);
+      }
+      .btn-primary:hover::before {
+        width: 100%;
+      }
+
+      @media (max-width: 850px) {
+        .create-section {
+          grid-template-columns: 1fr;
+          gap: 35px;
+        }
+        .create-title {
+          font-size: 1.8rem;
+        }
+        .create-text {
+          font-size: 0.95rem;
+          margin-bottom: 25px;
+        }
+      }
+
+      /* === NEWS & UPDATES (タイムライン / 横並びグリッド & アコーディオントグル) === */
+      .timeline-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px 80px;
+      }
+      
+      /* 動的に生成される最新3件のグリッド */
+      .news-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+      
+      .news-card {
+        background: rgba(18, 18, 18, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      .news-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--accent-orange);
+        box-shadow: 0 12px 30px rgba(255, 77, 0, 0.15);
+      }
+      .news-card-img-wrapper {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16/10;
+        overflow: hidden;
+      }
+      .news-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .news-card:hover .news-card-img {
+        transform: scale(1.08);
+      }
+      .news-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--accent-orange);
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 4px 10px;
+        border-radius: 20px;
+        letter-spacing: 0.05em;
+        box-shadow: 0 0 10px rgba(255, 77, 0, 0.6);
+        animation: badgePulse 2s infinite;
+      }
+      @keyframes badgePulse {
+        0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 77, 0, 0.6); }
+        50% { transform: scale(1.05); box-shadow: 0 0 18px rgba(255, 77, 0, 0.9); }
+        100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 77, 0, 0.6); }
+      }
+      .news-card-body {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+      .news-card-date {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        color: var(--accent-orange);
+        font-weight: 700;
+        margin-bottom: 8px;
+        letter-spacing: 0.05em;
+      }
+      .news-card-title {
+        font-family: 'Playfair Display', 'Noto Serif JP', "BIZ UDPMincho", "Hiragino Mincho ProN", serif;
+        font-size: 1.15rem;
+        color: #fff;
+        margin: 0 0 12px 0;
+        line-height: 1.4;
+      }
+      .news-card-text {
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      @media (max-width: 992px) {
+        .news-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 600px) {
+        .news-grid {
+          grid-template-columns: 1fr;
+        }
+        .news-card-body {
+          padding: 20px;
+        }
+      }
+
+      /* 古い履歴用の縦型タイムライン */
+      .timeline-container {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .older-timeline-list {
+        position: relative;
+        padding-left: 30px;
+      }
+      .older-timeline-list::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 11px;
+        bottom: 0;
+        width: 2px;
+        background-color: var(--border-color);
+      }
+      
+      .timeline-item {
+        position: relative;
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .timeline-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      .timeline-dot {
+        position: absolute;
+        top: 6px;
+        left: -30px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--bg-dark);
+        border: 2px solid var(--accent-orange);
+        box-shadow: 0 0 10px rgba(255, 77, 0, 0.5);
+        transition: all 0.3s ease;
+        z-index: 1;
+      }
+      .timeline-item:hover .timeline-dot {
+        background-color: var(--accent-orange);
+        box-shadow: 0 0 15px rgba(255, 77, 0, 0.8);
+        transform: scale(1.2);
+      }
+      .timeline-date {
+        font-size: 0.9rem;
+        color: var(--accent-orange);
+        font-weight: bold;
+        letter-spacing: 0.05em;
+        margin-bottom: 5px;
+        font-family: 'Inter', sans-serif;
+      }
+      .timeline-content {
+        font-size: 1.05rem;
+        color: var(--text-primary);
+        line-height: 1.5;
+        transition: color 0.3s ease;
+      }
+      .timeline-item:hover .timeline-content {
+        color: #fff;
+      }
+      .timeline-desc {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-top: 8px;
+      }
+
+      /* 更新履歴開閉アコーディオントグル */
+      .timeline-older {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        overflow: hidden;
+      }
+      .timeline-older.is-open {
+        grid-template-rows: 1fr;
+        margin-top: 30px;
+        margin-bottom: 20px;
+      }
+      .timeline-older-inner {
+        overflow: hidden;
+      }
+      .timeline-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 25px auto 0;
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 12px 30px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 0.05em;
+      }
+      .timeline-toggle-btn:hover {
+        color: var(--accent-orange);
+        border-color: var(--accent-orange);
+        box-shadow: 0 0 10px rgba(255, 77, 0, 0.15);
+      }
+      .timeline-toggle-btn .toggle-icon {
+        transition: transform 0.3s ease;
+        font-size: 0.7rem;
+      }
+      .timeline-toggle-btn.is-open .toggle-icon {
+        transform: rotate(180deg);
+      }
+
+      /* === スクロールアニメーション用クラス === */
+      .js-scroll-trigger {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      }
+      .js-scroll-trigger.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* === TOPへ戻るボタン === */
+      .page-top-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background-color: var(--bg-dark);
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        color: var(--text-primary);
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2rem;
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+      .page-top-btn.is-show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .page-top-btn:hover {
+        background-color: var(--accent-orange);
+        border-color: var(--accent-orange);
+        color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 77, 0, 0.4);
+      }
+
+      /* === 言語切り替えボタンスタイル === */
+      .lang-switch {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+      }
+      .lang-switch button {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 5px;
+        transition: color 0.3s ease;
+      }
+      .lang-switch button:hover {
+        color: var(--text-primary);
+      }
+      .lang-switch button.active {
+        color: var(--accent-orange);
+        pointer-events: none;
+      }
+      .lang-switch span {
+        color: var(--border-color);
+        margin: 0 2px;
+      }
+      body[data-lang="ja"] .lang-en {
+        display: none !important;
+      }
+      body[data-lang="en"] .lang-ja {
+        display: none !important;
+      }
+
+      /* === フッター === */
+      .site-footer {
+        text-align: center;
+        padding: 30px 10px;
+        margin-top: 60px;
+        border-top: 1px solid var(--border-color);
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        letter-spacing: 0.05em;
+        line-height: 1.8;
+      }
+
+      /* === 画像保護 === */
+      img {
+        user-select: none;
+        -webkit-user-drag: none;
+        -webkit-touch-callout: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <a href="new_index.html" class="site-title">MokuSaku's Photo booth</a>
+        <nav>
+          <a href="profile.html"
+            ><img
+              src="images/Profile.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Profile</a
+          >
+          <a href="Policy.html"
+            ><img
+              src="images/Policy.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Policy</a
+          >
+          <a href="event.html"
+            ><img
+              src="images/Calendar.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Schedule</a
+          >
+          <a href="gallery.html"
+            ><img
+              src="images/Gallery.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Gallery</a
+          >
+          <a href="equipment.html"
+            ><img src="images/Gear.png?v=2" class="nav-icon" alt="" />Gear</a
+          >
+          <a href="contact.html"
+            ><img
+              src="images/Contact.png?v=2"
+              class="nav-icon"
+              alt=""
+            />Contact</a
+          >
+          <div class="lang-switch">
+            <button id="btn-ja" class="active">JP</button>
+            <span>/</span>
+            <button id="btn-en">EN</button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <div class="hero-section">
+      <!-- スライダー（全画面背景） -->
+      <div class="hero-slider-container">
+        <div class="hero-slider">
+          <div class="slide active" style="background-image: url('images/DSC09422.webp')"></div>
+          <div class="slide" style="background-image: url('images/IMG_3488.webp'); background-position: center 40%;"></div>
+          <div class="slide" style="background-image: url('images/DSC07198.webp')"></div>
+          <div class="slide" style="background-image: url('images/IMG_3374.webp')"></div>
+          <div class="slide" style="background-image: url('images/DSC09541.webp')"></div>
+          <div class="slide" style="background-image: url('images/IMG_3300.webp')"></div>
+          <div class="slide" style="background-image: url('images/DSC00589.webp')"></div>
+        </div>
+        <div class="hero-overlay"></div>
+      </div>
+
+      <!-- ウェルカムエリア (タイピングアニメーションを削除し静的化) -->
+      <div class="hero-content">
+        <div class="hero-content-inner">
+          <div class="hero-label">Photographer &amp; Videographer</div>
+          <h1 class="welcome-main-title" id="welcome-title">MokuSaku's Photo booth</h1>
+          <div class="hero-divider"></div>
+          
+          <div class="hero-tagline-container">
+            <div class="hero-tagline lang-ja">
+              <div class="tagline-eng">Capture the silence. Shape the story.</div>
+              <div class="tagline-sub">静けさを写し、物語に変える。</div>
+            </div>
+            <div class="hero-tagline lang-en">
+              <div class="tagline-eng">Capture the silence. Shape the story.</div>
+              <div class="tagline-sub">Capture the quiet, frame the narrative.</div>
+            </div>
+          </div>
+
+          <p class="hero-desc lang-ja">
+            関東を拠点に活動するフォト・ビデオグラファー、MokuSakuのポートフォリオサイトです。
+          </p>
+          <p class="hero-desc lang-en">
+            Kanto-based photographer &amp; videographer MokuSaku's portfolio site.
+          </p>
+
+          <a href="gallery.html" class="btn-gallery-hero">
+            <span>VIEW GALLERY</span>
+            <span class="arrow">&rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- スライダー操作子（ナビゲーション型） -->
+      <div class="slider-navigation">
+        <!-- デスクトップ用3枚サムネイル（動的切り替え） -->
+        <div class="slider-thumbnails"></div>
+
+        <!-- モバイル用ドットインジケーター -->
+        <div class="slider-dots">
+          <div class="dot active" data-index="0"></div>
+          <div class="dot" data-index="1"></div>
+          <div class="dot" data-index="2"></div>
+          <div class="dot" data-index="3"></div>
+          <div class="dot" data-index="4"></div>
+          <div class="dot" data-index="5"></div>
+          <div class="dot" data-index="6"></div>
+        </div>
+
+        <!-- 矢印ナビゲーション -->
+        <div class="slider-arrows">
+          <button class="slider-arrow prev-arrow" aria-label="Previous slide">&#10216;</button>
+          <button class="slider-arrow next-arrow" aria-label="Next slide">&#10217;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- === ABOUT MOKUSAKU セクション === -->
+    <section class="about-section js-scroll-trigger">
+      <div class="about-bg"></div>
+      <div class="about-card">
+        <h2 class="about-title">ABOUT MOKUSAKU</h2>
+        <div class="about-text">
+          <p class="lang-ja">
+            見過ごされがちな光景、静寂の中にあるストーリー。レンズ越しに見つめる世界を、時を超えて残る一枚の絵画のように切り取ります。関東を拠点に、ポートレート、スナップ、そして映像制作まで、独自の視点で表現します。
+          </p>
+          <p class="lang-en">
+            Every moment holds a silent story. Through the lens, I capture the world, turning fleeting silence into timeless narratives. Based in the Kanto region, I express my unique vision through portraits, street snaps, and cinematic videos.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- === FEATURED WORKS セクション === -->
+    <section class="featured-section">
+      <h2 class="section-heading js-scroll-trigger">
+        FEATURED WORKS
+        <span class="lang-ja">厳選作品ギャラリー</span>
+        <span class="lang-en">Curated Galleries</span>
+      </h2>
+      <div class="featured-grid">
+        <!-- PORTRAIT Card -->
+        <a href="gallery.html" class="featured-card js-scroll-trigger">
+          <img src="images/DSC06507.webp" alt="Portrait Work" class="featured-card-img" />
+          <div class="featured-card-overlay">
+            <span class="featured-card-tag">Gallery 01</span>
+            <h3 class="featured-card-title">PORTRAIT</h3>
+            <p class="featured-card-desc">
+              <span class="lang-ja">被写体の感情と光が織りなす、刹那の美しさ。</span>
+              <span class="lang-en">The fleeting beauty woven by the subject's emotion and light.</span>
+            </p>
+          </div>
+        </a>
+
+        <!-- SNAP Card -->
+        <a href="gallery.html" class="featured-card js-scroll-trigger">
+          <img src="images/DSC00589.webp" alt="Snap Work" class="featured-card-img" />
+          <div class="featured-card-overlay">
+            <span class="featured-card-tag">Gallery 02</span>
+            <h3 class="featured-card-title">SNAP</h3>
+            <p class="featured-card-desc">
+              <span class="lang-ja">日常に潜む静寂と、都市のコントラストを捉える。</span>
+              <span class="lang-en">Capturing the silent moments and contrasts hidden in daily urban life.</span>
+            </p>
+          </div>
+        </a>
+
+        <!-- VIDEO Card -->
+        <a href="gallery.html" class="featured-card js-scroll-trigger">
+          <img src="images/thumb_videography.webp" alt="Video Work" class="featured-card-img" />
+          <div class="featured-card-overlay">
+            <span class="featured-card-tag">Gallery 03</span>
+            <h3 class="featured-card-title">VIDEO</h3>
+            <p class="featured-card-desc">
+              <span class="lang-ja">動き出す光景と、流れる時間が生み出す映画的情感。</span>
+              <span class="lang-en">Cinematic emotions created by moving scenes and flowing time.</span>
+            </p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- === LET'S CREATE セクション === -->
+    <section class="create-section js-scroll-trigger">
+      <div class="create-img-wrapper">
+        <img src="images/DSC02215-Enhanced-NR.webp" alt="Creative Scene" class="create-img" />
+      </div>
+      <div class="create-content">
+        <h2 class="create-title">LET'S CREATE</h2>
+        <p class="create-text">
+          <span class="lang-ja">
+            あなたの特別なストーリーを、記憶に残る写真やシネマティックな映像という形で一緒に創り上げませんか？ポートレート撮影のご依頼、コラボレーションのご提案など、まずはお気軽にご相談ください。
+          </span>
+          <span class="lang-en">
+            Let's collaborate to shape your special stories into memorable photographs and cinematic films. Feel free to contact me for portrait bookings, creative projects, or other inquiries.
+          </span>
+        </p>
+        <a href="contact.html" class="btn-primary">
+          <span class="lang-ja">お問い合わせ</span>
+          <span class="lang-en">Get In Touch</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- === NEWS & UPDATES セクション (タイムライン構造保持) === -->
+    <!--
+      【管理ルール】更新履歴の追加方法
+      - 新しいエントリは #timeline-list の「先頭」に追加してください。
+      - HTML は全件フラットに並べるだけでOKです（新しい順が上）。
+      - 新着3件の表示・それ以外の格納は JavaScript（setupTimeline関数）が自動で行います。
+    -->
+    <section class="timeline-section js-scroll-trigger">
+      <h2 class="section-heading">
+        NEWS & UPDATES
+        <span class="lang-ja">お知らせ・更新履歴</span>
+        <span class="lang-en">Updates &amp; News</span>
+      </h2>
+      <div class="timeline-container" id="timelineContainer">
+        <!-- 
+          Javascriptがこの元の timeline-list 内の div を読み込み、
+          最初の3件を横並びカード（news-grid）にし、残りを timelineOlder へ格納します。
+        -->
+        <div id="timeline-list">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.05.15</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Gearを更新しました</span>
+              <span class="lang-en">Updated Gear</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Gearに新しいアイテムを追加し、一部機材のコメントを更新しました。</span>
+                <span class="lang-en">Added new items to the Gear section and updated comments for some equipment.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.05.06</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Gearを更新しました</span>
+              <span class="lang-en">Updated Gear</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Gearに新しいアイテムを追加しました。</span>
+                <span class="lang-en">Added new items to the Gear section.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.05.02</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Profile・Galleryを更新しました</span>
+              <span class="lang-en">Updated Profile &amp; Gallery</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">ProfileにTikTokのリンクを追加し、GalleryのPortraitに新しい写真を追加しました。</span>
+                <span class="lang-en">Added a TikTok link to the Profile and new photos to the Portrait section in the Gallery.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.04.27</div>
+            <div class="timeline-content">
+              <span class="lang-ja">GalleryのSnap・Videoを更新しました</span>
+              <span class="lang-en">Updated Gallery Snap &amp; Video</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Snapに新しい写真を7枚追加しました。Videoに「2026/04/26 騎西 藤まつり【Cinematic Vlog】」を追加しました。</span>
+                <span class="lang-en">Added 7 new photos to the Snap section. Added "2026/04/26 Kishi Fuji Festival【Cinematic Vlog】" to the Video section.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.04.23</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Galleryを更新しました</span>
+              <span class="lang-en">Updated Gallery</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Snapに新しい写真を追加しました。</span>
+                <span class="lang-en">Added new photos to the Snap section.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.04.14</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Event Scheduleを更新しました</span>
+              <span class="lang-en">Updated Event Schedule</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">acosta! @さいたまスーパーアリーナ TORIOの参加予定を追加しました。</span>
+                <span class="lang-en">Added acosta! @ Saitama Super Arena TORIO to the event schedule.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.30</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Galleryを更新しました</span>
+              <span class="lang-en">Updated Gallery</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Portraitに新しい写真を追加しました。</span>
+                <span class="lang-en">Added new photos to the Portrait section.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.24</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Galleryを更新しました</span>
+              <span class="lang-en">Updated Gallery</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Portraitに新しい写真を追加しました。</span>
+                <span class="lang-en">Added new photos to the Portrait section.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.14</div>
+            <div class="timeline-content">
+              <span class="lang-ja">GearページおよびPCスペックを更新しました</span>
+              <span class="lang-en">Updated Gear Page and PC Specs</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">PCスペックにPC機材を追加、他機材の更新や見やすいよう並び替えを行いました。</span>
+                <span class="lang-en">Added PC equipment to PC specs, updated other gear and reordered for better visibility.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.11</div>
+            <div class="timeline-content">
+              <span class="lang-ja">GearページおよびEvent Scheduleを更新しました</span>
+              <span class="lang-en">Updated Gear Page and Event Schedule</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">Godox FG-100とGodox ML-CD15を追加。AnimeJapan 2026の参加予定と各イベントの公式サイトへのリンクを掲載しました。</span>
+                <span class="lang-en">Added Godox FG-100 and Godox ML-CD15. Added AnimeJapan 2026 and official website links for all event listings.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.10</div>
+            <div class="timeline-content">
+              <span class="lang-ja">Galleryのレイアウトを調整しました</span>
+              <span class="lang-en">Improved Gallery Layout</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">スナップ写真とポートレートの配置をランダム化し、より動きのあるデザインにリニューアルしました。</span>
+                <span class="lang-en">Randomized the layout of Snap and Portrait photos to create a more dynamic presentation.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.09</div>
+            <div class="timeline-content">
+              <span class="lang-ja">画像保護機能を導入しました</span>
+              <span class="lang-en">Implemented Image Protection</span>
+              <span class="timeline-desc">
+                <span class="lang-ja">サイト内のすべての画像に対して、右クリックとドラッグによる保存を防止する機能を実装しました。</span>
+                <span class="lang-en">Added features to prevent saving images via right-click and drag on all site images.</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 古い履歴の格納先（JavaScriptが自動生成） -->
+        <div class="timeline-older" id="timelineOlder"></div>
+        <button class="timeline-toggle-btn" id="timelineToggle" style="display:none">
+          <span class="toggle-icon">▼</span>
+          <span class="lang-ja">過去の更新を見る</span>
+          <span class="lang-en">Show older updates</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- === フッター === -->
+    <footer class="site-footer">
+      &copy; 2026 MokuSaku. All Rights Reserved.<br />
+      <span class="lang-ja">当サイトのすべてのコンテンツの無断転載を禁じます。</span>
+      <span class="lang-en">Unauthorized reproduction of all contents on this site is prohibited.</span>
+    </footer>
+
+    <a href="#" class="page-top-btn" id="pageTopBtn">▲</a>
+
+    <!-- === JavaScript 制御コード === -->
+    <script>
+      // --- 現在アクティブなページのメニュー自動ハイライト ---
+      const currentPath = window.location.pathname;
+      const currentFilename = currentPath.substring(currentPath.lastIndexOf("/") + 1) || "index.html";
+      
+      // new_index.html が開かれている場合は、サイトタイトル等をカレント扱いに
+      document.querySelectorAll("nav a").forEach((link) => {
+        const href = link.getAttribute("href");
+        if (href === currentFilename || (currentFilename === "new_index.html" && href === "index.html")) {
+          link.classList.add("current-page");
+        }
+      });
+
+      // --- タイピングアニメーション削除 (静的表示に変更) ---
+
+      // --- ヒーローシネマティックスライダー制御 ---
+      const slides = document.querySelectorAll(".slide");
+      const dots = document.querySelectorAll(".slider-dots .dot");
+      const slideImages = [
+        'images/DSC09422.webp',
+        'images/IMG_3488.webp',
+        'images/DSC07198.webp',
+        'images/IMG_3374.webp',
+        'images/DSC09541.webp',
+        'images/IMG_3300.webp',
+        'images/DSC00589.webp'
+      ];
+      let currentSlide = 0;
+      let slideInterval;
+
+      // デザインカンプに沿った「3つの動的スライドプレビューサムネイル」生成ロジック
+      function updateThumbnails() {
+        const thumbContainer = document.querySelector('.slider-thumbnails');
+        if (!thumbContainer) return;
+        
+        thumbContainer.innerHTML = '';
+        // 現在のアクティブスライドから3枚分プレビューを作成
+        for (let i = 0; i < 3; i++) {
+          const slideIndex = (currentSlide + i) % slides.length;
+          const thumb = document.createElement('div');
+          thumb.className = `thumb-item ${i === 0 ? 'active' : ''}`;
+          thumb.style.backgroundImage = `url('${slideImages[slideIndex]}')`;
+          thumb.setAttribute('data-index', slideIndex);
+          
+          thumb.addEventListener('click', () => {
+            goToSlide(slideIndex);
+            startSlideShow();
+          });
+          thumb.addEventListener('mouseenter', stopSlideShow);
+          thumb.addEventListener('mouseleave', startSlideShow);
+          
+          thumbContainer.appendChild(thumb);
+        }
+      }
+
+      function goToSlide(index) {
+        slides[currentSlide].classList.remove("active");
+        if (dots.length > 0) dots[currentSlide].classList.remove("active");
+        
+        currentSlide = index;
+        
+        slides[currentSlide].classList.add("active");
+        if (dots.length > 0) dots[currentSlide].classList.add("active");
+        
+        updateThumbnails();
+      }
+
+      function nextSlide() {
+        let nextIndex = (currentSlide + 1) % slides.length;
+        goToSlide(nextIndex);
+      }
+
+      function prevSlide() {
+        let prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+        goToSlide(prevIndex);
+      }
+
+      function startSlideShow() {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 6000);
+      }
+
+      function stopSlideShow() {
+        clearInterval(slideInterval);
+      }
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener("mouseenter", stopSlideShow);
+        dot.addEventListener("mouseleave", startSlideShow);
+        dot.addEventListener("click", () => {
+          goToSlide(index);
+          startSlideShow();
+        });
+      });
+
+      document.querySelector(".prev-arrow").addEventListener("click", () => {
+        prevSlide();
+        startSlideShow();
+      });
+
+      document.querySelector(".next-arrow").addEventListener("click", () => {
+        nextSlide();
+        startSlideShow();
+      });
+
+      document.querySelectorAll(".slider-arrow").forEach(arrow => {
+        arrow.addEventListener("mouseenter", stopSlideShow);
+        arrow.addEventListener("mouseleave", startSlideShow);
+      });
+
+      updateThumbnails();
+      startSlideShow();
+
+      // --- ヘッダーのスクロール（自動隠し）制御 ---
+      const header = document.querySelector("header");
+      let lastScrollY = window.scrollY;
+
+      window.addEventListener("scroll", () => {
+        const currentScrollY = window.scrollY;
+        
+        if (currentScrollY > lastScrollY && currentScrollY > 50) {
+          header.style.transform = "translateY(-100%)";
+        } else if (currentScrollY < lastScrollY) {
+          header.style.transform = "translateY(0)";
+        }
+
+        lastScrollY = currentScrollY;
+      });
+
+      // --- TOPへ戻るボタンの表示制御 ---
+      const pageTopBtn = document.getElementById("pageTopBtn");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          pageTopBtn.classList.add("is-show");
+        } else {
+          pageTopBtn.classList.remove("is-show");
+        }
+      });
+      pageTopBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      });
+
+      // --- 更新履歴（News & Updates）: 3カラムグリッド + 格納アコーディオン制御 ---
+      function setupTimeline(listId, olderId, toggleId, threshold) {
+        const list = document.getElementById(listId);
+        const older = document.getElementById(olderId);
+        const toggle = document.getElementById(toggleId);
+        if (!list || !older || !toggle) return;
+
+        const items = Array.from(list.querySelectorAll('.timeline-item'));
+        if (items.length === 0) return;
+
+        // リスト内部を一旦クリア
+        list.innerHTML = '';
+
+        // グリッドコンテナ作成
+        const gridContainer = document.createElement('div');
+        gridContainer.className = 'news-grid';
+
+        // 記事キーワードに基づき適切なサムネイル画像を返す
+        const getThumbnail = (titleJa, titleEn) => {
+          const text = (titleJa + ' ' + titleEn).toLowerCase();
+          if (text.includes('gear') || text.includes('機材')) {
+            return 'images/thumb_Camera_a.webp';
+          } else if (text.includes('profile') || text.includes('プロフィール')) {
+            return 'images/myportrait.webp';
+          } else if (text.includes('gallery') || text.includes('ギャラリー') || text.includes('snap') || text.includes('portrait')) {
+            return 'images/DSC00589.webp';
+          } else if (text.includes('event') || text.includes('schedule') || text.includes('イベント')) {
+            return 'images/DSC09422.webp';
+          }
+          return 'images/DSC00589.webp';
+        };
+
+        // 新着3件をカード形式で配置
+        const featuredCount = Math.min(items.length, threshold);
+        for (let i = 0; i < featuredCount; i++) {
+          const item = items[i];
+          const date = item.querySelector('.timeline-date').innerText;
+          
+          const jaContent = item.querySelector('.timeline-content .lang-ja');
+          const enContent = item.querySelector('.timeline-content .lang-en');
+          
+          const jaTitleText = jaContent ? jaContent.childNodes[0].textContent.trim() : '';
+          const enTitleText = enContent ? enContent.childNodes[0].textContent.trim() : '';
+          
+          const jaDescElement = item.querySelector('.timeline-desc .lang-ja');
+          const enDescElement = item.querySelector('.timeline-desc .lang-en');
+          
+          const jaDescText = jaDescElement ? jaDescElement.innerText.trim() : '';
+          const enDescText = enDescElement ? enDescElement.innerText.trim() : '';
+
+          const imgUrl = getThumbnail(jaTitleText, enTitleText);
+
+          const card = document.createElement('div');
+          card.className = 'news-card js-scroll-trigger';
+          card.innerHTML = `
+            <div class="news-card-img-wrapper">
+              <img src="${imgUrl}" alt="News Image" class="news-card-img" />
+              <span class="news-badge">NEW</span>
+            </div>
+            <div class="news-card-body">
+              <div class="news-card-date">${date}</div>
+              <h3 class="news-card-title">
+                <span class="lang-ja">${jaTitleText}</span>
+                <span class="lang-en">${enTitleText}</span>
+              </h3>
+              <p class="news-card-text">
+                <span class="lang-ja">${jaDescText}</span>
+                <span class="lang-en">${enDescText}</span>
+              </p>
+            </div>
+          `;
+          gridContainer.appendChild(card);
+        }
+        list.appendChild(gridContainer);
+
+        // 4件目以降はトグル開閉式の縦型タイムラインへ格納
+        if (items.length > threshold) {
+          const olderInner = document.createElement('div');
+          olderInner.className = 'timeline-older-inner';
+          
+          const verticalTimeline = document.createElement('div');
+          verticalTimeline.className = 'older-timeline-list';
+          
+          items.slice(threshold).forEach(item => {
+            verticalTimeline.appendChild(item.cloneNode(true));
+          });
+          
+          olderInner.appendChild(verticalTimeline);
+          older.appendChild(olderInner);
+
+          toggle.style.display = 'flex';
+          
+          toggle.addEventListener('click', () => {
+            const isOpen = older.classList.toggle('is-open');
+            toggle.classList.toggle('is-open');
+            const jaText = toggle.querySelector('.lang-ja');
+            const enText = toggle.querySelector('.lang-en');
+            if (isOpen) {
+              jaText.textContent = '閉じる';
+              enText.textContent = 'Hide older updates';
+            } else {
+              jaText.textContent = '過去の更新を見る';
+              enText.textContent = 'Show older updates';
+            }
+          });
+        } else {
+          toggle.style.display = 'none';
+        }
+      }
+
+      setupTimeline('timeline-list', 'timelineOlder', 'timelineToggle', 3);
+
+      // --- スクロールフェードインアニメーションの制御 (IntersectionObserver) ---
+      const scrollTriggers = document.querySelectorAll(".js-scroll-trigger");
+      const cb = function (entries, observer) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      };
+      const io = new IntersectionObserver(cb, { rootMargin: "-8% 0px" });
+      scrollTriggers.forEach((trigger) => {
+        io.observe(trigger);
+      });
+
+      // --- 言語切り替え・状態保持の制御 ---
+      const btnJa = document.getElementById("btn-ja");
+      const btnEn = document.getElementById("btn-en");
+      const body = document.body;
+
+      const savedLang = localStorage.getItem("mokusaku_lang") || "ja";
+
+      function setLanguage(lang) {
+        document.documentElement.lang = lang;
+        body.setAttribute("data-lang", lang);
+        localStorage.setItem("mokusaku_lang", lang);
+
+        if (lang === "en") {
+          btnEn.classList.add("active");
+          btnJa.classList.remove("active");
+        } else {
+          btnJa.classList.add("active");
+          btnEn.classList.remove("active");
+        }
+        
+        // タイピングアニメーションなし (CSS/HTMLにて表示切り替え制御)
+      }
+
+      setLanguage(savedLang);
+
+      btnJa.addEventListener("click", () => setLanguage("ja"));
+      btnEn.addEventListener("click", () => setLanguage("en"));
+
+      // === セキュリティ画像保護：右クリック・ドラッグの無効化 ===
+      document.addEventListener('contextmenu', function(e) {
+        if (e.target.tagName === 'IMG' || e.target.classList.contains('slide') || e.target.classList.contains('featured-card-img') || e.target.classList.contains('news-card-img')) {
+          e.preventDefault();
+        }
+      }, false);
+      
+      document.addEventListener('dragstart', function(e) {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+        }
+      }, false);
+    </script>
+  </body>
+</html>
